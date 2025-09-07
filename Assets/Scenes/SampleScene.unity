@@ -248,10 +248,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3994985137764270263, guid: d4211814a6a149142a4832bf221360ef, type: 3}
-      propertyPath: m_Mass
-      value: 5
-      objectReference: {fileID: 0}
     - target: {fileID: 5766768589114410277, guid: d4211814a6a149142a4832bf221360ef, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.106907
@@ -297,28 +293,23 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
-      propertyPath: speed
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
       propertyPath: canJump
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
-      propertyPath: canMove
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
-      propertyPath: canRotate
+      propertyPath: adminMode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
       propertyPath: jumpForce
-      value: 1000
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
+      propertyPath: slideForce
+      value: 25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 7701135082307794508, guid: d4211814a6a149142a4832bf221360ef, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d4211814a6a149142a4832bf221360ef, type: 3}
