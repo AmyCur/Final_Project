@@ -43,8 +43,7 @@ public class PlayerController : MonoBehaviour {
 		);
 	}
 
-	bool grounded() {
-
+	bool Grounded() {
 		Vector3 scale = gameObject.transform.localScale;
 		Vector3 pos = gameObject.transform.position;
 
@@ -67,12 +66,10 @@ public class PlayerController : MonoBehaviour {
 	}
 
 
-	bool shouldJump => canJump && magic.key.down(keys.jump) && grounded() && s != state.sliding;
+	bool shouldJump => canJump && magic.key.down(keys.jump) && Grounded() && s != state.sliding;
+	
 	bool shouldDash => canDash && magic.key.down(keys.dash) && s != state.sliding;
-	bool shouldSlide => canSlide && magic.key.down(keys.slide) && grounded();
-
-
-
+	bool shouldSlide => canSlide && magic.key.down(keys.slide) && Grounded();
 
 	Rigidbody rb;
 

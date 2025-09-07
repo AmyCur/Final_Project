@@ -1,12 +1,10 @@
 using Magical;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.XR.OpenVR;
 using UnityEngine;
 
 public class CombatController : MonoBehaviour {
-
-
-	bool shouldShoot => canShoot && magic.key.down(keys.attack);
 
 	[Header("Controls")]
 	[Header("Shooting")]
@@ -15,77 +13,97 @@ public class CombatController : MonoBehaviour {
 	[SerializeField] bool canShoot = true;
 
 	[Header("Weapons")]
-	[Tooltip("Current Weapon")][SerializeField] Gun cw;
-	[SerializeField] List<Gun> guns;
+	[Tooltip("Current Weapon")][SerializeField] Attack ca;
+	[SerializeField] List<Attack> attacks;
+	PlayerController pc;
 
 	void Update() {
-		if (shouldShoot) {
-			DictateShotType();
+		if (ca.canAttack) {
+			if (magic.key.down(keys.attack)) {
+				ca.OnClick();
+			}
+			if (magic.key.up(keys.attack)) {
+				ca.OnRelease();
+			}
 		}
 
 		// 49 -> 57
-		SwitcWeapon();
+		SwitchWeapon();
 	}
 
-	void SwitcWeapon() {
+	void Start() {
+		pc = GetComponent<PlayerController>();
+	}
+
+	void SwitchWeapon() {
 		int pressedKey = (int) magic.key.PressedKey();
 		if (pressedKey >= 49 && pressedKey <= 57) {
 			pressedKey -= 49;
-			if (guns.Count >= pressedKey + 1) {
-				cw = guns[pressedKey];
+			if (attacks.Count >= pressedKey + 1) {
+				ca = attacks[pressedKey];
 			}
 		}
 	}
 
-	void DictateShotType() {
-		switch (cw.attackMode) {
-			case GunUtils.AttackMode.raycast:
-				StartCoroutine(RaycastShoot(cw));
-				break;
-			case GunUtils.AttackMode.projectile:
-				StartCoroutine(ProjectileShoot(cw));
-				break;
-		}
-	}
+	// void DictateShotType() {
+	// 	switch (cw.attackMode) {
+	// 		case GunUtils.AttackMode.raycast:
+	// 			StartCoroutine(RaycastShoot(cw));
+	// 			break;
+	// 		case GunUtils.AttackMode.projectile:
+	// 			StartCoroutine(ProjectileShoot(cw));
+	// 			break;
+	// 	}
+	// }
 
-	IEnumerator RaycastShoot(Gun currentWeapon) {
+	// IEnumerator RaycastShoot(Gun currentWeapon) {
 
-		int bps = currentWeapon.bulletsPerShot;
+	// 	Debug.Log($"Raycast shot {currentWeapon.name}");
+	// 	currentWeapon.canShoot = false;
 
-		if (bps <= 0) {
-			bps = 1;
-		}
+	// 	int bps = currentWeapon.bulletsPerShot;
 
-		// Shoot the bps amount of shots
-		for (int i = 0; i < bps; i++) {
+	// 	if (bps <= 0) {
+	// 		bps = 1;
+	// 	}
 
-		}
+	// 	// Shoot the bps amount of shots
+	// 	for (int i = 0; i < bps; i++) {
 
+	// 		Vector3 startPosition = pc.playerCamera.transform.position;
+	// 		//TODO: Implement random offset
+	// 		Vector3 direction = pc.playerCamera.transform.forward;
+	// 		float range = currentWeapon.maxRange;
+	// 		Debug.DrawLine(startPosition, startPosition + (direction * range), Color.green, 2);
 
+	// 		if (Physics.Raycast(startPosition, direction, out RaycastHit hit, range)) {
+	// 			if (hit.collider.tag == "enemy") {
+	// 				EnemyController enemy = hit.collider.GetComponent<EnemyController>();
+	// 				if (enemy == null) {
+	// 					Debug.LogError($"EnemyController of {hit.collider.name} is not set");
+	// 				}
+	// 				else {
+	// 					enemy.TakeDamage(currentWeapon.damage / bps);
+	// 				}
+	// 			}
+	// 		}
+	// 	}
 
+	// 	yield return new WaitForSeconds(cw.shotCD);
+	// 	currentWeapon.canShoot = true;
 
-		yield return null;
-	}
+	// }
 
-	void rotate_vector_by_quaternion(Vector3 v, Quaternion q, Vector3 vprime) {
-		// Extract the vector part of the quaternion
-		Vector3 u = new(q.x, q.y, q.z);
+	// IEnumerator ProjectileShoot(Gun currentWeapon) {
+	// 	yield return null;
+	// }
 
-		// Extract the scalar part of the quaternion
-		float s = q.w;
+	// IEnumerator Shoot(Gun currentWeapon) {
 
-		// Do the math
-		vprime = 2.0f * dot(u, v) * u
-				+ (s * s - dot(u, u)) * v
-				+ 2.0f * s * cross(u, v);
-	}
+	// 	yield return new WaitForSeconds(currentWeapon.shotCD);
+	// }
 
-	IEnumerator ProjectileShoot(Gun currentWeapon) {
-		yield return null;
-	}
-
-	IEnumerator Shoot(Gun currentWeapon) {
-
-		yield return new WaitForSeconds(currentWeapon.shotCD);
-	}
+	// void OnDrawGizmos() {
+		
+	// }
 }
