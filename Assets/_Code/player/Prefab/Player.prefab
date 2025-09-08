@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 266485287343104216}
   - component: {fileID: 7307930137881989105}
   - component: {fileID: 5872848814387922153}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -151,7 +151,7 @@ GameObject:
   - component: {fileID: 8395698010380907392}
   - component: {fileID: 4819737068671345320}
   - component: {fileID: 5154177159871973030}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -239,8 +239,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   s: 0
   adminState: 0
-  adminMode: 0
-  jumpForce: 1000
+  adminMode: 1
+  jumpForce: 150
   canJump: 1
   canRotate: 1
   mouseSensitivityX: 2
@@ -254,7 +254,7 @@ MonoBehaviour:
   canDash: 1
   dashReductionIncrement: 0.35
   dashReductionIncrementTime: 0.05
-  slideForce: 5
+  slideForce: 25
   canSlide: 1
   slideReductionIncrement: 0.1
   slideReductionIncrementTime: 0.1
@@ -369,9 +369,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 136d6ca7bd6592c4090e0daeab8d83f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canShoot: 1
-  cw: {fileID: 0}
-  guns: []
+  ca: {fileID: 11400000, guid: 83be91e5180a7508fa8701fc2f601ad5, type: 2}
+  attacks:
+  - {fileID: 11400000, guid: 83be91e5180a7508fa8701fc2f601ad5, type: 2}
+  - {fileID: 11400000, guid: 674598afed708494bace28aa880d5c71, type: 2}
 --- !u!1 &9003766077271217922
 GameObject:
   m_ObjectHideFlags: 0
@@ -381,7 +382,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8852605640988208444}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Eyes
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -1,16 +1,12 @@
 using Magical;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.XR.OpenVR;
 using UnityEngine;
 
 public class CombatController : MonoBehaviour {
 
 	[Header("Controls")]
 	[Header("Shooting")]
-
-
-	[SerializeField] bool canShoot = true;
 
 	[Header("Weapons")]
 	[Tooltip("Current Weapon")][SerializeField] Attack ca;

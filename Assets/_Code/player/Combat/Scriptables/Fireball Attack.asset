@@ -9,16 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86c3e7144e6170844937fd4cb2a7fc6d, type: 3}
-  m_Name: New Gun 3
+  m_Script: {fileID: 11500000, guid: b12cf1a981b3a7ce99f1171198fb7e94, type: 3}
+  m_Name: Fireball Attack
   m_EditorClassIdentifier: 
-  damage: 0
-  shotCD: 0
-  canShoot: 1
-  maxRange: 0
-  bulletsPerShot: 0
-  shotOffset:
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  attackType: 0
-  attackMode: 0
+  damage: 10
+  attackCD: 0.5
+  range: 100
+  canAttack: 1
+  pc: {fileID: 0}
+  element: 1
+  fireball: {fileID: 744630679400653840, guid: 4728922b19c5ff045be4ab8a0b714d34, type: 3}

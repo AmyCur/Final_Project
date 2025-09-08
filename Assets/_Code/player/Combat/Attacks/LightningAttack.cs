@@ -5,9 +5,14 @@ using UnityEditor.Rendering;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Lighting Attack", menuName = "Attacks/Create/Lighting", order = 0)]
-public class LightningAttack : Attack {
+public sealed class LightningAttack : Attack {
 
     List<EnemyController> hitEnemies = new();
+
+    [Header("Lightning")]
+    [SerializeField] Material defaultMaterial;
+    [SerializeField] Material selectedMaterial;
+    [SerializeField] Material damagedMaterial;
 
     IEnumerator CheckForEnemies() {
         while (keyDown) {
@@ -15,10 +20,11 @@ public class LightningAttack : Attack {
 
             if (ec != null && !hitEnemies.Contains(ec)) {
                 Debug.Log($"Adding {ec.name}");
+                ec.GetComponent<MeshRenderer>().material = selectedMaterial;
                 hitEnemies.Add(ec);
             }
 
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds(0.01f);
         }
     }
 
@@ -29,6 +35,13 @@ public class LightningAttack : Attack {
         pc.StartCoroutine(CheckForEnemies());
     }
 
+
+    IEnumerator SetToDefault(EnemyController ec) {
+        ec.GetComponent<MeshRenderer>().material = damagedMaterial;
+        yield return new WaitForSeconds(.2f);
+        if (!hitEnemies.Contains(ec)) ec.GetComponent<MeshRenderer>().material = defaultMaterial;
+    }
+
     public override void OnRelease() {
         base.OnRelease();
 
@@ -37,7 +50,9 @@ public class LightningAttack : Attack {
         float damageMultiplier = Mathf.Clamp(1 + (Mathf.Pow(enemies, 2) / 100), 1, 2);
 
         foreach (EnemyController ec in hitEnemies) {
-            ec.TakeDamage(damage * damageMultiplier);
+            pc.StartCoroutine(SetToDefault(ec));
+            ec.TakeDamage(damage * damageMultiplier, element);
+            
         }
 
         pc.StartCoroutine(AttackCooldown());

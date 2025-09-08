@@ -1,3 +1,4 @@
+using Elements;
 using Magical;
 using System.Collections;
 using UnityEngine;
@@ -8,11 +9,12 @@ public abstract class Attack : ScriptableObject{
     public float attackCD;
     public float range;
     public bool canAttack = true;
-    protected PlayerController pc;
+    public PlayerController pc;
     protected bool keyDown;
+    public Element element;
 
     protected EnemyController hitEnemy(Vector3 startPos, Vector3 direction, float range) {
-        Debug.DrawLine(startPos, startPos+(direction*range), Color.red, 1);
+        Debug.DrawLine(startPos, startPos + (direction * range), Color.red, 1);
         if (Physics.Raycast(startPos, direction, out RaycastHit hit, range)) {
             if (hit.collider.tag == "Enemy") {
                 EnemyController ec = hit.collider.GetComponent<EnemyController>();
@@ -21,7 +23,7 @@ public abstract class Attack : ScriptableObject{
                 }
             }
         }
-        
+
         return null;
     }
 

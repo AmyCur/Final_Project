@@ -54,9 +54,7 @@ public class PlayerController : MonoBehaviour {
 
 		colliders.Remove(GetComponent<CapsuleCollider>());
 
-		foreach (Collider col in colliders) {
-			Debug.Log($"Colldier: {col.name}");
-		}
+		
 
 
 		if (colliders.Count() > 0)
@@ -283,7 +281,6 @@ public class PlayerController : MonoBehaviour {
 
 	IEnumerator Dash() {
 		canDash = false;
-		Debug.Log("Should Dash");
 		dashForceMultiplier = 1f;
 
 		yield return new WaitForSeconds(0.2f);
