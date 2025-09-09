@@ -7,7 +7,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Lighting Attack", menuName = "Attacks/Create/Lighting", order = 0)]
 public sealed class LightningAttack : Attack {
 
-    List<EntityController> hitEnemies = new();
+    List<EntityController> hitEnems = new();
 
     [Header("Lightning")]
     [SerializeField] Material defaultMaterial;
@@ -16,12 +16,18 @@ public sealed class LightningAttack : Attack {
 
     IEnumerator CheckForEnemies() {
         while (keyDown) {
-            EntityController ec = hitEnemy(pc.playerCamera.transform.position, pc.playerCamera.transform.forward, range);
+            EntityController[] ecs = hitEnemies(pc.playerCamera.transform.position, pc.playerCamera.transform.forward, range);
 
-            if (ec != null && !hitEnemies.Contains(ec)) {
-                ec.GetComponent<MeshRenderer>().material = selectedMaterial;
-                hitEnemies.Add(ec);
+            if (ecs != null) {
+                foreach (EntityController ec in ecs) {
+                    if (ec != null && !hitEnems.Contains(ec)) {
+                        ec.GetComponent<MeshRenderer>().material = selectedMaterial;
+                        hitEnems.Add(ec);
+                    }
+                }
             }
+            
+            
 
             yield return new WaitForSeconds(0.01f);
         }
@@ -30,7 +36,7 @@ public sealed class LightningAttack : Attack {
     public override void OnClick() {
         base.OnClick();
 
-        hitEnemies = new();
+        hitEnems = new();
         pc.StartCoroutine(CheckForEnemies());
     }
 
@@ -38,17 +44,17 @@ public sealed class LightningAttack : Attack {
     IEnumerator SetToDefault(EntityController ec) {
         ec.GetComponent<MeshRenderer>().material = damagedMaterial;
         yield return new WaitForSeconds(.2f);
-        if (!hitEnemies.Contains(ec)) ec.GetComponent<MeshRenderer>().material = defaultMaterial;
+        if (!hitEnems.Contains(ec)) ec.GetComponent<MeshRenderer>().material = defaultMaterial;
     }
 
     public override void OnRelease() {
         base.OnRelease();
 
-        int enemies = hitEnemies.Count;
+        int enemies = hitEnems.Count;
         // Peaks at 10 enemies for double damage
         float damageMultiplier = Mathf.Clamp(1 + (Mathf.Pow(enemies, 2) / 100), 1, 2);
 
-        foreach (EntityController ec in hitEnemies) {
+        foreach (EntityController ec in hitEnems) {
             pc.StartCoroutine(SetToDefault(ec));
             ec.TakeDamage(damage * damageMultiplier, element);
             

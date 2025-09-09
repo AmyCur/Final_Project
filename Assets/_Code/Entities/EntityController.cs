@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System.Collections;
 using GameDebug;
 
-public class EntityController : MonoBehaviour {
+public abstract class EntityController : MonoBehaviour {
+    [Header("Entity")]
     [Header("Stats")]
     public float health;
     public float defence;
@@ -18,6 +19,7 @@ public class EntityController : MonoBehaviour {
     public float burnDuration = 5f;
     public float currentBurnTime = 5f;
     [HideInInspector] public bool burning;
+
 
     bool areType(ElementType recent, ElementType other, ElementType type) {
         return recent == type || other == type;
@@ -64,6 +66,7 @@ public class EntityController : MonoBehaviour {
 
     #endregion
 
+
     void ApplyElementalDamage() {
         ElementType recent = currentElements[currentElements.Count - 1].type;
         ElementType other = currentElements[currentElements.Count - 2].type;
@@ -73,6 +76,7 @@ public class EntityController : MonoBehaviour {
 
         // I cant think of a better way :cry:
 
+        #region Massive if block
         if (recent == ElementType.fire || other == ElementType.fire) {
             if (recent == ElementType.electric || other == ElementType.electric) {
                 ElectricFireDamage();
@@ -99,6 +103,7 @@ public class EntityController : MonoBehaviour {
                 ElectricNatureDamage();
             }
         }
+        #endregion
     }
 
     public void ApplyElements(Element element) {
@@ -126,7 +131,7 @@ public class EntityController : MonoBehaviour {
 
     }
 
-
+    #region Damage
     public void TakeDamage(float damage, Element element, float armourPenetration = 0) {
         float defenceDmgReduction = Positive(defence - armourPenetration) / 2;
         damage -= defenceDmgReduction;
@@ -144,6 +149,7 @@ public class EntityController : MonoBehaviour {
         damage -= defenceDmgReduction;
         health -= Positive(damage);
     }
+    #endregion
 
     void OnDrawGizmos() {
         Gizmos.color = Color.red;

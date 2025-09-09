@@ -2,10 +2,10 @@ using UnityEngine;
 
 namespace GameDebug {
     public static class Combat {
-        public static bool drawLightningArcRadius = true;
+        public static bool drawLightningArcRadius = false;
     }
     public static class Player {
-        public static bool drawJumpCollider = true; 
+        public static bool drawJumpCollider = false; 
         
     }
 }
