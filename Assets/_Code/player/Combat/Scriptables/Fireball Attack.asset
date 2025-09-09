@@ -17,5 +17,7 @@ MonoBehaviour:
   range: 100
   canAttack: 1
   pc: {fileID: 0}
-  element: 1
+  element:
+    type: 1
+    shouldRestart: 0
   fireball: {fileID: 744630679400653840, guid: 4728922b19c5ff045be4ab8a0b714d34, type: 3}

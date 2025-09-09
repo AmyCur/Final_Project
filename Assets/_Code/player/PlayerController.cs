@@ -27,20 +27,23 @@ namespace PlayerStates {
 [RequireComponent(typeof(Rigidbody))]           // For movement
 [RequireComponent(typeof(CapsuleCollider))]     // For Collision
 [RequireComponent(typeof(AudioSource))]
-public class PlayerController : MonoBehaviour {
+public class PlayerController : EntityController {
 
 	#region Variables
 
-	readonly Vector2 checkScale = new(1f, 0.06f);
+	readonly Vector2 checkScale = new(.45f, 0.06f);
 
 	void OnDrawGizmos() {
-		Vector3 scale = gameObject.transform.localScale;
-		Vector3 pos = gameObject.transform.position;
+		if (GameDebug.Player.drawJumpCollider) {
+			Vector3 scale = gameObject.transform.localScale;
+			Vector3 pos = gameObject.transform.position;
 
-		Gizmos.DrawCube(
-			new Vector3(pos.x, pos.y - scale.y - (checkScale.y / 2), pos.z),
-			new Vector3(scale.x * checkScale.x, checkScale.y, scale.z * checkScale.x)
-		);
+			Gizmos.DrawCube(
+				new Vector3(pos.x, pos.y - scale.y - (checkScale.y / 2), pos.z),
+				new Vector3(scale.x * checkScale.x, checkScale.y, scale.z * checkScale.x)
+			);
+		}
+		
 	}
 
 	bool Grounded() {

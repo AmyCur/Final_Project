@@ -272,8 +272,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77bea63a3ca5d99e8ae499222a492277, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
+  health: 1000
   defence: 0
+  currentElements: []
+  allCurrentElements: []
+  burnDamage: 10
+  burnDuration: 5
+  currentBurnTime: 5
 --- !u!65 &570731764
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -397,6 +402,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   defence: 0
+  currentElements: []
+  allCurrentElements: []
+  burnDamage: 10
+  burnDuration: 5
+  currentBurnTime: 5
 --- !u!65 &752088040
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -494,6 +504,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5154177159871973030, guid: d4211814a6a149142a4832bf221360ef, type: 3}
+      propertyPath: 'attacks.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: a2eb8f11967c580e3af6f8059c629fe8, type: 2}
     - target: {fileID: 5766768589114410277, guid: d4211814a6a149142a4832bf221360ef, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.106907

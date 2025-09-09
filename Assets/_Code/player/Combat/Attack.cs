@@ -1,5 +1,6 @@
 using Elements;
 using Magical;
+using MathsAndSome;
 using System.Collections;
 using UnityEngine;
 
@@ -13,11 +14,11 @@ public abstract class Attack : ScriptableObject{
     protected bool keyDown;
     public Element element;
 
-    protected EnemyController hitEnemy(Vector3 startPos, Vector3 direction, float range) {
+    protected EntityController hitEnemy(Vector3 startPos, Vector3 direction, float range) {
         Debug.DrawLine(startPos, startPos + (direction * range), Color.red, 1);
         if (Physics.Raycast(startPos, direction, out RaycastHit hit, range)) {
             if (hit.collider.tag == "Enemy") {
-                EnemyController ec = hit.collider.GetComponent<EnemyController>();
+                EntityController ec = hit.collider.GetComponent<EntityController>();
                 if (ec != null) {
                     return ec;
                 }
@@ -32,7 +33,7 @@ public abstract class Attack : ScriptableObject{
         keyDown = true;
 
         if (pc == null) {
-            pc = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+            pc = mas.player.GetPlayer();
         }
 
     }
