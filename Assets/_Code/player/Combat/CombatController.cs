@@ -23,6 +23,15 @@ public class CombatController : MonoBehaviour {
 			}
 		}
 
+		if (ca.canAltAttack) {
+			if (magic.key.down(keys.altAttack)) {
+				ca.OnALtClick();
+			}
+			if (magic.key.up(keys.altAttack)) {
+				ca.OnALtRelease();
+			}
+		}
+
 		// 49 -> 57
 		SwitchWeapon();
 	}

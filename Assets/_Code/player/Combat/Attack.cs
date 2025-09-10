@@ -5,15 +5,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Attack : ScriptableObject{
+public abstract class Attack : ScriptableObject {
 
+    [Header("Main Attack")]
     public float damage;
     public float attackCD;
     public float range;
     public bool canAttack = true;
-    public PlayerController pc;
     protected bool keyDown;
     public Element element;
+
+    [Header("Alt Attack")]
+    public float altCD;
+    public float altAttackCD = 5f;
+    public bool canAltAttack = true;
+    protected bool altKeyDown;
+    RadialUpdater ru;
+
+    [HideInInspector] public PlayerController pc;
+
 
     protected EntityController[] hitEnemies(Vector3 startPos, Vector3 direction, float range) {
         Debug.DrawLine(startPos, startPos + (direction * range), Color.red, 1);
@@ -22,9 +32,9 @@ public abstract class Attack : ScriptableObject{
         float dist = range;
 
         RaycastHit[] hits = Physics.RaycastAll(startPos, direction, range);
-        
 
-        if (hits.Length>0) {
+
+        if (hits.Length > 0) {
             foreach (RaycastHit hit in hits) {
                 if (hit.collider.tag == "Enemy") {
                     EntityController ec = hit.collider.GetComponent<EntityController>();
@@ -39,7 +49,7 @@ public abstract class Attack : ScriptableObject{
         if (ecs.Count > 0) {
             return ecs.ToArray();
         }
-       
+
         return null;
     }
 
@@ -53,7 +63,11 @@ public abstract class Attack : ScriptableObject{
 
     }
     public virtual void OnClickHold() { }
-    public virtual void OnRelease() { 
+
+    public virtual void OnALtClick() { altKeyDown = true; }
+    public virtual void OnALtRelease() { altKeyDown = false; }
+
+    public virtual void OnRelease() {
         keyDown = false;
 
 
@@ -63,6 +77,19 @@ public abstract class Attack : ScriptableObject{
         canAttack = false;
         yield return new WaitForSeconds(attackCD);
         canAttack = true;
+    }
+    
+    protected IEnumerator AltAttackCooldown() {
+        if (ru == null) {
+            ru = GameObject.FindGameObjectWithTag("RadialBar").GetComponent<RadialUpdater>();
+        }
+        canAltAttack = false;
+        float altCD = altAttackCD / 10f;
+        for (int i = 0; i < 10; i++) {
+            ru.UpdateProgress(i);
+            yield return new WaitForSeconds(altAttackCD);        
+        }
+        canAltAttack= true;
     }
 
 }

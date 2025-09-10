@@ -71,7 +71,7 @@ public class PlayerController : EntityController {
 	bool shouldSlide => canSlide && magic.key.down(keys.slide) && Grounded() && s != state.sliding;
 	bool shouldSlam => canSlam && magic.key.down(keys.slam) && !Grounded();
 
-	Rigidbody rb;
+	[HideInInspector] public Rigidbody rb;
 
 	[Space(20)]
 	[Header("Player")]
@@ -330,7 +330,7 @@ public class PlayerController : EntityController {
 			return t;
 		}
 
-		Vector3 velocity = WASDMovement() + DashForce() + SlideForce() + slamForce;
+		Vector3 velocity = WASDMovement() + DashForce() + SlideForce() + slamForce + impulses();
 
 		if (velocity.y == 0) {
 			velocity = new(velocity.x, rb.linearVelocity.y, velocity.z);
@@ -359,7 +359,7 @@ public class PlayerController : EntityController {
 	}
 
 	Vector3 WASDMovement() {
-		if (s != state.sliding) return new(MoveDirection().x * forwardSpeed, 0, MoveDirection().z * sidewaysSpeed);
+		if (s != state.sliding) return new(MoveDirection().x * forwardSpeed, 0, MoveDirection().z * forwardSpeed);
 
 		return Vector3.zero;
 

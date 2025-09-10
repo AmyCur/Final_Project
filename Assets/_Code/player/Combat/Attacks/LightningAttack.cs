@@ -1,7 +1,7 @@
 
+using MathsAndSome;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Rendering;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Lighting Attack", menuName = "Attacks/Create/Lighting", order = 0)]
@@ -39,6 +39,21 @@ public sealed class LightningAttack : Attack {
         hitEnems = new();
         pc.StartCoroutine(CheckForEnemies());
     }
+
+    public override void OnALtClick() {
+        base.OnALtClick();
+
+        if (pc == null) {
+            pc = mas.player.GetPlayer();
+        }
+
+        if (pc.rb != null) { pc.SV.Add(new(new(0, 20, 0), false)); Debug.Log("Not failed"); }
+        else Debug.Log("ALt failed");
+        
+        pc.StartCoroutine(AltAttackCooldown());
+        
+    }
+
 
 
     IEnumerator SetToDefault(EntityController ec) {

@@ -8,7 +8,7 @@ namespace Globals
     {
         public const string playerTag = "Player";
         public const string swordsmanTag = "swordsman";
-        public const string enemyTag = "enemy";
+        public const string enemyTag = "Enemy";
         public const string holderTag = "Holder";
         public const string projTag = "Projectile";
         public const string imgTag = "damage_image";
