@@ -16,10 +16,13 @@ MonoBehaviour:
   attackCD: 0.1
   range: 100
   canAttack: 1
-  pc: {fileID: 0}
   element:
     type: 4
-    shouldRestart: 0
+    f: 0
+  altCD: 0
+  altAttackCD: 1
+  canAltAttack: 1
+  pc: {fileID: 0}
   defaultMaterial: {fileID: 2100000, guid: 73298126e8aef2d75bc16d551b7f95fd, type: 2}
   selectedMaterial: {fileID: 2100000, guid: 5e93b35faa4493e7d8f726d0eb51254e, type: 2}
   damagedMaterial: {fileID: 2100000, guid: ef79119ec1e73bda3b8c531e4a78b0e2, type: 2}

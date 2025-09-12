@@ -84,10 +84,11 @@ public abstract class Attack : ScriptableObject {
             ru = GameObject.FindGameObjectWithTag("RadialBar").GetComponent<RadialUpdater>();
         }
         canAltAttack = false;
-        float altCD = altAttackCD / 10f;
-        for (int i = 0; i < 10; i++) {
-            ru.UpdateProgress(i);
-            yield return new WaitForSeconds(altAttackCD);        
+        const int chunks = 30;
+        float altCD = altAttackCD / (float)chunks;
+        for (int i = 0; i < chunks+1; i++) {
+            ru.UpdateProgress(Mathf.Ceil(i * 100f/chunks));
+            yield return new WaitForSeconds(altCD);
         }
         canAltAttack= true;
     }

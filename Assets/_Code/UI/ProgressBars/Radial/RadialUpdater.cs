@@ -24,7 +24,8 @@ public class RadialUpdater : MonoBehaviour {
     }
 
     public void UpdateProgress(float v) {
-        m_RadialProgress.progress = v;
+        Debug.Log(v);
+        m_RadialProgress.progress = Mathf.Clamp(v, 0, 100);
         
     }
 }
