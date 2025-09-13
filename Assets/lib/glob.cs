@@ -4,8 +4,7 @@ using UnityEngine;
 
 namespace Globals
 {
-    public static class glob
-    {
+    public static class glob {
         public const string playerTag = "Player";
         public const string swordsmanTag = "swordsman";
         public const string enemyTag = "Enemy";
@@ -19,5 +18,9 @@ namespace Globals
         public const float maxAiCheckRange = 10000f;
 
         public static readonly LayerMask enemyMask = 64;
+
+        public static bool isEntity(string tag) {
+            return tag == enemyTag || tag == playerTag;
+        }
     }
 }

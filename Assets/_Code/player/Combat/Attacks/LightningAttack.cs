@@ -47,7 +47,7 @@ public sealed class LightningAttack : Attack {
             pc = mas.player.GetPlayer();
         }
 
-        if (pc.rb != null) { pc.SV.Add(new(new(0, 20, 0), false)); Debug.Log("Not failed"); }
+        if (pc.rb != null) { pc.SV.Add(new(new(0, 20, 0), pc)); Debug.Log("Not failed"); }
         else Debug.Log("ALt failed");
         
         pc.StartCoroutine(AltAttackCooldown());

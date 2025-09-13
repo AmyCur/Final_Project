@@ -71,8 +71,6 @@ public class PlayerController : EntityController {
 	bool shouldSlide => canSlide && magic.key.down(keys.slide) && Grounded() && s != state.sliding;
 	bool shouldSlam => canSlam && magic.key.down(keys.slam) && !Grounded();
 
-	[HideInInspector] public Rigidbody rb;
-
 	[Space(20)]
 	[Header("Player")]
 	[Header("Controls")]
@@ -102,7 +100,6 @@ public class PlayerController : EntityController {
 	float defaultSideways = 12f;
 	float halfSideways = 6f;
 	float defaultSpeed;
-	public bool canMove = true;
 
 	float hInp;
 	float vInp;
@@ -137,57 +134,7 @@ public class PlayerController : EntityController {
 
 	
 
-	[Header("Impulses")]
-	public List<Impulse> SV; 
-
-	[Serializable]
-	public class Impulse {
-		public Vector3 force;
-		bool ntp;
-
-		IEnumerator ReduceForce() {
-
-			float dx = force.x / 2f;
-			float dy = force.y / 2f;
-			float dz = force.z / 2f;
-
-			float ax = Mathf.Abs(force.x);
-			float ay = Mathf.Abs(force.y);
-			float az = Mathf.Abs(force.z);
-
-			Debug.Log($"{ax},{ay},{az}");
-
-			while (Mathf.Abs(force.x)+Mathf.Abs(force.y)+Mathf.Abs(force.z)>1) {
-				force = new(force.x - dx, force.y - dy, force.z - dz);
-				if (ntp) {
-					force = new(
-						Mathf.Clamp(force.x, Mathf.NegativeInfinity, 0),
-						Mathf.Clamp(force.y, Mathf.NegativeInfinity, 0),
-						Mathf.Clamp(force.z, Mathf.NegativeInfinity, 0)
-					);
-				}
-				else {
-					force = new(
-						Mathf.Clamp(force.x, 0, Mathf.Infinity),
-						Mathf.Clamp(force.y, 0, Mathf.Infinity),
-						Mathf.Clamp(force.z, 0, Mathf.Infinity)
-					);
-				}
-				Debug.Log(force);
-				yield return new WaitForSeconds(.1f);
-			}
-			Debug.Log("fin");
-			mas.player.GetPlayer().SV.Remove(this);
-
-		}
-
-		public Impulse(Vector3 force, bool ntp) {
-			Debug.Log("Impulse Made");
-			this.ntp = ntp;
-			this.force = force;
-			mas.player.GetPlayer().StartCoroutine(ReduceForce());
-		}
-	}
+	
 
 
 	[Header("Objects")]
@@ -201,23 +148,21 @@ public class PlayerController : EntityController {
 	#endregion
 
 	#region Core Functions
+	
 
-	void Start() {
-		SetStartDefaults();
-	}
-
-	void SetStartDefaults() {
+	public override void SetStartDefaults() {
+		base.SetStartDefaults();
 		defaultSpeed = forwardSpeed;
 		defaultSideways = sidewaysSpeed;
 		halfSideways = sidewaysSpeed / 2;
-		rb = GetComponent<Rigidbody>();
 		playerCamera = Camera.main;
 
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
 	}
 
-	void FixedUpdate() {
+	public override void FixedUpdate() {
+		movementVector = WASDMovement() + DashForce() + SlideForce() + slamForce;
 		if (adminState == AdminState.standard) {
 			if (canMove) {
 				Move();
@@ -229,6 +174,8 @@ public class PlayerController : EntityController {
 	}
 
 	void Update() {
+
+		
 
 		sidewaysSpeed = Grounded() ? defaultSideways : halfSideways;
 		if (Grounded()) {
@@ -320,24 +267,7 @@ public class PlayerController : EntityController {
 	#region Other Functions
 
 	#region Movement
-	void Move() {
-		// I should have the player be moved by adding all the movement vectors
-		Vector3 impulses() {
-			Vector3 t = new();
-			foreach (Impulse i in SV) {
-				t += i.force;
-			}
-			return t;
-		}
-
-		Vector3 velocity = WASDMovement() + DashForce() + SlideForce() + slamForce + impulses();
-
-		if (velocity.y == 0) {
-			velocity = new(velocity.x, rb.linearVelocity.y, velocity.z);
-		}
-
-		rb.linearVelocity = velocity;
-	}
+	
 
 	Vector3 MoveDirection() {
 		hInp = Input.GetAxisRaw("Horizontal");

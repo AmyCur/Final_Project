@@ -16,9 +16,12 @@ namespace MathsAndSome
                 return new(v.x + x, v.y, v.z + z);
             }
 
+            public static Vector3 ClampVectorWithFloat(Vector3 v1, float min, float max) {
+                return new(Mathf.Clamp(v1.x, min, max), Mathf.Clamp(v1.y, min, max), Mathf.Clamp(v1.z, min, max));
+            }
+
             // This takes two Vector 3s and a float t as an input and returns the linear interpolation of the two vectors at (t*100)% 
-            public static Vector3 LerpVectors(Vector3 v1, Vector3 v2, float a)
-            {
+            public static Vector3 LerpVectors(Vector3 v1, Vector3 v2, float a) {
                 return new Vector3(
                     Mathf.Lerp(v1.x, v2.x, a),
                     Mathf.Lerp(v1.y, v2.y, a),

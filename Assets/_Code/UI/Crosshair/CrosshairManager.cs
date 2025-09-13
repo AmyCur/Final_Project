@@ -24,18 +24,15 @@ public class CrosshairManager : MonoBehaviour
             switch (hit.collider.tag) {
                 case glob.enemyTag:
                     image.sprite = Resources.Load<Sprite>("EnemyCursor");
-                    Debug.Log("enemy");
                     break;
                 default:
                     image.sprite = Resources.Load<Sprite>("default_cursor");
-                    Debug.Log("default");
                     break;
             }
         }
 
         else {
             image.sprite = Resources.Load<Sprite>("default_cursor");
-            Debug.Log("default but other");
         }
 
 
