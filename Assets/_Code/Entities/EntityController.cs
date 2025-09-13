@@ -5,6 +5,7 @@ using System.Collections;
 using GameDebug;
 using MathsAndSome;
 
+[RequireComponent(typeof(Rigidbody))]           // For movement
 public abstract class EntityController : MonoBehaviour {
     [Header("Entity")]
     [Header("Stats")]
@@ -55,11 +56,8 @@ public abstract class EntityController : MonoBehaviour {
                     Mathf.Clamp(force.z, sf.x<0 ? -10_000 : 0, sf.z>=0 ? 10_000 : 0)
                 );
 				
-				
-				Debug.Log(force);
 				yield return new WaitForSeconds(.1f);
 			}
-			Debug.Log("fin");
 			ec.SV.Remove(this);
 
 		}
@@ -169,7 +167,7 @@ public abstract class EntityController : MonoBehaviour {
             if (recent == ElementType.water || other == ElementType.water) {
                 WaterFireDamage();
             }
-            if (recent == ElementType.nature || other == ElementType.nature) {
+            if (recent == ElementType.wind || other == ElementType.wind) {
                 FireNatureDamage();
             }
         }
@@ -178,13 +176,13 @@ public abstract class EntityController : MonoBehaviour {
             if (recent == ElementType.electric || other == ElementType.electric) {
                 WaterElectricDamage();
             }
-            if (recent == ElementType.nature || other == ElementType.nature) {
+            if (recent == ElementType.wind || other == ElementType.wind) {
                 WaterNatureDamage();
             }
         }
 
         if (recent == ElementType.electric || other == ElementType.electric) {
-            if (recent == ElementType.nature || other == ElementType.nature) {
+            if (recent == ElementType.wind || other == ElementType.wind) {
                 ElectricNatureDamage();
             }
         }

@@ -53,23 +53,36 @@ public abstract class Attack : ScriptableObject {
         return null;
     }
 
-    public virtual void OnClick() {
-        Debug.Log("CLicked");
-        keyDown = true;
-
+    void GetPlayer() {
         if (pc == null) {
             pc = mas.player.GetPlayer();
         }
+    }
+
+    public virtual void OnClick() {
+        keyDown = true;
+
+        GetPlayer();
 
     }
-    public virtual void OnClickHold() { }
+    public virtual void OnClickHold() {
+        GetPlayer();
 
-    public virtual void OnALtClick() { altKeyDown = true; }
-    public virtual void OnALtRelease() { altKeyDown = false; }
+     }
+
+    public virtual void OnALtClick() {
+        altKeyDown = true;
+        GetPlayer();
+    }
+    public virtual void OnALtRelease() {
+        altKeyDown = false;
+        GetPlayer();
+    }
 
     public virtual void OnRelease() {
         keyDown = false;
 
+        GetPlayer();
 
     }
 

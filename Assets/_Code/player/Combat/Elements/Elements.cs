@@ -9,7 +9,7 @@ namespace Elements {
         fire = 1,
         water = 2,
         electric = 4,
-        nature = 8
+        wind = 8
     };
 
     static class Consts {
@@ -27,7 +27,7 @@ namespace Elements {
             {ElementType.fire, 5f},
             {ElementType.water, 5f},
             {ElementType.electric, 2f},
-            {ElementType.nature, 3f},
+            {ElementType.wind, 3f},
         };
     }
 

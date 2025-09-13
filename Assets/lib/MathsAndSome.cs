@@ -7,10 +7,15 @@ namespace MathsAndSome
 {
     public static class mas
     {
-        public static class vector
-        {
-            public static Vector3 GetRandomVectorInRadius(Vector3 v, float radius)
-            {
+        public static class get {
+            public static Transform VortexHolder() {
+                return GameObject.FindGameObjectWithTag("VortexHolder").transform;
+            }
+        }
+
+
+        public static class vector {
+            public static Vector3 GetRandomVectorInRadius(Vector3 v, float radius) {
                 float x = UnityEngine.Random.Range(0.1f, 1f) * radius;
                 float z = UnityEngine.Random.Range(0.1f, 1f) * radius;
                 return new(v.x + x, v.y, v.z + z);
@@ -29,12 +34,10 @@ namespace MathsAndSome
                 );
             }
 
-            public static Vector3 SubVectors(List<Vector3> v3s)
-            {
+            public static Vector3 SubVectors(List<Vector3> v3s) {
                 Vector3 vector = v3s[0];
                 // Skip root
-                for (int i = 1; i < v3s.Count; i++)
-                {
+                for (int i = 1; i < v3s.Count; i++) {
                     vector = new Vector3(vector.x - v3s[i].x, vector.y - v3s[i].y, vector.z - v3s[i].z);
                 }
 
@@ -42,11 +45,9 @@ namespace MathsAndSome
             }
 
             // This returns the absolute value of a vector (All numbers are positive)
-            public static Vector3 AbsVector(Vector3 v3)
-            {
+            public static Vector3 AbsVector(Vector3 v3) {
                 // If the vector is already all positive, there is no need to compute the abs of it
-                if (v3.x > 0 && v3.y > 0 && v3.z > 0)
-                {
+                if (v3.x > 0 && v3.y > 0 && v3.z > 0) {
                     return v3;
                 }
 
@@ -54,13 +55,10 @@ namespace MathsAndSome
             }
 
             // This multiplies n vectors where 0 < n <= infinity
-            public static Vector3 MultiplyVectors(List<Vector3> vectors)
-            {
+            public static Vector3 MultiplyVectors(List<Vector3> vectors) {
                 Vector3 v3 = vectors[0];
-                for (int i = 0; i < vectors.Count; i++)
-                {
-                    if (i != 0)
-                    {
+                for (int i = 0; i < vectors.Count; i++) {
+                    if (i != 0) {
                         v3 = new Vector3(v3.x * vectors[i].x, v3.y * vectors[i].y, v3.z * vectors[i].z);
                     }
                 }
@@ -68,36 +66,29 @@ namespace MathsAndSome
             }
 
             // This divides n vectors where 0 < n <= infinity
-            public static Vector3 DivideVectors(List<Vector3> vectors)
-            {
+            public static Vector3 DivideVectors(List<Vector3> vectors) {
                 Vector3 v3 = vectors[0];
-                for (int i = 0; i < vectors.Count; i++)
-                {
-                    if (i != 0)
-                    {
+                for (int i = 0; i < vectors.Count; i++) {
+                    if (i != 0) {
                         v3 = new Vector3(v3.x / vectors[i].x, v3.y / vectors[i].y, v3.z / vectors[i].z);
                     }
                 }
                 return v3;
             }
 
-            public static Vector3 InvertVector(Vector3 vector)
-            {
+            public static Vector3 InvertVector(Vector3 vector) {
                 return -vector;
             }
 
-            public static Quaternion v3q(Vector3 v3)
-            {
+            public static Quaternion v3q(Vector3 v3) {
                 return Quaternion.Euler(v3.x, v3.y, v3.z);
             }
 
-            public static float AddVectorComponents(Vector3 v)
-            {
+            public static float AddVectorComponents(Vector3 v) {
                 return v.x + v.y + v.z;
             }
 
-            public static Quaternion VectorsToQuaternion(Vector3 v1, Vector3 v2)
-            {
+            public static Quaternion VectorsToQuaternion(Vector3 v1, Vector3 v2) {
 
                 Vector3 v3 = new Vector3
                 (1 / Mathf.Sin((v1.y - v2.y) / (v1.x - v2.x)),
@@ -106,13 +97,11 @@ namespace MathsAndSome
 
                 return Quaternion.Euler(v3);
             }
-            public static Vector3 zeroY(Vector3 v)
-            {
+            public static Vector3 zeroY(Vector3 v) {
                 return new Vector3(v.x, 0, v.z);
             }
 
-            public static Vector3 ClampVector(Vector3 vectorToClamp, Vector3[] clamp)
-            {
+            public static Vector3 ClampVector(Vector3 vectorToClamp, Vector3[] clamp) {
                 float x = Mathf.Clamp(vectorToClamp.x, clamp[0].x, clamp[1].x);
                 float y = Mathf.Clamp(vectorToClamp.y, clamp[0].y, clamp[1].y);
                 float z = Mathf.Clamp(vectorToClamp.z, clamp[0].z, clamp[1].z);

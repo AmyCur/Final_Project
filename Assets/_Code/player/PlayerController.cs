@@ -22,7 +22,6 @@ namespace PlayerStates {
 	}
 }
 
-[RequireComponent(typeof(Rigidbody))]           // For movement
 [RequireComponent(typeof(CapsuleCollider))]     // For Collision
 [RequireComponent(typeof(AudioSource))]
 public class PlayerController : EntityController {
@@ -43,7 +42,7 @@ public class PlayerController : EntityController {
 		}
 	}
 
-	bool Grounded() {
+	public bool Grounded() {
 		Vector3 scale = gameObject.transform.localScale;
 		Vector3 pos = gameObject.transform.position;
 
