@@ -63,7 +63,6 @@ public abstract class EntityController : MonoBehaviour {
 		}
 
 		public Impulse(Vector3 force, EntityController ec) {
-			Debug.Log("Impulse Made");
             this.ec = ec;
 			this.force = force;
 			mas.player.GetPlayer().StartCoroutine(ReduceForce());

@@ -6,6 +6,7 @@ using UnityEngine;
 using Magical;
 using PlayerStates;
 using MathsAndSome;
+using Globals;
 
 namespace PlayerStates {
 	public enum state {
@@ -53,9 +54,8 @@ public class PlayerController : EntityController {
 
 		colliders.Remove(GetComponent<CapsuleCollider>());
 		foreach (Collider c in colliders.ToList()) {
-			if (c.isTrigger) {
-				colliders.Remove(c);
-			}
+			if (c.isTrigger) colliders.Remove(c);
+			if (glob.isEntity(c.tag)) colliders.Remove(c);
 		}
 
 		if (colliders.Count() > 0)
@@ -219,7 +219,7 @@ public class PlayerController : EntityController {
 
 			if (magic.key.down(keys.teleport)) {
 				if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hit, Mathf.Infinity, ~16)) {
-					transform.position = hit.transform.position;
+					transform.position = hit.point;
 				}
 			}
 

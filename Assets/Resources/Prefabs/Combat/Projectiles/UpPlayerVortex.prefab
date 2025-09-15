@@ -46,6 +46,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pullable: 0
   polarity: 0
-  radius: 5
+  radius: 8
   force: 3.5
   vortexLifetime: 2.5

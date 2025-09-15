@@ -6,8 +6,8 @@ using Vortex;
 
 namespace Vortex {
     public static class Create {
-        public static GameObject CreateVortex(GameObject vortex, Transform transform) {
-            return GameObject.Instantiate(vortex, transform.position, Quaternion.identity, mas.get.VortexHolder());
+        public static GameObject CreateVortex(GameObject vortex, Vector3 position) {
+            return GameObject.Instantiate(vortex, position, Quaternion.identity, mas.get.VortexHolder());
         }
     }
     
