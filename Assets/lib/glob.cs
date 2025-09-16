@@ -13,6 +13,7 @@ namespace Globals
         public const string imgTag = "damage_image";
         public const string deathScreenTag = "death_menu";
         public const string languageTextTag = "language_text";
+        public const string WeaponIconTag = "WeaponIcon";
 
         // This contains the max range for AI's when raycasting
         public const float maxAiCheckRange = 10000f;

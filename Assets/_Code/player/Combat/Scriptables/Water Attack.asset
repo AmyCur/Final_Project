@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b920effc3a3af2474aed098e2c1bbdc7, type: 3}
-  m_Name: Nature Attack
+  m_Name: Water Attack
   m_EditorClassIdentifier: 
   damage: 10
   attackCD: 0.1
   range: 100
   canAttack: 1
   element:
-    type: 1
+    type: 2
     f: 2.7412748
   altCD: 0
   altAttackCD: 5

@@ -1,4 +1,4 @@
-using MyGameUILibrary;
+using RadialProgressLib;
 using UnityEngine;
 using UnityEngine.UIElements;
 

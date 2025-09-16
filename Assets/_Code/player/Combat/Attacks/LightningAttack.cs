@@ -26,8 +26,8 @@ public sealed class LightningAttack : Attack {
                     }
                 }
             }
-            
-            
+
+
 
             yield return new WaitForSeconds(0.01f);
         }
@@ -43,15 +43,14 @@ public sealed class LightningAttack : Attack {
     public override void OnALtClick() {
         base.OnALtClick();
 
-        if (pc == null) {
-            pc = mas.player.GetPlayer();
-        }
+        if (pc == null) pc = mas.player.GetPlayer();
+
 
         if (pc.rb != null) { pc.SV.Add(new(new(0, 20, 0), pc)); Debug.Log("Not failed"); }
         else Debug.Log("ALt failed");
-        
-        pc.StartCoroutine(AltAttackCooldown());
-        
+
+        if (pc != null) pc.StartCoroutine(AltAttackCooldown());
+
     }
 
 
@@ -70,9 +69,11 @@ public sealed class LightningAttack : Attack {
         float damageMultiplier = Mathf.Clamp(1 + (Mathf.Pow(enemies, 2) / 100), 1, 2);
 
         foreach (EntityController ec in hitEnems) {
-            pc.StartCoroutine(SetToDefault(ec));
-            ec.TakeDamage(damage * damageMultiplier, element);
-            
+            if (ec != null) {
+                pc.StartCoroutine(SetToDefault(ec));
+                ec.TakeDamage(damage * damageMultiplier, element);
+            }
+
         }
 
         pc.StartCoroutine(AttackCooldown());

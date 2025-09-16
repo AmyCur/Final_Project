@@ -2,13 +2,11 @@ using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace MyGameUILibrary
-{
+namespace RadialProgressLib {
 
     // An element that displays progress inside a partially filled circle
     [UxmlElement]
-    public partial class RadialProgress : VisualElement
-    {
+    public partial class RadialProgress : VisualElement {
 
         // These are USS class names for the control overall and the label.
         public static readonly string ussClassName = "radial-progress";
@@ -29,12 +27,10 @@ namespace MyGameUILibrary
 
         // A value between 0 and 100
         [UxmlAttribute]
-        public float progress
-        {
+        public float progress {
             // The progress property is exposed in C#.
             get => m_Progress;
-            set
-            {
+            set {
                 // Whenever the progress property changes, MarkDirtyRepaint() is named. This causes a call to the
                 // generateVisualContents callback.
                 m_Progress = value;
@@ -44,8 +40,7 @@ namespace MyGameUILibrary
         }
 
         // This default constructor is RadialProgress's only constructor.
-        public RadialProgress()
-        {
+        public RadialProgress() {
             // Create a Label, add a USS class name, and add it to this visual tree.
             m_Label = new Label();
             m_Label.AddToClassList(ussLabelClassName);
@@ -63,16 +58,14 @@ namespace MyGameUILibrary
             progress = 0.0f;
         }
 
-        static void CustomStylesResolved(CustomStyleResolvedEvent evt)
-        {
-            RadialProgress element = (RadialProgress)evt.currentTarget;
+        static void CustomStylesResolved(CustomStyleResolvedEvent evt) {
+            RadialProgress element = (RadialProgress) evt.currentTarget;
             element.UpdateCustomStyles();
         }
 
         // After the custom colors are resolved, this method uses them to color the meshes and (if necessary) repaint
         // the control.
-        void UpdateCustomStyles()
-        {
+        void UpdateCustomStyles() {
             bool repaint = false;
             if (customStyle.TryGetValue(s_ProgressColor, out m_ProgressColor))
                 repaint = true;
@@ -84,8 +77,7 @@ namespace MyGameUILibrary
                 MarkDirtyRepaint();
         }
 
-        void GenerateVisualContent(MeshGenerationContext context)
-        {
+        void GenerateVisualContent(MeshGenerationContext context) {
             float width = contentRect.width;
             float height = contentRect.height;
 
@@ -106,4 +98,5 @@ namespace MyGameUILibrary
             painter.Stroke();
         }
     }
+   
 }
