@@ -12,7 +12,8 @@ public class RadialUpdater : MonoBehaviour {
         m_RadialProgress = new RadialProgress() {
             style = {
                 position = Position.Absolute,
-                left = 20, top = 20, width = 200, height = 200
+                right = 20, bottom = 20, width = 120, height = 120,
+                backgroundColor=Color.black,
             }
         };
 

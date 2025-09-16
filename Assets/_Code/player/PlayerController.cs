@@ -172,8 +172,8 @@ public class PlayerController : EntityController {
 		}
 	}
 
-	void Update() {
-
+	public override void Update() {
+		base.Update();
 		
 
 		sidewaysSpeed = Grounded() ? defaultSideways : halfSideways;

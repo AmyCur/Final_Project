@@ -109,6 +109,8 @@ public abstract class EntityController : MonoBehaviour {
 		rb = GetComponent<Rigidbody>();
     }
 
+    public virtual void Die(){}
+
     public void Start() {
         SetStartDefaults();
     }
@@ -118,6 +120,10 @@ public abstract class EntityController : MonoBehaviour {
             Move();
         }		
 	}
+
+    public virtual void Update() {
+        if (health <= 0) Die();
+    }
 
 
     void ElectricNatureDamage() {

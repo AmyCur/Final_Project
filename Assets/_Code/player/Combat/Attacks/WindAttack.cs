@@ -10,14 +10,28 @@ public class WindAttack : Attack {
     GameObject downVortex;
     GameObject cv;
 
-    public override void OnClick() {
-        base.OnClick();
+    [Header("Wind")]
+    public float upDamage = 5f;
+    public float downDamage = 45f;
+
+
+    void CreateDamageSphere(float dmg) {
+        Collider[] ec = Physics.OverlapSphere(pc.transform.position, upVortex.GetComponent<VortexController>().radius);
+
+        foreach (Collider col in ec) {
+            EntityController entityController = col.GetComponent<EntityController>();
+            if (entityController != null) {
+                entityController.TakeDamage(dmg, element);
+            }
+        }
     }
 
     IEnumerator Slam() {
+        pc.canSlam = false;
         if (cv!=null) Destroy(cv);
         pc.SV.Add(new(new(0, -60, 0), pc));
         yield return new WaitUntil(() => pc.Grounded());
+        CreateDamageSphere(downDamage);
         cv = Vortex.Create.CreateVortex(downVortex, pc.transform.position);
         pc.canSlam = true;
     }
@@ -27,9 +41,12 @@ public class WindAttack : Attack {
         pc.canSlam = false;
 
         cv = Vortex.Create.CreateVortex(upVortex, pc.transform.position);
+
+        CreateDamageSphere(upDamage);
+
         pc.SV.Add(new(new(0, 20, 0), pc));
         yield return new WaitForSeconds(.4f);
-        pc.StartCoroutine(Slam());
+        pc.canSlam = true;
     }
 
     public override void OnALtClick() {

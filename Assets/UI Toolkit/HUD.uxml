@@ -1,0 +1,10 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/USS/DarkBG.uss?fileID=7433441132597879392&amp;guid=a2e09d8abacd171249e209890a4da9ac&amp;type=3#DarkBG" />
+    <ui:VisualElement name="Container" style="flex-grow: 1;">
+        <MyGameUILibrary.RadialProgress name="RadialProgress" enabled="true" style="height: 180px; width: 180px; position: absolute; right: 50px; bottom: 50px; top: initial; left: initial;" />
+        <ui:Label text="Label" class="background" style="position: absolute; bottom: 20px; left: 20px; width: 785px; font-size: 0; height: 293px; text-overflow: clip;">
+            <ui:Label text="Label" style="font-size: 0; background-image: url(&quot;project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=-6527069497977903076&amp;guid=0ece7240e0e043c5a969e3fbb93822e4&amp;type=3#console.warnicon@2x&quot;); position: absolute; height: 200px; width: 200px; top: 37px; left: 27px;" />
+        </ui:Label>
+        <ui:Label text="Label" class="background" style="position: absolute; bottom: 0; left: 50%; width: 6px; font-size: 0; height: 6px; text-overflow: clip; top: 50%; right: 0; white-space: pre; flex-direction: column; flex-wrap: nowrap;" />
+    </ui:VisualElement>
+</ui:UXML>
