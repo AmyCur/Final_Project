@@ -207,7 +207,7 @@ Rigidbody:
   m_GameObject: {fileID: 8234333527592107431}
   serializedVersion: 4
   m_Mass: 5
-  m_Drag: 0
+  m_Drag: 0.01
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -237,27 +237,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90e2e910219492f4387f003fbfdf2ada, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 0
+  defence: 0
+  currentElements: []
+  burnDamage: 10
+  burnDuration: 5
+  currentBurnTime: 5
+  burning: 0
+  rb: {fileID: 0}
+  canMove: 1
+  movementVector: {x: 0, y: 0, z: 0}
+  SV: []
   s: 0
   adminState: 0
   adminMode: 1
-  jumpForce: 150
+  jumpForce: 160
   canJump: 1
   canRotate: 1
   mouseSensitivityX: 2
   mouseSensitivityY: 2
   minY: -90
   maxY: 90
-  speed: 12
-  canMove: 1
+  forwardSpeed: 15
+  sidewaysSpeed: 12
   dashForce: 15
   dashCD: 0.1
   canDash: 1
   dashReductionIncrement: 0.35
   dashReductionIncrementTime: 0.05
-  slideForce: 25
+  slideForce: 30
   canSlide: 1
   slideReductionIncrement: 0.1
   slideReductionIncrementTime: 0.1
+  canSlam: 1
+  slamForce: {x: 0, y: -50, z: 0}
   playerCamera: {fileID: 0}
   forwardObject: {fileID: 9003766077271217922}
 --- !u!82 &4819737068671345320

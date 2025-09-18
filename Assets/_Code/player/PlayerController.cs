@@ -66,9 +66,10 @@ public class PlayerController : EntityController {
 
 
 	bool shouldJump => canJump && magic.key.down(keys.jump) && Grounded();
-	bool shouldDash => canDash && magic.key.down(keys.dash) && s != state.sliding;
+	bool shouldDash => canDash && magic.key.down(keys.dash) && s != state.sliding && stamina>=dashStamina;
 	bool shouldSlide => canSlide && magic.key.down(keys.slide) && Grounded() && s != state.sliding;
 	bool shouldSlam => canSlam && magic.key.down(keys.slam) && !Grounded();
+	bool shouldRegenerateStamina => !regeneratingStamina && (s != state.sliding || s != state.slamming);
 
 	[Space(20)]
 	[Header("Player")]
@@ -130,6 +131,21 @@ public class PlayerController : EntityController {
 	public bool canSlam = true;
 	public Vector3 slamForce = new(0, -50, 0);
 
+	[Header("Stamina")]
+
+	public float stamina = 90f;
+	public float maxStamina = 90f;
+	public float minStamina = 0f;
+	public float staminaPerTick = 5f;
+	public float deltaTick = 0.05f;
+	bool regeneratingStamina = false;
+
+	public float dashStamina = 30f;
+
+	HUDController hc;
+
+
+
 
 	
 
@@ -151,6 +167,7 @@ public class PlayerController : EntityController {
 
 	public override void SetStartDefaults() {
 		base.SetStartDefaults();
+		hc = mas.get.HC();
 		defaultSpeed = forwardSpeed;
 		defaultSideways = sidewaysSpeed;
 		halfSideways = sidewaysSpeed / 2;
@@ -161,7 +178,11 @@ public class PlayerController : EntityController {
 	}
 
 	public override void FixedUpdate() {
-		movementVector = WASDMovement() + DashForce() + SlideForce() + slamForce;
+		Vector3 p1 = WASDMovement() + DashForce() + slamForce;
+		movementVector = p1 + SlideForce(Mathf.Clamp(
+			(Mathf.Abs(p1.x)+Mathf.Abs(p1.y)+Mathf.Abs(p1.z)) / 24f, 1f, 5f)
+		);
+		if (s == state.sliding) movementVector = new(movementVector.x, 0, movementVector.z);
 		if (adminState == AdminState.standard) {
 			if (canMove) {
 				Move();
@@ -174,7 +195,8 @@ public class PlayerController : EntityController {
 
 	public override void Update() {
 		base.Update();
-		
+
+		if (shouldRegenerateStamina) StartCoroutine(RegenerateStamina());
 
 		sidewaysSpeed = Grounded() ? defaultSideways : halfSideways;
 		if (Grounded()) {
@@ -293,6 +315,25 @@ public class PlayerController : EntityController {
 		return Vector3.zero;
 
 	}
+
+	#region Stamina
+	IEnumerator RegenerateStamina() {
+		regeneratingStamina = true;
+		while (stamina < maxStamina) {
+			stamina = Mathf.Clamp(stamina + (movementVector==Vector3.zero ? staminaPerTick: staminaPerTick*1.5f),minStamina, maxStamina);
+			hc.UpdateStaminaBars();
+			yield return new WaitForSeconds(deltaTick);
+		}
+		regeneratingStamina = false;
+	}
+
+	public void ReduceStamina(float reduce) {
+		stamina -= reduce;
+		hc.UpdateStaminaBars();
+	}
+
+	#endregion
+
 	#endregion
 
 	#region Directions
@@ -348,6 +389,7 @@ public class PlayerController : EntityController {
 	}
 
 	IEnumerator Dash() {
+		ReduceStamina(dashStamina);
 		canDash = false;
 		dashForceMultiplier = 1f;
 
@@ -360,9 +402,10 @@ public class PlayerController : EntityController {
 	#endregion
 
 	#region Sliding
-	Vector3 SlideForce() {
+	Vector3 SlideForce(float velocity) {
+		Debug.Log($"V: {velocity}");
 		Vector3 direction = slideDirection;
-		direction *= slideForce * slideForceMultiplier;
+		direction *= slideForce * slideForceMultiplier*velocity;
 		return direction;
 	}
 
@@ -378,11 +421,21 @@ public class PlayerController : EntityController {
 		slideForceMultiplier = 0f;
 	}
 
+	IEnumerator LockPlayerToGround(){
+		while (s == state.sliding) {
+
+			if (Physics.Raycast(transform.position, new(0, -1, 0), out RaycastHit hit, 3f)) transform.position = new(transform.position.x, hit.point.y + transform.localScale.y, transform.position.z);
+			yield return new WaitForSeconds(0f);
+		}
+	}
+
+
 	IEnumerator Slide() {
 
 		s = state.sliding;
 		canSlide = false;
 		slideForceMultiplier = 1f;
+		StartCoroutine(LockPlayerToGround());
 		yield return new WaitUntil(() => magic.key.up(keys.slide) || shouldJump);
 		if (shouldJump) {
 			StartCoroutine(ReduceSlideForce());

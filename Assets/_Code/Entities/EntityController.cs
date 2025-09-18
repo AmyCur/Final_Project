@@ -87,22 +87,23 @@ public abstract class EntityController : MonoBehaviour {
     void WaterNatureDamage() { }
 
     public void Move() {
-		// I should have the player be moved by adding all the movement vectors
-		Vector3 impulses() {
-			Vector3 t = new();
-			foreach (Impulse i in SV) {
-				t += i.force;
-			}
-			return t;
-		}
+        // I should have the player be moved by adding all the movement vectors
+        Vector3 impulses() {
+            Vector3 t = new();
+            foreach (Impulse i in SV) {
+                t += i.force;
+            }
+            return t;
+        }
 
-		Vector3 velocity = movementVector + impulses();
+        Vector3 velocity = movementVector + impulses();
 
-		if (velocity.y == 0) {
-			velocity = new(velocity.x, rb.linearVelocity.y, velocity.z);
-		}
+        if (velocity.y == 0) {
+            velocity = new(velocity.x, rb.linearVelocity.y, velocity.z);
+        }
 
         rb.linearVelocity = mas.vector.ClampVectorWithFloat(velocity, -1000, 1000);
+        
 	}
 
     public virtual void SetStartDefaults() {

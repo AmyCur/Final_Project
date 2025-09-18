@@ -1,5 +1,6 @@
 using Globals;
 using Magical;
+using MathsAndSome;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ public class CombatController : MonoBehaviour {
 	[Header("Weapons")]
 	[Tooltip("Current Weapon")][SerializeField] Attack ca;
 	[SerializeField] List<Attack> attacks;
-	UpdateWeaponIcon uwi;
+	HUDController hc;
 	PlayerController pc;
 
 	void Update() {
@@ -39,12 +40,12 @@ public class CombatController : MonoBehaviour {
 
 	void Start() {
 		pc = GetComponent<PlayerController>();
-		uwi = GameObject.FindGameObjectWithTag(glob.WeaponIconTag).GetComponent<UpdateWeaponIcon>();
+		hc = mas.get.HC();
 		UpdateIcons();
 	}
 
 	void UpdateIcons() {
-		uwi.UpdateIcon(ca.element.type);
+		hc.UpdateIcon(ca.element.type);
 	}
 
 	void SwitchWeapon() {
