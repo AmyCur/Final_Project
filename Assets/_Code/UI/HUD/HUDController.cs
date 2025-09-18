@@ -39,17 +39,24 @@ public class HUDController : MonoBehaviour {
         float maxStaminaPerBar = pc.maxStamina / staminaBars.Length;
         float currentStamina = stamina;
 
+
         foreach (Slider s in staminaBars) {
-            float a = currentStamina;
+            s.value = Mathf.Clamp(currentStamina, minStamina, maxStaminaPerBar);
             currentStamina -= maxStaminaPerBar;
-            s.value = Mathf.Clamp(a/staminaBars.Length, minStamina, maxStamina);
-            if (currentStamina <= 0) break;            
         }
+
+        
+    }
+
+    public void UpdateAll(ElementType? IconType=null) {
+        if (IconType != null) UpdateIcon((ElementType) IconType);
+        UpdateStaminaBars();
     }
 
     void Start() {
         pc = mas.player.GetPlayer();
     }
+    
     
     
     

@@ -69,7 +69,8 @@ public class PlayerController : EntityController {
 	bool shouldDash => canDash && magic.key.down(keys.dash) && s != state.sliding && stamina>=dashStamina;
 	bool shouldSlide => canSlide && magic.key.down(keys.slide) && Grounded() && s != state.sliding;
 	bool shouldSlam => canSlam && magic.key.down(keys.slam) && !Grounded();
-	bool shouldRegenerateStamina => !regeneratingStamina && (s != state.sliding || s != state.slamming);
+	bool shouldKeepRegenStamina => s != state.sliding || s != state.slamming;
+	bool shouldRegenerateStamina => !regeneratingStamina && shouldKeepRegenStamina;
 
 	[Space(20)]
 	[Header("Player")]
@@ -163,7 +164,7 @@ public class PlayerController : EntityController {
 	#endregion
 
 	#region Core Functions
-	
+
 
 	public override void SetStartDefaults() {
 		base.SetStartDefaults();
@@ -175,6 +176,8 @@ public class PlayerController : EntityController {
 
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
+		hc.UpdateAll();
+		
 	}
 
 	public override void FixedUpdate() {
@@ -319,7 +322,7 @@ public class PlayerController : EntityController {
 	#region Stamina
 	IEnumerator RegenerateStamina() {
 		regeneratingStamina = true;
-		while (stamina < maxStamina) {
+		while (stamina < maxStamina && s!=state.sliding && s!=state.slamming) {
 			stamina = Mathf.Clamp(stamina + (movementVector==Vector3.zero ? staminaPerTick: staminaPerTick*1.5f),minStamina, maxStamina);
 			hc.UpdateStaminaBars();
 			yield return new WaitForSeconds(deltaTick);
@@ -373,7 +376,7 @@ public class PlayerController : EntityController {
 	Vector3 DashForce() {
 		Vector3 direction = dashDirection;
 		direction *= dashForce * dashForceMultiplier;
-		if (s != state.sliding) return direction;
+		if (s != state.sliding) return new(direction.x,0,direction.z);
 		return Vector3.zero;
 
 	}
@@ -402,6 +405,7 @@ public class PlayerController : EntityController {
 	#endregion
 
 	#region Sliding
+	// Should get change in height and increase slide speed based on that
 	Vector3 SlideForce(float velocity) {
 		Debug.Log($"V: {velocity}");
 		Vector3 direction = slideDirection;
@@ -436,7 +440,11 @@ public class PlayerController : EntityController {
 		canSlide = false;
 		slideForceMultiplier = 1f;
 		StartCoroutine(LockPlayerToGround());
+		transform.localScale=new(transform.localScale.x,transform.localScale.y/2,transform.localScale.z);
+		transform.position = new(transform.position.x, transform.position.y - (transform.localScale.y), transform.position.z);
 		yield return new WaitUntil(() => magic.key.up(keys.slide) || shouldJump);
+		transform.localScale=new(transform.localScale.x,transform.localScale.y*2,transform.localScale.z);
+		transform.position = new(transform.position.x, transform.position.y + (transform.localScale.y / 2), transform.position.z);
 		if (shouldJump) {
 			StartCoroutine(ReduceSlideForce());
 		}
