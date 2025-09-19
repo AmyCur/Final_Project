@@ -4,8 +4,8 @@ using System.Collections;
 using UnityEngine;
 using Vortex;
 
-[CreateAssetMenu(fileName = "Wind Attack", menuName = "Attacks/Create/Wind", order = 2)]
-public class WindAttack : Attack {
+// [CreateAssetMenu(fileName = "Wind Attack", menuName = "Attacks/Create/Wind", order = 2)]
+public class WindAttack : AlternateAttack {
     GameObject upVortex;
     GameObject downVortex;
     GameObject cv;
@@ -49,9 +49,9 @@ public class WindAttack : Attack {
         pc.canSlam = true;
     }
 
-    public override void OnALtClick() {
-        if (canAltAttack) {
-            base.OnALtClick();
+    public override void OnClick() {
+        if (canAttack) {
+            base.OnClick();
             upVortex =Resources.Load<GameObject>("Prefabs/Combat/Projectiles/UpPlayerVortex");
             downVortex=Resources.Load<GameObject>("Prefabs/Combat/Projectiles/DownPlayerVortex");
             if (pc.Grounded()) pc.StartCoroutine(CreateVortex());

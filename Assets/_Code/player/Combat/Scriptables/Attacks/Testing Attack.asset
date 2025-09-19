@@ -9,15 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b12cf1a981b3a7ce99f1171198fb7e94, type: 3}
-  m_Name: Fireball Attack
+  m_Script: {fileID: 11500000, guid: e8936093976fe4b178b21c6e5c8d3d5a, type: 3}
+  m_Name: Testing Attack
   m_EditorClassIdentifier: 
-  damage: 10
-  attackCD: 0.5
-  range: 100
-  canAttack: 1
+  primary: {fileID: 11400000, guid: d2da083e38c60f7f88e6e724cfcf5fb9, type: 2}
+  alt: {fileID: 11400000, guid: dca53e20632b9d50aa847738986b0525, type: 2}
   pc: {fileID: 0}
-  element:
-    type: 1
-    shouldRestart: 0
-  fireball: {fileID: 744630679400653840, guid: 4728922b19c5ff045be4ab8a0b714d34, type: 3}

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "Beam Attack", menuName = "Attacks/Create/Primary/Beam", order = 0)]
+[CreateAssetMenu(fileName = "Beam Attack", menuName = "Attacks/Primary/Beam", order = 0)]
 public class BeamAttack : PrimaryAttack {
 
     [SerializeField] List<EntityController> hitEnems = new();
@@ -27,8 +27,6 @@ public class BeamAttack : PrimaryAttack {
                     }
                 }
             }
-
-
 
             yield return new WaitForSeconds(0.01f);
         }

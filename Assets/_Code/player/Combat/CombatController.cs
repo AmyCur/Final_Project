@@ -16,24 +16,13 @@ public class CombatController : MonoBehaviour {
 	PlayerController pc;
 
 	void Update() {
-		if (ca.canAttack) {
-			if (magic.key.down(keys.attack)) {
-				ca.OnClick();
-			}
-			if (magic.key.up(keys.attack)) {
-				ca.OnRelease();
-			}
-		}
+		if(ca!=null){
+			if (ca.primary.keyDown() && ca.primary.canAttack) ca.primary.OnClick();
+			if (ca.primary.keyUp()) ca.primary.OnRelease();
 
-		if (ca.canAltAttack) {
-			if (magic.key.down(keys.altAttack)) {
-				ca.OnALtClick();
-			}
-			if (magic.key.up(keys.altAttack)) {
-				ca.OnALtRelease();
-			}
+			if (ca.alt.keyDown() && ca.alt.canAttack) ca.alt.OnClick();
+			if (ca.alt.keyUp()) ca.alt.OnRelease();
 		}
-
 		// 49 -> 57
 		SwitchWeapon();
 	}
@@ -45,7 +34,7 @@ public class CombatController : MonoBehaviour {
 	}
 
 	void UpdateIcons() {
-		hc.UpdateIcon(ca.element.type);
+		hc.UpdateIcon(ca.primary.element.type);
 	}
 
 	void SwitchWeapon() {

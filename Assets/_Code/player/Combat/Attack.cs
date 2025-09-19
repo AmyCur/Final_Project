@@ -5,53 +5,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Attack : ScriptableObject {
+[CreateAssetMenu(fileName = "New Attack", menuName = "Attacks/Create", order = 0)]
+public class Attack : ScriptableObject {
 
-    [Header("Main Attack")]
-    public float damage;
-    public float attackCD;
-    public float range;
-    public bool canAttack = true;
-    protected bool keyDown;
-    public Element element;
+    // [Header("Main Attack")]
+    // public float damage;
+    // public float attackCD;
+    // public float range;
+    // public bool canAttack = true;
+    // protected bool keyDown;
+    // public Element element;
 
-    [Header("Alt Attack")]
-    public float altCD;
-    public float altAttackCD = 5f;
-    public bool canAltAttack = true;
-    protected bool altKeyDown;
-    RadialUpdater ru;
+    // [Header("Alt Attack")]
+    // public float altCD;
+    // public float altAttackCD = 5f;
+    // public bool canAltAttack = true;
+    // protected bool altKeyDown;
+    // RadialUpdater ru;
+
+    public PrimaryAttack primary;
+    public AlternateAttack alt;
 
     [HideInInspector] public PlayerController pc;
 
 
-    protected EntityController[] hitEnemies(Vector3 startPos, Vector3 direction, float range) {
-        Debug.DrawLine(startPos, startPos + (direction * range), Color.red, 1);
-        List<EntityController> ecs = new();
-        Vector3 pos = startPos;
-        float dist = range;
 
-        RaycastHit[] hits = Physics.RaycastAll(startPos, direction, range);
-
-
-        if (hits.Length > 0) {
-            foreach (RaycastHit hit in hits) {
-                if (hit.collider.tag == "Enemy") {
-                    EntityController ec = hit.collider.GetComponent<EntityController>();
-
-                    if (ec != null) {
-                        ecs.Add(ec);
-                    }
-                }
-            }
-        }
-
-        if (ecs.Count > 0) {
-            return ecs.ToArray();
-        }
-
-        return null;
-    }
 
     void GetPlayer() {
         if (pc == null) {
@@ -59,39 +37,8 @@ public abstract class Attack : ScriptableObject {
         }
     }
 
-    public virtual void OnClick() {
-        keyDown = true;
 
-        GetPlayer();
-
-    }
-    public virtual void OnClickHold() {
-        GetPlayer();
-
-     }
-
-    public virtual void OnALtClick() {
-        altKeyDown = true;
-        GetPlayer();
-    }
-    public virtual void OnALtRelease() {
-        altKeyDown = false;
-        GetPlayer();
-    }
-
-    public virtual void OnRelease() {
-        keyDown = false;
-
-        GetPlayer();
-
-    }
-
-    protected IEnumerator AttackCooldown() {
-        canAttack = false;
-        yield return new WaitForSeconds(attackCD);
-        canAttack = true;
-    }
-    
+    /*
     protected IEnumerator AltAttackCooldown() {
         if (ru == null)
         {
@@ -110,5 +57,5 @@ public abstract class Attack : ScriptableObject {
         }
         canAltAttack= true;
     }
-
+*/
 }
