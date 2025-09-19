@@ -32,6 +32,7 @@ public class HUDController : MonoBehaviour {
     public void UpdateIcon(ElementType e) => weaponIcon.sprite = Resources.Load<Sprite>(ETypePath[e]);
 
     public void UpdateStaminaBars() {
+        
         float stamina = pc.stamina;
         float maxStamina = pc.maxStamina;
         float minStamina = pc.minStamina;
@@ -53,7 +54,7 @@ public class HUDController : MonoBehaviour {
         UpdateStaminaBars();
     }
 
-    void Start() {
+    void Awake() {
         pc = mas.player.GetPlayer();
     }
     

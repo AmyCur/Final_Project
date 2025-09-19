@@ -8,11 +8,14 @@ using UnityEngine;
 public sealed class LightningAttack : Attack {
 
     List<EntityController> hitEnems = new();
+    public List<GameObject> markers = new();
 
     [Header("Lightning")]
     [SerializeField] Material defaultMaterial;
     [SerializeField] Material selectedMaterial;
     [SerializeField] Material damagedMaterial;
+    
+    GameObject marker => Resources.Load<GameObject>("Prefabs/Combat/Marker/Marker");
 
     IEnumerator CheckForEnemies() {
         while (keyDown) {
@@ -20,9 +23,14 @@ public sealed class LightningAttack : Attack {
 
             if (ecs != null) {
                 foreach (EntityController ec in ecs) {
-                    if (ec != null && !hitEnems.Contains(ec)) {
+                    if (ec != null && !hitEnems.Contains(ec))
+                    {
                         ec.GetComponent<MeshRenderer>().material = selectedMaterial;
                         hitEnems.Add(ec);
+                        GameObject m = Instantiate(marker, ec.transform.position, Quaternion.identity);
+                        m.transform.position = new(m.transform.position.x + (m.transform.forward.x * 1), m.transform.position.y, m.transform.position.z + (m.transform.forward.z * 1));
+                        m.transform.parent = ec.gameObject.transform;
+                        markers.Add(m);
                     }
                 }
             }

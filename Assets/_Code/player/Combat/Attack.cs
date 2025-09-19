@@ -93,8 +93,13 @@ public abstract class Attack : ScriptableObject {
     }
     
     protected IEnumerator AltAttackCooldown() {
-        if (ru == null) {
-            ru = GameObject.FindGameObjectWithTag("RadialBar").GetComponent<RadialUpdater>();
+        if (ru == null)
+        {
+            try
+            {
+                ru = GameObject.FindGameObjectWithTag("RadialBar").GetComponent<RadialUpdater>();
+            }
+            catch { }
         }
         canAltAttack = false;
         const int chunks = 30;

@@ -407,7 +407,7 @@ public class PlayerController : EntityController {
 	#region Sliding
 	// Should get change in height and increase slide speed based on that
 	Vector3 SlideForce(float velocity) {
-		Debug.Log($"V: {velocity}");
+		// Debug.Log($"V: {velocity}");
 		Vector3 direction = slideDirection;
 		direction *= slideForce * slideForceMultiplier*velocity;
 		return direction;
