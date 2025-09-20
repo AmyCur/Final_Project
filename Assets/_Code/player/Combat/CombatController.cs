@@ -30,6 +30,7 @@ public class CombatController : MonoBehaviour {
 	void Start() {
 		pc = GetComponent<PlayerController>();
 		hc = mas.get.HC();
+		if (!ca) ca = attacks[0];
 		UpdateIcons();
 	}
 

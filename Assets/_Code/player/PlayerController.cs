@@ -113,9 +113,10 @@ public class PlayerController : EntityController {
 	[Space(10)]
 	[SerializeField] float dashReductionIncrement = 0.08f;
 	[SerializeField] float dashReductionIncrementTime = 0.1f;
+	[SerializeField] float dashDirectionChangeSpeed = 0.01f;
 
-	Vector3 dashDirection;
-	float dashForceMultiplier = 0f;
+	public Vector3 dashDirection;
+	[HideInInspector] public float dashForceMultiplier = 0f;
 
 	[Header("Sliding")]
 
@@ -146,6 +147,11 @@ public class PlayerController : EntityController {
 	HUDController hc;
 
 
+	// Movement
+	[HideInInspector] public bool justDashed;
+	[HideInInspector] public bool justSlid;
+
+	[SerializeField] Vector3 currentVelocity;
 
 
 	
@@ -199,6 +205,8 @@ public class PlayerController : EntityController {
 	public override void Update() {
 		base.Update();
 
+		currentVelocity = rb.linearVelocity;
+
 		if (shouldRegenerateStamina) StartCoroutine(RegenerateStamina());
 
 		sidewaysSpeed = Grounded() ? defaultSideways : halfSideways;
@@ -216,7 +224,9 @@ public class PlayerController : EntityController {
 			}
 
 			if (shouldJump) {
-				Jump();
+				if (justDashed) { Jump(jumpForce / 2); dashForceMultiplier *= 2; }
+				else if (justSlid) Jump(jumpForce / 2);
+				else { Jump(); Debug.Log("JUMP"); }
 				if (!canDash) {
 					// dashReductionIncrement = 0.01f;
 				}
@@ -307,12 +317,31 @@ public class PlayerController : EntityController {
 		return (forward * vInp + right * hInp).normalized;
 	}
 
-	void Jump() {
+	
+
+	void Jump(float? force=null) {
+		if (force == null) force = jumpForce;
+			
+		
 		// rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpForce, rb.linearVelocity.z);
-		rb.AddForce(new(0, jumpForce * 10, 0));
+		rb.AddForce(new(0, (float)force * 10, 0));
 	}
 
 	Vector3 WASDMovement() {
+		Vector3 md = new(Math.Sign(MoveDirection().x), 0, Math.Sign(MoveDirection().z));
+		Vector3 dd = new(Math.Sign(dashDirection.x), 0, Math.Sign(dashDirection.z));
+
+		if (-md.x == dd.x && md.x!=0 && dd.x!=0) {
+			if (dashDirection.x < 0) dashDirection = new(dashDirection.x+dashDirectionChangeSpeed, dashDirection.y, dashDirection.z);
+			else if (dashDirection.x > 0) dashDirection = new(dashDirection.x-dashDirectionChangeSpeed, dashDirection.y, dashDirection.z);
+		}
+
+		if (-md.z == dd.z && md.z!=0 && dd.z!=0) {
+			if (dashDirection.z < 0) dashDirection = new(dashDirection.x, dashDirection.y, dashDirection.z + dashDirectionChangeSpeed);
+			else if (dashDirection.z > 0) dashDirection = new(dashDirection.x, dashDirection.y, dashDirection.z - dashDirectionChangeSpeed);
+		}
+		
+
 		if (s != state.sliding) return new(MoveDirection().x * forwardSpeed, 0, MoveDirection().z * forwardSpeed);
 
 		return Vector3.zero;
@@ -381,9 +410,11 @@ public class PlayerController : EntityController {
 
 	}
 
+	
+
 	IEnumerator ReduceDashForce() {
 		while (dashForceMultiplier > 0) {
-			dashForceMultiplier -= Grounded() ? dashReductionIncrement : dashReductionIncrement / 10;
+			dashForceMultiplier -= Grounded() ? dashReductionIncrement : 0;
 			dashForceMultiplier = Mathf.Clamp(dashForceMultiplier, 0, Mathf.Infinity);
 			yield return new WaitForSeconds(dashReductionIncrementTime);
 		}
@@ -391,7 +422,14 @@ public class PlayerController : EntityController {
 		dashForceMultiplier = 0f;
 	}
 
+	IEnumerator JustDashedCalculator() {
+		justDashed = true;
+		yield return new WaitForSeconds(.2f);
+		justDashed = false;
+	}
+
 	IEnumerator Dash() {
+		StartCoroutine(JustDashedCalculator());
 		ReduceStamina(dashStamina);
 		canDash = false;
 		dashForceMultiplier = 1f;
@@ -410,14 +448,15 @@ public class PlayerController : EntityController {
 		// Debug.Log($"V: {velocity}");
 		Vector3 direction = slideDirection;
 		direction *= slideForce * slideForceMultiplier*velocity;
+		direction = new(direction.x, 0, direction.z);
 		return direction;
 	}
 
-	IEnumerator ReduceSlideForce() {
+	IEnumerator ReduceSlideForce(float reductionIncrement) {
 		yield return new WaitForSeconds(.05f);
 
 		while (slideForceMultiplier > 0 || !Grounded()) {
-			slideForceMultiplier -= slideReductionIncrement <= 0 ? 0.1f : slideReductionIncrement;
+			slideForceMultiplier -= reductionIncrement;
 			slideForceMultiplier = Mathf.Clamp(slideForceMultiplier, 0, Mathf.Infinity);
 			yield return new WaitForSeconds(slideReductionIncrementTime);
 		}
@@ -433,9 +472,15 @@ public class PlayerController : EntityController {
 		}
 	}
 
+	IEnumerator JustSlidCalculator() {
+		justSlid = true;
+		yield return new WaitForSeconds(.2f);
+		justSlid = false;
+	}
+
 
 	IEnumerator Slide() {
-
+		StartCoroutine(JustSlidCalculator());
 		s = state.sliding;
 		canSlide = false;
 		slideForceMultiplier = 1f;
@@ -446,10 +491,11 @@ public class PlayerController : EntityController {
 		transform.localScale=new(transform.localScale.x,transform.localScale.y*2,transform.localScale.z);
 		transform.position = new(transform.position.x, transform.position.y + (transform.localScale.y / 2), transform.position.z);
 		if (shouldJump) {
-			StartCoroutine(ReduceSlideForce());
+			StartCoroutine(ReduceSlideForce(slideReductionIncrement));
 		}
 		else {
-			slideForceMultiplier = 0f;
+			StartCoroutine(ReduceSlideForce(slideReductionIncrement*10));
+
 		}
 		canSlide = true;
 		s = state.walking;
