@@ -13,7 +13,7 @@ namespace PlayerStates {
 		walking,
 		sliding,
 		slamming,
-		wall_run,
+		crawling,
 		dead
 	}
 
@@ -68,7 +68,7 @@ public class PlayerController : EntityController {
 	bool shouldJump => canJump && magic.key.down(keys.jump) && Grounded();
 	bool shouldDash => canDash && magic.key.down(keys.dash) && s != state.sliding && stamina>=dashStamina;
 	bool shouldSlide => canSlide && magic.key.down(keys.slide) && Grounded() && s != state.sliding;
-	bool shouldSlam => canSlam && magic.key.down(keys.slam) && !Grounded();
+	bool shouldSlam => canSlam && magic.key.down(keys.slam) && !Grounded() && !Physics.Raycast(transform.position, new(0,-1,0), 2f);
 	bool shouldKeepRegenStamina => s != state.sliding || s != state.slamming;
 	bool shouldRegenerateStamina => !regeneratingStamina && shouldKeepRegenStamina;
 
@@ -82,6 +82,7 @@ public class PlayerController : EntityController {
 	[Header("Jumping")]
 
 	public float jumpForce = 12f;
+	float baseJumpForce;
 	public bool canJump = true;
 
 	[Header("Camera")]
@@ -131,6 +132,7 @@ public class PlayerController : EntityController {
 
 	[Header("Slamming")]
 	public bool canSlam = true;
+	public float slamJumpForce = 416f;
 	public Vector3 slamForce = new(0, -50, 0);
 
 	[Header("Stamina")]
@@ -148,13 +150,17 @@ public class PlayerController : EntityController {
 
 
 	// Movement
-	[HideInInspector] public bool justDashed;
-	[HideInInspector] public bool justSlid;
+	[Header("Just Bools")]
+	[SerializeField] bool justSlammed;
+	public bool justDashed;
+	public bool justSlid;
 
-	[SerializeField] Vector3 currentVelocity;
 
 
+	Vector3 playerSize;
+	Vector3 halfSize;
 	
+	[SerializeField] Vector3 currentVelocity;
 
 	
 
@@ -170,20 +176,31 @@ public class PlayerController : EntityController {
 	#endregion
 
 	#region Core Functions
+	
+
+	public override void Start() {
+		base.Start();
+
+	}
 
 
 	public override void SetStartDefaults() {
 		base.SetStartDefaults();
+		// Application.
+		baseJumpForce = jumpForce;
 		hc = mas.get.HC();
 		defaultSpeed = forwardSpeed;
 		defaultSideways = sidewaysSpeed;
 		halfSideways = sidewaysSpeed / 2;
 		playerCamera = Camera.main;
+		playerSize = transform.localScale;
+		halfSize = new(transform.localScale.x, transform.localScale.y / 2, transform.localScale.z);
 
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
-		hc.UpdateAll();
 		
+		hc.UpdateAll();
+
 	}
 
 	public override void FixedUpdate() {
@@ -202,6 +219,12 @@ public class PlayerController : EntityController {
 		}
 	}
 
+	IEnumerator SlamJumpTimer() {
+		jumpForce = slamJumpForce;
+		yield return new WaitForSeconds(0.14f);
+		jumpForce = baseJumpForce;
+	}
+
 	public override void Update() {
 		base.Update();
 
@@ -209,8 +232,9 @@ public class PlayerController : EntityController {
 
 		if (shouldRegenerateStamina) StartCoroutine(RegenerateStamina());
 
-		sidewaysSpeed = Grounded() ? defaultSideways : halfSideways;
+		// sidewaysSpeed = Grounded() ? defaultSideways : halfSideways;
 		if (Grounded()) {
+			if (slamForce != Vector3.zero) StartCoroutine(SlamJumpTimer());
 			slamForce = Vector3.zero;
 		}
 
@@ -225,8 +249,8 @@ public class PlayerController : EntityController {
 
 			if (shouldJump) {
 				if (justDashed) { Jump(jumpForce / 2); dashForceMultiplier *= 2; }
-				else if (justSlid) Jump(jumpForce / 2);
-				else { Jump(); Debug.Log("JUMP"); }
+				else if (justSlid) Jump(jumpForce / 1.67f);
+				else Jump();
 				if (!canDash) {
 					// dashReductionIncrement = 0.01f;
 				}
@@ -286,69 +310,27 @@ public class PlayerController : EntityController {
 	}
 	#endregion
 
-	#region Admin
-	void AdminMove() {
-		hInp = Input.GetAxisRaw("Horizontal");
-		vInp = Input.GetAxisRaw("Vertical");
+	#region IEnumerators
+	#region Justs
+	IEnumerator JustSlammed() {
+		justSlammed = true;
+		yield return new WaitForSeconds(0.1f);
+		justSlammed = false;
+	}
 
-		Vector3 right = playerCamera.transform.right;
-		Vector3 forward = playerCamera.transform.forward;
+	IEnumerator JustDashedCalculator() {
+		justDashed = true;
+		yield return new WaitForSeconds(.2f);
+		justDashed = false;
+	}
 
-		rb.linearVelocity = (forward * vInp + right * hInp).normalized * forwardSpeed;
+	IEnumerator JustSlidCalculator() {
+		justSlid = true;
+		yield return new WaitForSeconds(.2f);
+		justSlid = false;
 	}
 	#endregion
-
-	#region Other Functions
-
-	#region Movement
-	
-
-	Vector3 MoveDirection() {
-		hInp = Input.GetAxisRaw("Horizontal");
-		vInp = Input.GetAxisRaw("Vertical");
-
-		if (hInp != 0 && vInp != 0) {
-			slideForceMultiplier = Mathf.Clamp(slideForceMultiplier - 0.03f, 0, Mathf.Infinity);
-		}
-
-		Vector3 forward = forwardObject.transform.forward;
-		Vector3 right = forwardObject.transform.right;
-
-		return (forward * vInp + right * hInp).normalized;
-	}
-
-	
-
-	void Jump(float? force=null) {
-		if (force == null) force = jumpForce;
-			
-		
-		// rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpForce, rb.linearVelocity.z);
-		rb.AddForce(new(0, (float)force * 10, 0));
-	}
-
-	Vector3 WASDMovement() {
-		Vector3 md = new(Math.Sign(MoveDirection().x), 0, Math.Sign(MoveDirection().z));
-		Vector3 dd = new(Math.Sign(dashDirection.x), 0, Math.Sign(dashDirection.z));
-
-		if (-md.x == dd.x && md.x!=0 && dd.x!=0) {
-			if (dashDirection.x < 0) dashDirection = new(dashDirection.x+dashDirectionChangeSpeed, dashDirection.y, dashDirection.z);
-			else if (dashDirection.x > 0) dashDirection = new(dashDirection.x-dashDirectionChangeSpeed, dashDirection.y, dashDirection.z);
-		}
-
-		if (-md.z == dd.z && md.z!=0 && dd.z!=0) {
-			if (dashDirection.z < 0) dashDirection = new(dashDirection.x, dashDirection.y, dashDirection.z + dashDirectionChangeSpeed);
-			else if (dashDirection.z > 0) dashDirection = new(dashDirection.x, dashDirection.y, dashDirection.z - dashDirectionChangeSpeed);
-		}
-		
-
-		if (s != state.sliding) return new(MoveDirection().x * forwardSpeed, 0, MoveDirection().z * forwardSpeed);
-
-		return Vector3.zero;
-
-	}
-
-	#region Stamina
+	#region Regenerations
 	IEnumerator RegenerateStamina() {
 		regeneratingStamina = true;
 		while (stamina < maxStamina && s!=state.sliding && s!=state.slamming) {
@@ -358,60 +340,8 @@ public class PlayerController : EntityController {
 		}
 		regeneratingStamina = false;
 	}
-
-	public void ReduceStamina(float reduce) {
-		stamina -= reduce;
-		hc.UpdateStaminaBars();
-	}
-
 	#endregion
-
-	#endregion
-
-	#region Directions
-
-	Vector3 DashDirection(bool increaseForward = true) {
-		hInp = Input.GetAxisRaw("Horizontal");
-		vInp = Input.GetAxisRaw("Vertical");
-
-		Vector3 forward = forwardObject.transform.forward;
-		Vector3 right = forwardObject.transform.right;
-
-		// Debug.Log($"Forward {forward} | Right {right}");
-
-		if (s != state.sliding) {
-			if (hInp != 0) {
-				return vInp != 0 ? (forward * vInp + right * hInp).normalized : (right * hInp).normalized;
-			}
-
-			else {
-				return vInp != 0 ? (forward * vInp).normalized : increaseForward ? forward * 1.1f : forward /*Forward is increased because it feels smaller cos ur not moving*/;
-			}
-		}
-
-		return Vector3.zero;
-
-
-		// return (hInp != 0 && vInp != 0) ? (forward * vInp + right * hInp).normalized : forward;
-
-	}
-
-	Vector3 SlideDirection() {
-		return DashDirection(false);
-	}
-	#endregion
-
-	#region Dashing
-	Vector3 DashForce() {
-		Vector3 direction = dashDirection;
-		direction *= dashForce * dashForceMultiplier;
-		if (s != state.sliding) return new(direction.x,0,direction.z);
-		return Vector3.zero;
-
-	}
-
-	
-
+	#region Reductions
 	IEnumerator ReduceDashForce() {
 		while (dashForceMultiplier > 0) {
 			dashForceMultiplier -= Grounded() ? dashReductionIncrement : 0;
@@ -422,12 +352,19 @@ public class PlayerController : EntityController {
 		dashForceMultiplier = 0f;
 	}
 
-	IEnumerator JustDashedCalculator() {
-		justDashed = true;
-		yield return new WaitForSeconds(.2f);
-		justDashed = false;
-	}
+	IEnumerator ReduceSlideForce(float reductionIncrement) {
+		yield return new WaitForSeconds(.05f);
 
+		while (slideForceMultiplier > 0 || !Grounded()) {
+			if (!canSlide) { slideForceMultiplier = 1f; break;}
+			slideForceMultiplier -= reductionIncrement;
+			slideForceMultiplier = Mathf.Clamp(slideForceMultiplier, 0, Mathf.Infinity);
+			yield return new WaitForSeconds(slideReductionIncrementTime);
+		}
+	}
+	
+	#endregion
+	#region Dashing
 	IEnumerator Dash() {
 		StartCoroutine(JustDashedCalculator());
 		ReduceStamina(dashStamina);
@@ -441,9 +378,115 @@ public class PlayerController : EntityController {
 		canDash = true;
 	}
 	#endregion
+	#region QOL
+	IEnumerator LockPlayerToGround(){
+		while (s == state.sliding) {
 
+			if (Physics.Raycast(transform.position, new(0, -1, 0), out RaycastHit hit, 3f)) transform.position = new(transform.position.x, hit.point.y + transform.localScale.y, transform.position.z);
+			yield return 0;
+		}
+	}
+	#endregion
 	#region Sliding
-	// Should get change in height and increase slide speed based on that
+	IEnumerator Slide() {
+		StartCoroutine(JustSlidCalculator());
+		StartCoroutine(LockPlayerToGround());
+
+		s = state.sliding;
+
+		canSlide = false;
+		slideForceMultiplier = 1f;
+
+		HalfSize();
+
+		yield return new WaitUntil(() => magic.key.up(keys.slide) || shouldJump);
+
+		FullSize();
+
+		if (shouldJump) StartCoroutine(ReduceSlideForce(slideReductionIncrement));
+		else StartCoroutine(ReduceSlideForce(slideReductionIncrement * 10));
+		
+		canSlide = true;
+		s = state.walking;
+	}
+	#endregion
+	#endregion
+
+	#region Functions
+	#region Directions
+	Vector3 MoveDirection() {
+		hInp = Input.GetAxisRaw("Horizontal");
+		vInp = Input.GetAxisRaw("Vertical");
+
+		if (hInp != 0 && vInp != 0) {
+			slideForceMultiplier = Mathf.Clamp(slideForceMultiplier - 0.03f, 0, Mathf.Infinity);
+		}
+
+		Vector3 forward = forwardObject.transform.forward;
+		Vector3 right = forwardObject.transform.right;
+
+		return (forward * vInp*forwardSpeed) + (right * hInp * sidewaysSpeed);
+	}
+
+	Vector3 SlideDirection() => DashDirection(false);
+
+	Vector3 DashDirection(bool increaseForward = true) {
+		hInp = Input.GetAxisRaw("Horizontal");
+		vInp = Input.GetAxisRaw("Vertical");
+
+		Vector3 forward = forwardObject.transform.forward;
+		Vector3 right = forwardObject.transform.right;
+
+		if (s != state.sliding) {
+			if (hInp != 0) return vInp != 0 ? (forward * vInp + right * hInp).normalized : (right * hInp).normalized;
+			else return vInp != 0 ? (forward * vInp).normalized : increaseForward ? forward * 1.1f : forward /*Forward is increased because it feels smaller cos ur not moving*/;
+		}
+
+		return Vector3.zero;
+	}
+	#endregion
+	#region Movement
+	Vector3 WASDMovement() {
+		DashDirectionChange();
+
+		if (s != state.sliding) return new(MoveDirection().x, 0, MoveDirection().z);
+
+		return Vector3.zero;
+	}
+	#endregion
+	#region Jumping
+	void Jump(float force=-999) {
+		if (force == -999) force = jumpForce;	
+
+		rb.AddForce(new(0, force * 10, 0));
+	}
+	#endregion
+	#region Dashing
+	void DashDirectionChange() {
+		Vector3 md = new(Math.Sign(MoveDirection().normalized.x), 0, Math.Sign(MoveDirection().normalized.z));
+		Vector3 dd = new(Math.Sign(dashDirection.x), 0, Math.Sign(dashDirection.z));
+		
+		// Check if the player is moving in the opposite direciton of the dash and if they are, change the dash direction to suit them
+
+		if (-md.x == dd.x && md.x != 0 && dd.x != 0) {
+			if (dashDirection.x < 0) dashDirection = new(dashDirection.x + dashDirectionChangeSpeed, dashDirection.y, dashDirection.z);
+			else if (dashDirection.x > 0) dashDirection = new(dashDirection.x - dashDirectionChangeSpeed, dashDirection.y, dashDirection.z);
+		}
+
+		if (-md.z == dd.z && md.z!=0 && dd.z!=0) {
+			if (dashDirection.z < 0) dashDirection = new(dashDirection.x, dashDirection.y, dashDirection.z + dashDirectionChangeSpeed);
+			else if (dashDirection.z > 0) dashDirection = new(dashDirection.x, dashDirection.y, dashDirection.z - dashDirectionChangeSpeed);
+		}
+	}
+	#endregion
+	#region Forces
+	Vector3 DashForce() {
+		Vector3 direction = dashDirection;
+		direction *= dashForce * dashForceMultiplier;
+		if (s != state.sliding) return new(direction.x,0,direction.z);
+		return Vector3.zero;
+	}
+
 	Vector3 SlideForce(float velocity) {
 		// Debug.Log($"V: {velocity}");
 		Vector3 direction = slideDirection;
@@ -451,70 +494,32 @@ public class PlayerController : EntityController {
 		direction = new(direction.x, 0, direction.z);
 		return direction;
 	}
-
-	IEnumerator ReduceSlideForce(float reductionIncrement) {
-		yield return new WaitForSeconds(.05f);
-
-		while (slideForceMultiplier > 0 || !Grounded()) {
-			slideForceMultiplier -= reductionIncrement;
-			slideForceMultiplier = Mathf.Clamp(slideForceMultiplier, 0, Mathf.Infinity);
-			yield return new WaitForSeconds(slideReductionIncrementTime);
-		}
-
-		slideForceMultiplier = 0f;
-	}
-
-	IEnumerator LockPlayerToGround(){
-		while (s == state.sliding) {
-
-			if (Physics.Raycast(transform.position, new(0, -1, 0), out RaycastHit hit, 3f)) transform.position = new(transform.position.x, hit.point.y + transform.localScale.y, transform.position.z);
-			yield return new WaitForSeconds(0f);
-		}
-	}
-
-	IEnumerator JustSlidCalculator() {
-		justSlid = true;
-		yield return new WaitForSeconds(.2f);
-		justSlid = false;
-	}
-
-
-	IEnumerator Slide() {
-		StartCoroutine(JustSlidCalculator());
-		s = state.sliding;
-		canSlide = false;
-		slideForceMultiplier = 1f;
-		StartCoroutine(LockPlayerToGround());
-		transform.localScale=new(transform.localScale.x,transform.localScale.y/2,transform.localScale.z);
-		transform.position = new(transform.position.x, transform.position.y - (transform.localScale.y), transform.position.z);
-		yield return new WaitUntil(() => magic.key.up(keys.slide) || shouldJump);
-		transform.localScale=new(transform.localScale.x,transform.localScale.y*2,transform.localScale.z);
-		transform.position = new(transform.position.x, transform.position.y + (transform.localScale.y / 2), transform.position.z);
-		if (shouldJump) {
-			StartCoroutine(ReduceSlideForce(slideReductionIncrement));
-		}
-		else {
-			StartCoroutine(ReduceSlideForce(slideReductionIncrement*10));
-
-		}
-		canSlide = true;
-		s = state.walking;
-
-	}
 	#endregion
-
 	#region Slamming
 	void Slam() {
+		StartCoroutine(JustSlammed());
 		slamForce = new(0, -50, 0);
 	}
 	#endregion
+	#region Sliding
+	void HalfSize() {
+		transform.localScale = halfSize;
+		transform.position = new(transform.position.x, transform.position.y - transform.localScale.y, transform.position.z);
+	}
 
-	#region Impulses
-	void AddImpulse() {
-		
+	void FullSize() {
+		transform.localScale=playerSize;
+		transform.position = new(transform.position.x, transform.position.y + (transform.localScale.y / 2), transform.position.z);
+	}
+
+	#endregion
+	#region Stamina
+	public void ReduceStamina(float reduce) {
+		stamina -= reduce;
+		hc.UpdateStaminaBars();
 	}
 	#endregion
-	// Handles Mouse Movement
+	#region Mouse
 	void HandleMouse() {
 		float mouseX = Input.GetAxis("Mouse X") * mouseSensitivityX;
 		float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivityY;
@@ -526,8 +531,18 @@ public class PlayerController : EntityController {
 
 		playerCamera.transform.localRotation = Quaternion.Euler(currentXRotation, 0f, 0f);
 	}
-
-	// Sets Movement Direction
 	#endregion
+	#endregion
+	
+	#region Admin
+	void AdminMove() {
+		hInp = Input.GetAxisRaw("Horizontal");
+		vInp = Input.GetAxisRaw("Vertical");
 
+		Vector3 right = playerCamera.transform.right;
+		Vector3 forward = playerCamera.transform.forward;
+
+		rb.linearVelocity = (forward * vInp + right * hInp).normalized * forwardSpeed;
+	}
+	#endregion
 }

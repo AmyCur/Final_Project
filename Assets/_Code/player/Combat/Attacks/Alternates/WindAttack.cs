@@ -10,6 +10,9 @@ public class WindAttack : AlternateAttack {
     GameObject downVortex;
     GameObject cv;
 
+    float apex;
+    float landingY;
+
     [Header("Wind")]
     public float upDamage = 5f;
     public float downDamage = 45f;
@@ -28,10 +31,13 @@ public class WindAttack : AlternateAttack {
 
     IEnumerator Slam() {
         pc.canSlam = false;
-        if (cv!=null) Destroy(cv);
+        apex = pc.transform.position.y;
+        if (cv != null) Destroy(cv);
         pc.SV.Add(new(new(0, -60, 0), pc));
         yield return new WaitUntil(() => pc.Grounded());
-        CreateDamageSphere(downDamage);
+        landingY = pc.transform.position.y;
+        Debug.Log($"YYYY: {apex - landingY}");
+        CreateDamageSphere(downDamage*Mathf.Clamp((apex-landingY)/30, 1, 4f));
         cv = Vortex.Create.CreateVortex(downVortex, pc.transform.position);
         pc.canSlam = true;
     }

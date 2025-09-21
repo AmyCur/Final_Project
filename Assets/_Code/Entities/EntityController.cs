@@ -102,7 +102,7 @@ public abstract class EntityController : MonoBehaviour {
             velocity = new(velocity.x, rb.linearVelocity.y, velocity.z);
         }
 
-        rb.linearVelocity = mas.vector.ClampVectorWithFloat(velocity, -1000, 1000);
+        rb.linearVelocity = mas.vector.ClampVector(velocity, new Vector3[] {new(-1000,-40,-1000), new(1000,20,1000)});
         
 	}
 
@@ -112,7 +112,7 @@ public abstract class EntityController : MonoBehaviour {
 
     public virtual void Die(){}
 
-    public void Start() {
+    public virtual void Start() {
         SetStartDefaults();
     }
 
