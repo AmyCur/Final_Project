@@ -35,7 +35,7 @@ public class BeamAttack : PrimaryAttack {
     IEnumerator SetToDefault(EntityController ec) {
         ec.GetComponent<MeshRenderer>().material = damagedMaterial;
         yield return new WaitForSeconds(.2f);
-        if (!hitEnems.Contains(ec)) ec.GetComponent<MeshRenderer>().material = defaultMaterial;
+        if (!hitEnems.Contains(ec) && ec != null) ec.GetComponent<MeshRenderer>().material = defaultMaterial;
     }
 
 

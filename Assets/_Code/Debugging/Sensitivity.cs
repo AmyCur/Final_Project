@@ -11,7 +11,7 @@ public class Sensitivity {
 
 #if ADJUST_SENS
         PlayerController pc = mas.player.GetPlayer();
-        if (refreshRate.value > 60) pc.mouseSensitivityX/=2f;
+        if (refreshRate.value > 60){ pc.mouseSensitivityX/=2f; pc.mouseSensitivityY/=2f;}
 #endif
     }
 }

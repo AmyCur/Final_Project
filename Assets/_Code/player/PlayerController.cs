@@ -68,7 +68,7 @@ public class PlayerController : EntityController {
 	bool shouldJump => canJump && magic.key.down(keys.jump) && Grounded();
 	bool shouldDash => canDash && magic.key.down(keys.dash) && s != state.sliding && stamina>=dashStamina;
 	bool shouldSlide => canSlide && magic.key.down(keys.slide) && Grounded() && s != state.sliding;
-	bool shouldSlam => canSlam && magic.key.down(keys.slam) && !Grounded() && !Physics.Raycast(transform.position, new(0,-1,0), 2f);
+	bool shouldSlam => canSlam && magic.key.down(keys.slam) && !Grounded();
 	bool shouldKeepRegenStamina => s != state.sliding || s != state.slamming;
 	bool shouldRegenerateStamina => !regeneratingStamina && shouldKeepRegenStamina;
 
@@ -248,8 +248,8 @@ public class PlayerController : EntityController {
 			}
 
 			if (shouldJump) {
-				if (justDashed) { Jump(jumpForce / 2); dashForceMultiplier *= 2; }
-				else if (justSlid) Jump(jumpForce / 1.67f);
+				if (justDashed) { Jump(baseJumpForce / 2); dashForceMultiplier *= 2; }
+				else if (justSlid) Jump(baseJumpForce / 1.67f);
 				else Jump();
 				if (!canDash) {
 					// dashReductionIncrement = 0.01f;

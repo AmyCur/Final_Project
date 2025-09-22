@@ -27,6 +27,9 @@ public abstract class EntityController : MonoBehaviour {
 	public bool canMove = true;
     public Vector3 movementVector;
 
+    
+
+
 
     [Header("Impulses")]
 	public List<Impulse> SV; 
@@ -77,6 +80,8 @@ public abstract class EntityController : MonoBehaviour {
     protected float Positive(float value) {
         return Mathf.Clamp(value, 0, Mathf.Infinity);
     }
+
+    public virtual void OnValidate() {if(health <= 0) Debug.LogWarning($"Health Invalid on {gameObject.name}");}
 
     #region Elemental Reaction Effects
 
