@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,15 +23,15 @@ namespace PlayerStates {
 	}
 }
 
+
 [RequireComponent(typeof(CapsuleCollider))]     // For Collision
 [RequireComponent(typeof(AudioSource))]
 public class PlayerController : EntityController {
-
 	#region Variables
 
 	readonly Vector2 checkScale = new(.4f, 0.06f);
 
-	void OnDrawGizmos() {
+	void OnDrawGizmos() {  
 		if (GameDebug.Player.drawJumpCollider) {
 			Vector3 scale = gameObject.transform.localScale;
 			Vector3 pos = gameObject.transform.position;
