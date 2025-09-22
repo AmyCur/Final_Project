@@ -64,6 +64,9 @@ public class PlayerController : EntityController {
 
 	}
 
+    
+
+
 
 	bool shouldJump => canJump && magic.key.down(keys.jump) && Grounded();
 	bool shouldDash => canDash && magic.key.down(keys.dash) && s != state.sliding && stamina>=dashStamina;

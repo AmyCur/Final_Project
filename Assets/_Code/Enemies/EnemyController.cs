@@ -1,5 +1,6 @@
 using UnityEngine;
 using MathsAndSome;
+using System.Collections.Generic;
 
 public abstract class EnemyController : EntityController
 {
@@ -31,13 +32,7 @@ public abstract class EnemyController : EntityController
 	[SerializeField] protected bool canHunt = true;
 	[SerializeField] protected bool canIdle = true;
 
-
-
-
-	void CheckRanges()
-	{
-		maxHuntRange = Mathf.Clamp(maxHuntRange, minSeekRange, Mathf.Infinity);
-	}
+	void CheckRanges() => maxHuntRange = Mathf.Clamp(maxHuntRange, minSeekRange, Mathf.Infinity);
 
 	public abstract bool shouldHunt();
 	public abstract bool shouldSeek();
@@ -54,10 +49,17 @@ public abstract class EnemyController : EntityController
 
 	// public override void OnValidate() { base.OnValidate(); CheckRanges();}
 
-	public override void Start()
-	{
+
+	public override void Start() {
 		base.Start();
 		CheckRanges();
+
+		thoughts = new() {
+			{nameof(health), health},
+			{nameof(defence), defence},
+			{"shouldHunt", shouldHunt()},
+			{"shouldSeek", shouldSeek()},
+		};
 	}
 
 	public override void Die() { base.Die(); Destroy(gameObject); }

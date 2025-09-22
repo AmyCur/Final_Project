@@ -8,6 +8,7 @@ TagManager:
   - RadialBar
   - VortexHolder
   - WeaponIcon
+  - PlayerChild
   layers:
   - Default
   - TransparentFX

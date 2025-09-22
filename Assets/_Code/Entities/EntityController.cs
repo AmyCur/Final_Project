@@ -7,6 +7,10 @@ using MathsAndSome;
 
 [RequireComponent(typeof(Rigidbody))]           // For movement
 public abstract class EntityController : MonoBehaviour {
+
+    public Dictionary<string, object> thoughts;
+
+
     [Header("Entity")]
     [Header("Stats")]
     public float health;

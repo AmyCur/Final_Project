@@ -28,11 +28,11 @@ public sealed class MeleeEnemy : EnemyController
         }
 
         
-        if (Physics.Raycast(pos, direction, out RaycastHit hit, maxSeekRange)){ Debug.Log($"Entity {hit.isEnemy()} >>> {hit.collider.name}| in range; {hit.distance.inRange(minSeekRange, maxSeekRange)} | Can seek: {canSeek}"); return hit.isEntity() && hit.distance.inRange(minSeekRange, maxSeekRange) && canSeek;}
+        if (Physics.Raycast(pos, direction, out RaycastHit hit, maxSeekRange)){ Debug.Log($"Entity {hit.isEntity()} >>> {hit.collider.name}| in range; {hit.distance.inRange(minSeekRange, maxSeekRange)} | Can seek: {canSeek}"); return hit.isEntity() && hit.distance.inRange(minSeekRange, maxSeekRange) && canSeek;}
         Debug.Log("Shouldnt seek");
         return false;
     }
 
-    public override void Hunt() { Debug.Log("Huntinsg"); }
+    public override void Hunt() { Debug.Log("Hunting"); }
     public override void Seek() { Debug.Log("Seeking");  }
 }
