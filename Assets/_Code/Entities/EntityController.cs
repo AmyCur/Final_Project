@@ -130,9 +130,13 @@ public abstract class EntityController : MonoBehaviour {
             Move();
         }		
 	}
+    
+    public virtual void UpdateThoughts(){}
 
-    public virtual void Update() {
+    public virtual void Update()
+    {
         if (health <= 0) Die();
+        UpdateThoughts();
     }
 
 

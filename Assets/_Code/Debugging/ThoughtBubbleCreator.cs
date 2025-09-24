@@ -7,12 +7,19 @@ using UnityEngine;
 public class ThoughtBubbleCreator : MonoBehaviour {
     [Header("Display Settings")]
     public float displayRange = 10f;
-    public GameObject bubble;
+    GameObject textMenu;
 
     GameObject player;
 
-    void Start() {
+    void UpdateRadius() => GetComponent<SphereCollider>().radius = displayRange;
+       
+    void OnValidate() => UpdateRadius();
+
+    void Start()
+    {
+        UpdateRadius();
         player = mas.player.GetPlayer().gameObject;
+        textMenu = Resources.Load<GameObject>("Prefabs/Debugging/TextMenu");
     }
 
     void OnTriggerEnter(Collider other) {
@@ -25,8 +32,9 @@ public class ThoughtBubbleCreator : MonoBehaviour {
             }
 
             if (!contains) {
-                GameObject bu = Instantiate(bubble, other.transform.position, Quaternion.identity);
-                bu.transform.parent = other.transform;
+                GameObject bu = Instantiate(textMenu, other.transform.position, Quaternion.identity);
+                bu.transform.SetParent(other.transform);
+                bu.transform.position = new(bu.transform.position.x, bu.transform.position.y + other.transform.localScale.y*1.1f, bu.transform.position.z);
                 ThoughtBubble tb = bu.GetComponent<ThoughtBubble>();
                 tb.SetText(other.GetComponent<EntityController>().thoughts);
             }
@@ -34,8 +42,12 @@ public class ThoughtBubbleCreator : MonoBehaviour {
     }
 
 	void OnTriggerExit(Collider other) {
-        if (other.isEnemy()) {
-            for (int i = 0; i < other.transform.childCount - 1; i++) {
+        Debug.Log("exito");
+        if (other.isEnemy())
+        {
+            for (int i = 0; i < other.transform.childCount; i++)
+            {
+                Debug.Log("AAAAA");
                 if (other.transform.GetChild(i).CompareTag("Thought")) Destroy(other.transform.GetChild(i).gameObject);
             }
         }

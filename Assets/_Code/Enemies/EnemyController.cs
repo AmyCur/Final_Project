@@ -40,11 +40,28 @@ public abstract class EnemyController : EntityController
 	public abstract void Hunt();
 	public abstract void Seek();
 
+	public override void UpdateThoughts()
+	{
+		thoughts = new() {
+			{nameof(health), health},
+			{nameof(defence), defence},
+			{"shouldHunt", shouldHunt()},
+			{"shouldSeek", shouldSeek()},
+		};
+
+		for (int i = 0; i < transform.childCount; i++)
+		{
+			if (transform.GetChild(i) != null && transform.GetChild(i).CompareTag("Thought")) transform.GetChild(i).gameObject.GetComponent<ThoughtBubble>().SetText(thoughts);
+		}
+	}
+
 	public override void Update()
 	{
 		base.Update();
 		if (shouldHunt()) Hunt();
 		if (shouldSeek()) Seek();
+
+		
 	}
 
 	// public override void OnValidate() { base.OnValidate(); CheckRanges();}
@@ -54,13 +71,10 @@ public abstract class EnemyController : EntityController
 		base.Start();
 		CheckRanges();
 
-		thoughts = new() {
-			{nameof(health), health},
-			{nameof(defence), defence},
-			{"shouldHunt", shouldHunt()},
-			{"shouldSeek", shouldSeek()},
-		};
+		
 	}
+
+
 
 	public override void Die() { base.Die(); Destroy(gameObject); }
 

@@ -199,8 +199,8 @@ public class PlayerController : EntityController {
 		playerSize = transform.localScale;
 		halfSize = new(transform.localScale.x, transform.localScale.y / 2, transform.localScale.z);
 
-		Cursor.lockState = CursorLockMode.Locked;
-		Cursor.visible = false;
+		// Cursor.lockState = CursorLockMode.Locked;
+		// Cursor.visible = false;
 		
 		hc.UpdateAll();
 

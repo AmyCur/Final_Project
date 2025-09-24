@@ -19,11 +19,12 @@ public class ThoughtBubble : MonoBehaviour {
     Transform player => mas.player.GetPlayer().transform;
 
     void Awake() {
-        variablesText = transform.GetChild(1).GetComponent<TMP_Text>();
+        variablesText = GetComponent<TMP_Text>();
         if (variablesText == null) Debug.LogError($"Variables text is null on {gameObject.name}");
     }
 
-	void Update() {
+    void Update()
+    {
         transform.LookAt(player);
 	}
 

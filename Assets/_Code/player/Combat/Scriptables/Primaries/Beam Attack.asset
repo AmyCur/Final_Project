@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e149a206290410b0b926f2e491c878d0, type: 3}
   m_Name: Beam Attack
   m_EditorClassIdentifier: 
+  attackType: 1
   damage: 10
   attackCD: 0.1
   range: 100
   canAttack: 1
   element:
     type: 4
-    f: 0
-  attackType: 1
+    f: -0.082902394
   hitEnems: []
   defaultMaterial: {fileID: 2100000, guid: 73298126e8aef2d75bc16d551b7f95fd, type: 2}
   selectedMaterial: {fileID: 2100000, guid: 5e93b35faa4493e7d8f726d0eb51254e, type: 2}
