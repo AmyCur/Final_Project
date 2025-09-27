@@ -343,10 +343,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8234333527592107431}
-  serializedVersion: 5
+  serializedVersion: 4
   m_Mass: 5
-  m_LinearDamping: 0.01
-  m_AngularDamping: 0.05
+  m_Drag: 0
+  m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -375,22 +375,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90e2e910219492f4387f003fbfdf2ada, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
-  defence: 0
+  health: 20
+  defence: 11
   currentElements: []
   burnDamage: 1e+12
   burnDuration: 5
   currentBurnTime: 5
   burning: 0
   rb: {fileID: 0}
-  canMove: 1
+  canMove: 0
   movementVector: {x: 0, y: 0, z: 0}
   SV: []
   s: 0
   adminState: 0
   adminMode: 1
   jumpForce: 320
-  canJump: 1
+  canJump: 0
   canRotate: 1
   mouseSensitivityX: 1
   mouseSensitivityY: 1
@@ -400,14 +400,14 @@ MonoBehaviour:
   sidewaysSpeed: 11
   dashForce: 15
   dashCD: 0.1
-  canDash: 1
+  canDash: 0
   dashReductionIncrement: 0.35
   dashReductionIncrementTime: 0.03
   dashDirectionChangeSpeed: 0.01
   dashDirection: {x: 0, y: 0, z: 0}
   dashForceMultiplier: 0
   slideForce: 30
-  canSlide: 1
+  canSlide: 0
   slideReductionIncrement: 0.1
   slideReductionIncrementTime: 0.1
   canSlam: 1

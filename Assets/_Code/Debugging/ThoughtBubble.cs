@@ -8,8 +8,10 @@ public class ThoughtBubble : MonoBehaviour {
 
     public string SetVariablesText(Dictionary<string, object> variables) {
         string kvps = "";
-        foreach (KeyValuePair<string, object> kvp in variables) {
-            kvps += $"{kvp.Key} : {kvp.Value} \n";
+        if (variables != null) {
+            foreach (KeyValuePair<string, object> kvp in variables) {
+                kvps += $"{kvp.Key} : {kvp.Value} \n";
+            }
         }
         return kvps;
     }
@@ -23,10 +25,9 @@ public class ThoughtBubble : MonoBehaviour {
         if (variablesText == null) Debug.LogError($"Variables text is null on {gameObject.name}");
     }
 
-    void Update()
-    {
+    void Update() {
         transform.LookAt(player);
-	}
+    }
 
 
 
