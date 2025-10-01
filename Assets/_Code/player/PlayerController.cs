@@ -7,6 +7,7 @@ using Magical;
 using PlayerStates;
 using MathsAndSome;
 using Globals;
+using Elements;
 
 namespace PlayerStates {
 	public enum state {
@@ -63,10 +64,6 @@ public class PlayerController : EntityController {
 		return false;
 
 	}
-
-    
-
-
 
 	bool shouldJump => canJump && magic.key.down(keys.jump) && Grounded();
 	bool shouldDash => canDash && magic.key.down(keys.dash) && s != state.sliding && stamina>=dashStamina;
@@ -207,6 +204,10 @@ public class PlayerController : EntityController {
 	}
 
 	public override void FixedUpdate() {
+		if (Input.GetKeyDown(KeyCode.Q))
+		{
+			currentElements.Add(new(ElementType.fire));
+		}
 		Vector3 p1 = WASDMovement() + DashForce() + slamForce;
 		movementVector = p1 + SlideForce(Mathf.Clamp(
 			(Mathf.Abs(p1.x)+Mathf.Abs(p1.y)+Mathf.Abs(p1.z)) / 24f, 1f, 5f)
@@ -421,14 +422,10 @@ public class PlayerController : EntityController {
 		hInp = Input.GetAxisRaw("Horizontal");
 		vInp = Input.GetAxisRaw("Vertical");
 
-		if (hInp != 0 && vInp != 0) {
-			slideForceMultiplier = Mathf.Clamp(slideForceMultiplier - 0.03f, 0, Mathf.Infinity);
-		}
-
 		Vector3 forward = forwardObject.transform.forward;
 		Vector3 right = forwardObject.transform.right;
 
-		return (forward * vInp*forwardSpeed) + (right * hInp * sidewaysSpeed);
+		return (forward * vInp * forwardSpeed) + (right * hInp * sidewaysSpeed);
 	}
 
 	Vector3 SlideDirection() => DashDirection(false);

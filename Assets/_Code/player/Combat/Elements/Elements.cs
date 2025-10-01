@@ -32,29 +32,39 @@ namespace Elements {
     }
 
     [System.Serializable]
-    public class Element {
+    public class Element
+    {
         public ElementType type;
         public float f;
 
-        public IEnumerator DecayElement(EntityController ec) {
+        public IEnumerator DecayElement(EntityController ec)
+        {
             yield return new WaitForSeconds(0.1f);
             f -= 0.1f;
-            if (f > 0) {
+            if (f > 0)
+            {
                 ec.StartCoroutine(DecayElement(ec));
             }
-            else {
+            else
+            {
                 ec.currentElements.Remove(this);
             }
 
         }
 
-        public void StartDecay(EntityController ec) {
+        public void StartDecay(EntityController ec)
+        {
             ec.StartCoroutine(DecayElement(ec));
         }
 
-        public void RestartDecay(EntityController ec) {
+        public void RestartDecay(EntityController ec)
+        {
             StartDecay(ec);
+        }
 
+        public Element(ElementType type)
+        {
+            if(type!=null) this.type = type;
         }
     }
 

@@ -34,6 +34,8 @@ namespace Magical {
 		public static KeyCode[] pause = { /*KeyCode.Escape,*/ KeyCode.Tab };
 
 		public static KeyCode[] teleport = { KeyCode.T };
+
+		public static KeyCode[] terminal = { KeyCode.BackQuote };
 		// public static KeyCode[] respawnKey = {KeyCode.}
 
 

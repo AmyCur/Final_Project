@@ -16,7 +16,6 @@ public abstract class EntityController : MonoBehaviour {
     public float health;
     public float defence;
 
-    [Header("Elements")]
     public List<Element> currentElements;
 
     [Header("Burning")]
