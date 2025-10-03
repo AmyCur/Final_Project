@@ -4,8 +4,8 @@ using UnityEngine.UIElements;
 using UnityEngine;
 using System;
 
-[CanEditMultipleObjects]
-[CustomEditor(typeof(PlayerController))]
+// [CanEditMultipleObjects]
+// [CustomEditor(typeof(PlayerController))]
 public class PlayerInspector : Editor {
     PlayerController pc;
 
