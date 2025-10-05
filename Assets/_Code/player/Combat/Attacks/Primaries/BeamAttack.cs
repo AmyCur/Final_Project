@@ -7,6 +7,8 @@ using UnityEngine;
 public class BeamAttack : PrimaryAttack {
 
     [SerializeField] List<EntityController> hitEnems = new();
+    GameObject markerPrefab;
+    List<GameObject> markers;
 
 
 
@@ -16,6 +18,8 @@ public class BeamAttack : PrimaryAttack {
     [SerializeField] Material damagedMaterial;
 
     IEnumerator CheckForEnemies() {
+        if (markerPrefab == null) markerPrefab = Resources.Load<GameObject>("Prefabs/Combat/Marker/Marker");
+
         while (keyStayDown()) {
             EntityController[] ecs = hitEnemies(pc.playerCamera.transform.position, pc.playerCamera.transform.forward, range);
 
@@ -24,6 +28,7 @@ public class BeamAttack : PrimaryAttack {
                     if (ec != null && !hitEnems.Contains(ec)) {
                         ec.GetComponent<MeshRenderer>().material = selectedMaterial;
                         hitEnems.Add(ec);
+                        markers.Add(Instantiate(markerPrefab, ec.transform));
                     }
                 }
             }
@@ -46,6 +51,9 @@ public class BeamAttack : PrimaryAttack {
     }
 
     public override void OnRelease() {
+
+        markers?.ForEach((i) => Destroy(i));
+
         int enemies = hitEnems.Count;
         // Peaks at 10 enemies for double damage
         float damageMultiplier = Mathf.Clamp(1 + (Mathf.Pow(enemies, 2) / 100), 1, 2);

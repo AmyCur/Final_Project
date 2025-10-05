@@ -32,7 +32,7 @@ public class PlayerController : EntityController {
 
 	readonly Vector2 checkScale = new(.4f, 0.06f);
 
-	void OnDrawGizmos() {  
+	void OnDrawGizmos() {
 		if (GameDebug.Player.drawJumpCollider) {
 			Vector3 scale = gameObject.transform.localScale;
 			Vector3 pos = gameObject.transform.position;
@@ -66,7 +66,7 @@ public class PlayerController : EntityController {
 	}
 
 	bool shouldJump => canJump && magic.key.down(keys.jump) && Grounded();
-	bool shouldDash => canDash && magic.key.down(keys.dash) && s != state.sliding && stamina>=dashStamina;
+	bool shouldDash => canDash && magic.key.down(keys.dash) && s != state.sliding && stamina >= dashStamina;
 	bool shouldSlide => canSlide && magic.key.down(keys.slide) && Grounded() && s != state.sliding;
 	bool shouldSlam => canSlam && magic.key.down(keys.slam) && !Grounded();
 	bool shouldKeepRegenStamina => s != state.sliding || s != state.slamming;
@@ -159,10 +159,10 @@ public class PlayerController : EntityController {
 
 	Vector3 playerSize;
 	Vector3 halfSize;
-	
+
 	[SerializeField] Vector3 currentVelocity;
 
-	
+
 
 
 	[Header("Objects")]
@@ -176,7 +176,7 @@ public class PlayerController : EntityController {
 	#endregion
 
 	#region Core Functions
-	
+
 
 	public override void Start() {
 		base.Start();
@@ -198,19 +198,18 @@ public class PlayerController : EntityController {
 
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
-		
+
 		hc.UpdateAll();
 
 	}
 
 	public override void FixedUpdate() {
-		if (Input.GetKeyDown(KeyCode.Q))
-		{
+		if (Input.GetKeyDown(KeyCode.Q)) {
 			currentElements.Add(new(ElementType.fire));
 		}
 		Vector3 p1 = WASDMovement() + DashForce() + slamForce;
 		movementVector = p1 + SlideForce(Mathf.Clamp(
-			(Mathf.Abs(p1.x)+Mathf.Abs(p1.y)+Mathf.Abs(p1.z)) / 24f, 1f, 5f)
+			(Mathf.Abs(p1.x) + Mathf.Abs(p1.y) + Mathf.Abs(p1.z)) / 24f, 1f, 5f)
 		);
 		if (s == state.sliding) movementVector = new(movementVector.x, 0, movementVector.z);
 		if (adminState == AdminState.standard) {
@@ -337,8 +336,8 @@ public class PlayerController : EntityController {
 	#region Regenerations
 	IEnumerator RegenerateStamina() {
 		regeneratingStamina = true;
-		while (stamina < maxStamina && s!=state.sliding && s!=state.slamming) {
-			stamina = Mathf.Clamp(stamina + (movementVector==Vector3.zero ? staminaPerTick: staminaPerTick*1.5f),minStamina, maxStamina);
+		while (stamina < maxStamina && s != state.sliding && s != state.slamming) {
+			stamina = Mathf.Clamp(stamina + (movementVector == Vector3.zero ? staminaPerTick : staminaPerTick * 1.5f), minStamina, maxStamina);
 			hc.UpdateStaminaBars();
 			yield return new WaitForSeconds(deltaTick);
 		}
@@ -360,13 +359,13 @@ public class PlayerController : EntityController {
 		yield return new WaitForSeconds(.05f);
 
 		while (slideForceMultiplier > 0 || !Grounded()) {
-			if (!canSlide) { slideForceMultiplier = 1f; break;}
+			if (!canSlide) { slideForceMultiplier = 1f; break; }
 			slideForceMultiplier -= reductionIncrement;
 			slideForceMultiplier = Mathf.Clamp(slideForceMultiplier, 0, Mathf.Infinity);
 			yield return new WaitForSeconds(slideReductionIncrementTime);
 		}
 	}
-	
+
 	#endregion
 	#region Dashing
 	IEnumerator Dash() {
@@ -383,7 +382,7 @@ public class PlayerController : EntityController {
 	}
 	#endregion
 	#region QOL
-	IEnumerator LockPlayerToGround(){
+	IEnumerator LockPlayerToGround() {
 		while (s == state.sliding) {
 
 			if (Physics.Raycast(transform.position, new(0, -1, 0), out RaycastHit hit, 3f)) transform.position = new(transform.position.x, hit.point.y + transform.localScale.y, transform.position.z);
@@ -409,7 +408,7 @@ public class PlayerController : EntityController {
 
 		if (shouldJump) StartCoroutine(ReduceSlideForce(slideReductionIncrement));
 		else StartCoroutine(ReduceSlideForce(slideReductionIncrement * 10));
-		
+
 		canSlide = true;
 		s = state.walking;
 	}
@@ -455,8 +454,8 @@ public class PlayerController : EntityController {
 	}
 	#endregion
 	#region Jumping
-	void Jump(float force=-999) {
-		if (force == -999) force = jumpForce;	
+	void Jump(float force = -999) {
+		if (force == -999) force = jumpForce;
 
 		rb.AddForce(new(0, force * 10, 0));
 	}
@@ -465,7 +464,7 @@ public class PlayerController : EntityController {
 	void DashDirectionChange() {
 		Vector3 md = new(Math.Sign(MoveDirection().normalized.x), 0, Math.Sign(MoveDirection().normalized.z));
 		Vector3 dd = new(Math.Sign(dashDirection.x), 0, Math.Sign(dashDirection.z));
-		
+
 		// Check if the player is moving in the opposite direciton of the dash and if they are, change the dash direction to suit them
 
 		if (-md.x == dd.x && md.x != 0 && dd.x != 0) {
@@ -473,7 +472,7 @@ public class PlayerController : EntityController {
 			else if (dashDirection.x > 0) dashDirection = new(dashDirection.x - dashDirectionChangeSpeed, dashDirection.y, dashDirection.z);
 		}
 
-		if (-md.z == dd.z && md.z!=0 && dd.z!=0) {
+		if (-md.z == dd.z && md.z != 0 && dd.z != 0) {
 			if (dashDirection.z < 0) dashDirection = new(dashDirection.x, dashDirection.y, dashDirection.z + dashDirectionChangeSpeed);
 			else if (dashDirection.z > 0) dashDirection = new(dashDirection.x, dashDirection.y, dashDirection.z - dashDirectionChangeSpeed);
 		}
@@ -483,14 +482,14 @@ public class PlayerController : EntityController {
 	Vector3 DashForce() {
 		Vector3 direction = dashDirection;
 		direction *= dashForce * dashForceMultiplier;
-		if (s != state.sliding) return new(direction.x,0,direction.z);
+		if (s != state.sliding) return new(direction.x, 0, direction.z);
 		return Vector3.zero;
 	}
 
 	Vector3 SlideForce(float velocity) {
 		// Debug.Log($"V: {velocity}");
 		Vector3 direction = slideDirection;
-		direction *= slideForce * slideForceMultiplier*velocity;
+		direction *= slideForce * slideForceMultiplier * velocity;
 		direction = new(direction.x, 0, direction.z);
 		return direction;
 	}
@@ -508,7 +507,7 @@ public class PlayerController : EntityController {
 	}
 
 	void FullSize() {
-		transform.localScale=playerSize;
+		transform.localScale = playerSize;
 		transform.position = new(transform.position.x, transform.position.y + (transform.localScale.y / 2), transform.position.z);
 	}
 
@@ -533,7 +532,7 @@ public class PlayerController : EntityController {
 	}
 	#endregion
 	#endregion
-	
+
 	#region Admin
 	void AdminMove() {
 		hInp = Input.GetAxisRaw("Horizontal");

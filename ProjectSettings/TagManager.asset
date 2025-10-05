@@ -9,6 +9,7 @@ TagManager:
   - VortexHolder
   - WeaponIcon
   - PlayerChild
+  - Thought
   layers:
   - Default
   - TransparentFX
@@ -17,7 +18,7 @@ TagManager:
   - Water
   - UI
   - Projectile Ignore
-  - 
+  - Marker
   - 
   - 
   - 

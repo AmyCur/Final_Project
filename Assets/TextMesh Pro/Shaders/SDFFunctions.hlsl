@@ -99,15 +99,13 @@ void ScreenSpaceRatio2_float(float4x4 projection, float4 position, float2 object
 // Filter		: Enable perspective filter (soften)
 void ScreenSpaceRatio_float(float2 UV, float TextureSize, bool Filter, out float SSR)
 {
-	if(Filter)
-	{
+	if(Filter) {
 		float2 a = float2(ddx(UV.x), ddy(UV.x));
 		float2 b = float2(ddx(UV.y), ddy(UV.y));
 		float s = lerp(dot(a,a), dot(b,b), 0.5);
 		SSR = rsqrt(s) / TextureSize;
 	}
-	else
-	{
+	else {
 		float s = rsqrt(abs(ddx(UV.x) * ddy(UV.y) - ddy(UV.x) * ddx(UV.y)));
 		SSR = s / TextureSize;
 	}

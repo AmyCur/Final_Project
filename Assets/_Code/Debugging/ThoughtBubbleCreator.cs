@@ -42,12 +42,10 @@ public class ThoughtBubbleCreator : MonoBehaviour {
     }
 
 	void OnTriggerExit(Collider other) {
-        Debug.Log("exito");
         if (other.isEnemy())
         {
             for (int i = 0; i < other.transform.childCount; i++)
             {
-                Debug.Log("AAAAA");
                 if (other.transform.GetChild(i).CompareTag("Thought")) Destroy(other.transform.GetChild(i).gameObject);
             }
         }

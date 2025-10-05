@@ -16,7 +16,6 @@ public sealed class MeleeEnemy : EnemyController
             Debug.DrawLine(pos, pos+(direction * minHuntRange), Color.yellow);
         }
         if (Physics.Raycast(pos, direction, out RaycastHit hit, maxHuntRange)) return hit.isEntity() && hit.distance.inRange(minHuntRange, maxHuntRange) && canHunt;
-        Debug.Log("Shouldnt Hunt");
         return false;
     }
     public override bool shouldSeek()
@@ -29,10 +28,9 @@ public sealed class MeleeEnemy : EnemyController
 
         
         if (Physics.Raycast(pos, direction, out RaycastHit hit, maxSeekRange)) return hit.isEntity() && hit.distance.inRange(minSeekRange, maxSeekRange) && canSeek;
-        Debug.Log("Shouldnt seek");
         return false;
     }
 
-    public override void Hunt() { Debug.Log("Hunting"); }
-    public override void Seek() { Debug.Log("Seeking");  }
+    public override void Hunt() { }
+    public override void Seek() { }
 }
