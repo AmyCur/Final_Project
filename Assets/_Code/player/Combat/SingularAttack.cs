@@ -6,6 +6,8 @@ using UnityEngine;
 
 public abstract class SingularAttack : ScriptableObject {
 
+    protected AudioSource source;
+
     protected EntityController[] hitEnemies(Vector3 startPos, Vector3 direction, float range) {
         Debug.DrawLine(startPos, startPos + (direction * range), Color.red, 1);
         List<EntityController> ecs = new();
@@ -50,6 +52,12 @@ public abstract class SingularAttack : ScriptableObject {
     
 
     public Element element;
+
+    public AudioClip onClickClip;
+    public AudioClip onReleaseClip;
+    public AudioClip onDamageClip;
+
+    protected void PlayClip(AudioClip clip) { if (clip != null) source.PlayOneShot(clip); }
 
     public abstract bool keyDown();
     public abstract bool keyUp();

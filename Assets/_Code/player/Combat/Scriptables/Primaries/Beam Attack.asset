@@ -19,8 +19,12 @@ MonoBehaviour:
   canAttack: 1
   element:
     type: 4
-    f: -0.082902394
-  hitEnems: []
+    f: 2.3734834
+  onClickClip: {fileID: 8300000, guid: 7d23ea507de769f20a02ad6ca52d5a6e, type: 3}
+  onReleaseClip: {fileID: 0}
+  onDamageClip: {fileID: 8300000, guid: 2cd0f5befe7b542ad908e15bfc258a79, type: 3}
+  hitEnems:
+  - {fileID: 0}
   defaultMaterial: {fileID: 2100000, guid: 73298126e8aef2d75bc16d551b7f95fd, type: 2}
   selectedMaterial: {fileID: 2100000, guid: 5e93b35faa4493e7d8f726d0eb51254e, type: 2}
   damagedMaterial: {fileID: 2100000, guid: ef79119ec1e73bda3b8c531e4a78b0e2, type: 2}

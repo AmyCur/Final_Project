@@ -12,6 +12,7 @@ public class BeamAttack : PrimaryAttack {
 
 
 
+
     [Header("Lightning")]
     [SerializeField] Material defaultMaterial;
     [SerializeField] Material selectedMaterial;
@@ -48,13 +49,18 @@ public class BeamAttack : PrimaryAttack {
     public override void OnClick() {
         hitEnems = new();
         pc.StartCoroutine(CheckForEnemies());
+        source = pc.GetComponent<AudioSource>();
+        PlayClip(onClickClip);
     }
 
     public override void OnRelease() {
 
+        source.Stop();
+        
         markers?.ForEach((i) => Destroy(i));
 
         int enemies = hitEnems.Count;
+        if (enemies > 0 && onDamageClip!=null) PlayClip(onDamageClip);
         // Peaks at 10 enemies for double damage
         float damageMultiplier = Mathf.Clamp(1 + (Mathf.Pow(enemies, 2) / 100), 1, 2);
 
