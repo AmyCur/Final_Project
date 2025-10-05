@@ -1,11 +1,13 @@
-using UnityEngine;
 using Elements;
-using System.Collections.Generic;
-using System.Collections;
 using GameDebug;
 using MathsAndSome;
+using Newtonsoft.Json;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]           // For movement
+
+// [RequireComponent(typeof(Rigidbody))]           // For movement
 public abstract class EntityController : MonoBehaviour {
 
     public Dictionary<string, object> thoughts;
@@ -120,6 +122,7 @@ public abstract class EntityController : MonoBehaviour {
 
     public virtual void Die(){}
 
+    // Should do JSON Loading of data here
     public virtual void Start() {
         SetStartDefaults();
     }

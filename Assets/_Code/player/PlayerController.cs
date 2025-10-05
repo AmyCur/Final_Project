@@ -30,7 +30,7 @@ namespace PlayerStates {
 public class PlayerController : EntityController {
 	#region Variables
 
-	readonly Vector2 checkScale = new(.4f, 0.06f);
+	readonly Vector2 checkScale = new(.3f, 0.06f);
 
 	void OnDrawGizmos() {
 		if (GameDebug.Player.drawJumpCollider) {
@@ -230,7 +230,6 @@ public class PlayerController : EntityController {
 
 	public override void Update() {
 		base.Update();
-		StartCoroutine(LockPlayerToGround());
 
 		currentVelocity = rb.linearVelocity;
 
@@ -384,10 +383,10 @@ public class PlayerController : EntityController {
 	#endregion
 	#region QOL
 	IEnumerator LockPlayerToGround() {
-		// while (s == state.sliding) {
+		while (s == state.sliding) {
 			if (Physics.Raycast(transform.position, new(0, -1, 0), out RaycastHit hit, 3f)) transform.position = new(transform.position.x, hit.point.y + transform.localScale.y, transform.position.z);
 			yield return 0;
-		// }
+		}
 	}
 	#endregion
 	#region Sliding
