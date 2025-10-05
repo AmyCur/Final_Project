@@ -230,6 +230,7 @@ public class PlayerController : EntityController {
 
 	public override void Update() {
 		base.Update();
+		StartCoroutine(LockPlayerToGround());
 
 		currentVelocity = rb.linearVelocity;
 
@@ -383,11 +384,10 @@ public class PlayerController : EntityController {
 	#endregion
 	#region QOL
 	IEnumerator LockPlayerToGround() {
-		while (s == state.sliding) {
-
+		// while (s == state.sliding) {
 			if (Physics.Raycast(transform.position, new(0, -1, 0), out RaycastHit hit, 3f)) transform.position = new(transform.position.x, hit.point.y + transform.localScale.y, transform.position.z);
 			yield return 0;
-		}
+		// }
 	}
 	#endregion
 	#region Sliding
