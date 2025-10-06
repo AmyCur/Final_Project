@@ -5,9 +5,9 @@ using UnityEngine;
 using System;
 
 // [CanEditMultipleObjects]
-// [CustomEditor(typeof(PlayerController))]
+// [CustomEditor(typeof(PL_Controller))]
 public class PlayerInspector : Editor {
-    PlayerController pc;
+    PL_Controller pc;
 
 
 
@@ -57,7 +57,7 @@ public class PlayerInspector : Editor {
 
     void OnEnable()
     {
-        pc = target as PlayerController;
+        pc = target as PL_Controller;
 
         slideReductionIncrement = serializedObject.FindProperty("slideReductionIncrement");
         slideReductionIncrementTime = serializedObject.FindProperty("slideReductionIncrementTime");

@@ -13,7 +13,7 @@ public class CombatController : MonoBehaviour {
 	[Tooltip("Current Weapon")][SerializeField] Attack ca;
 	[SerializeField] List<Attack> attacks;
 	HUDController hc;
-	PlayerController pc;
+	PL_Controller pc;
 
 	void Update() {
 		if(!!ca){
@@ -28,7 +28,7 @@ public class CombatController : MonoBehaviour {
 	}
 
 	void Start() {
-		pc = GetComponent<PlayerController>();
+		pc = GetComponent<PL_Controller>();
 		hc = mas.get.HC();
 		if (!ca) ca = attacks[0];
 		UpdateIcons();
@@ -82,9 +82,9 @@ public class CombatController : MonoBehaviour {
 
 	// 		if (Physics.Raycast(startPosition, direction, out RaycastHit hit, range)) {
 	// 			if (hit.collider.tag == "enemy") {
-	// 				EnemyController enemy = hit.collider.GetComponent<EnemyController>();
+	// 				ENM_Controller enemy = hit.collider.GetComponent<ENM_Controller>();
 	// 				if (enemy == null) {
-	// 					Debug.LogError($"EnemyController of {hit.collider.name} is not set");
+	// 					Debug.LogError($"ENM_Controller of {hit.collider.name} is not set");
 	// 				}
 	// 				else {
 	// 					enemy.TakeDamage(currentWeapon.damage / bps);

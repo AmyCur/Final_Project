@@ -8,26 +8,26 @@ namespace EntityLib
     public static class Entity
     {
         public static bool isEntity(this object m) {
-            if (m is RaycastHit h) return !!(h.collider.GetComponent<EntityController>()) || h.collider.CompareTag(Globals.glob.playerChildTag);
-            else if (m is Collider c) return !!(c.GetComponent<EntityController>()) || c.CompareTag(Globals.glob.playerChildTag);
-            else if (m is MonoBehaviour mono) return mono is EntityController;
+            if (m is RaycastHit h) return !!(h.collider.GetComponent<ENT_Controller>()) || h.collider.CompareTag(Globals.glob.playerChildTag);
+            else if (m is Collider c) return !!(c.GetComponent<ENT_Controller>()) || c.CompareTag(Globals.glob.playerChildTag);
+            else if (m is MonoBehaviour mono) return mono is ENT_Controller;
 
             return false;
         }
 
         public static bool isPlayer(this object m)
         {
-            if (m is RaycastHit h) return !!h.collider.GetComponent<PlayerController>();
-            else if (m is Collider c) return !!(c.GetComponent<PlayerController>()) || c.CompareTag(Globals.glob.playerChildTag);
-            else if (m is MonoBehaviour mono) return mono is PlayerController;
+            if (m is RaycastHit h) return !!h.collider.GetComponent<PL_Controller>();
+            else if (m is Collider c) return !!(c.GetComponent<PL_Controller>()) || c.CompareTag(Globals.glob.playerChildTag);
+            else if (m is MonoBehaviour mono) return mono is PL_Controller;
             return false;
         }
 
         public static bool isEnemy(this object m)
         {
-            if (m is RaycastHit h) return !!h.collider.GetComponent<EnemyController>() || h.collider.CompareTag(Globals.glob.enemyTag);
-            else if (m is Collider c) return !!c.GetComponent<EnemyController>();
-            else if (m is MonoBehaviour mono) return mono is EnemyController;
+            if (m is RaycastHit h) return h.collider.tag == Globals.glob.enemyTag || !!h.collider.GetComponent<ENM_Controller>();
+            else if (m is Collider c) return !!c.GetComponent<ENM_Controller>();
+            else if (m is MonoBehaviour mono) return mono is ENM_Controller;
             return false;
         }
 

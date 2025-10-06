@@ -26,7 +26,7 @@ public class Attack : ScriptableObject {
     public PrimaryAttack primary;
     public AlternateAttack alt;
 
-    [HideInInspector] public PlayerController pc;
+    [HideInInspector] public PL_Controller pc;
 
 
 

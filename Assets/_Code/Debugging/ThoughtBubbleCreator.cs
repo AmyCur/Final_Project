@@ -36,7 +36,7 @@ public class ThoughtBubbleCreator : MonoBehaviour {
                 bu.transform.SetParent(other.transform);
                 bu.transform.position = new(bu.transform.position.x, bu.transform.position.y + other.transform.localScale.y*1.1f, bu.transform.position.z);
                 ThoughtBubble tb = bu.GetComponent<ThoughtBubble>();
-                tb.SetText(other.GetComponent<Controller>().thoughts);
+                tb.SetText(other.GetComponent<RB_Controller>().thoughts);
             }
         }
     }

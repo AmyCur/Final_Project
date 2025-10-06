@@ -20,9 +20,9 @@ public abstract class thingie : ScriptableObject{
     public Element element;
     public AttackType attackType;
 
-    protected EntityController[] hitEnemies(Vector3 startPos, Vector3 direction, float range) {
+    protected ENT_Controller[] hitEnemies(Vector3 startPos, Vector3 direction, float range) {
         Debug.DrawLine(startPos, startPos + (direction * range), Color.red, 1);
-        List<EntityController> ecs = new();
+        List<ENT_Controller> ecs = new();
         Vector3 pos = startPos;
         float dist = range;
 
@@ -31,7 +31,7 @@ public abstract class thingie : ScriptableObject{
         if (hits.Length > 0) {
             foreach (RaycastHit hit in hits) {
                 if (hit.collider.tag == "Enemy") {
-                    EntityController ec = hit.collider.GetComponent<EntityController>();
+                    ENT_Controller ec = hit.collider.GetComponent<ENT_Controller>();
 
                     if (!!ec) {
                         ecs.Add(ec);
@@ -53,7 +53,7 @@ public abstract class thingie : ScriptableObject{
         canAttack = true;
     }
 
-    public PlayerController pc => mas.player.GetPlayer();
+    public PL_Controller pc => mas.player.GetPlayer();
 
     public abstract bool keyDown();
     public abstract bool keyStayDown();

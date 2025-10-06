@@ -46,10 +46,10 @@ public class VortexController : MonoBehaviour {
 
             foreach (Collider col in cols) {
                 if (glob.isEntity(col.tag)) {
-                    EntityController c = col.GetComponent<EntityController>();
+                    ENT_Controller c = col.GetComponent<ENT_Controller>();
 
                     if (!c) {
-                        Debug.LogError($"{col.name} is an enemy thats missing a EntityController!");
+                        Debug.LogError($"{col.name} is an enemy thats missing a ENT_Controller!");
                         break;
                     }
 
@@ -59,15 +59,15 @@ public class VortexController : MonoBehaviour {
 
                     switch (pullable) {
                         case Pullable.enemy:
-                            if (c is EnemyController enemC)
+                            if (c is ENM_Controller enemC)
                                 enemC.SV.Add(new(dir * f, enemC));
                             break;
                         case Pullable.player:
-                            if (c is PlayerController pc)
+                            if (c is PL_Controller pc)
                                 pc.SV.Add(new(dir * f, pc));
                             break;
                         case Pullable.both:
-                            (c as Controller).SV.Add(new(dir * f, c as Controller));
+                            (c as RB_Controller).SV.Add(new(dir * f, c as RB_Controller));
                             break;
                     }
                 }

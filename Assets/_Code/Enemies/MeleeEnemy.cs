@@ -3,7 +3,7 @@ using static EntityLib.Entity;
 using static GameDebug.Combat;
 using MathsAndSome;
 
-public sealed class MeleeEnemy : EnemyController
+public sealed class MeleeEnemy : ENM_Controller
 {
     Vector3 pos => transform.position;
     Vector3 direction => (playerPosition-pos).normalized;

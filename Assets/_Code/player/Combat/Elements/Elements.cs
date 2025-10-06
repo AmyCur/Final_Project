@@ -37,7 +37,7 @@ namespace Elements {
         public ElementType type;
         public float f;
 
-        public IEnumerator DecayElement(EntityController ec)
+        public IEnumerator DecayElement(ENT_Controller ec)
         {
             yield return new WaitForSeconds(0.1f);
             f -= 0.1f;
@@ -52,12 +52,12 @@ namespace Elements {
 
         }
 
-        public void StartDecay(EntityController ec)
+        public void StartDecay(ENT_Controller ec)
         {
             ec.StartCoroutine(DecayElement(ec));
         }
 
-        public void RestartDecay(EntityController ec)
+        public void RestartDecay(ENT_Controller ec)
         {
             StartDecay(ec);
         }
@@ -75,7 +75,7 @@ namespace Elements {
             cols.Remove(obj.GetComponent<BoxCollider>());
 
             foreach (Collider col in cols) {
-                EntityController ec = col.GetComponent<EntityController>();
+                ENT_Controller ec = col.GetComponent<ENT_Controller>();
                 if (!!ec) {
                     ec.ApplyElements(element);
                 }

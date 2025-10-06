@@ -9,9 +9,9 @@ public abstract class SingularAttack : ScriptableObject {
 
     protected AudioSource source;
 
-    protected EntityController[] hitEnemies(Vector3 startPos, Vector3 direction, float range) {
+    protected ENT_Controller[] hitEnemies(Vector3 startPos, Vector3 direction, float range) {
         Debug.DrawLine(startPos, startPos + (direction * range), Color.red, 1);
-        List<EntityController> ecs = new();
+        List<ENT_Controller> ecs = new();
         Vector3 pos = startPos;
         float dist = range;
 
@@ -21,7 +21,7 @@ public abstract class SingularAttack : ScriptableObject {
         if (hits.Length > 0) {
             foreach (RaycastHit hit in hits) {
                 if (hit.isEnemy()) {
-                    EntityController ec = hit.collider.GetComponent<EntityController>();
+                    ENT_Controller ec = hit.collider.GetComponent<ENT_Controller>();
                     if (!!ec) {
                         ecs.Add(ec);
                     }
@@ -37,7 +37,7 @@ public abstract class SingularAttack : ScriptableObject {
     }
 
 
-    protected PlayerController pc => mas.player.GetPlayer();
+    protected PL_Controller pc => mas.player.GetPlayer();
 
     public enum AttackType {
         single,

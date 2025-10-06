@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class CollisionChecker : MonoBehaviour {
 
-    PlayerController pc;
+    PL_Controller pc;
 
     void OnTriggerEnter(Collider other) {
         if (!pc.justDashed) {

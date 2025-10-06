@@ -44,7 +44,7 @@
 //         This method is called when first loading the attack into the player
 //         you can use this to load default values or add animations like i am doing
 //     */
-//     public virtual void load(PlayerController character) {
+//     public virtual void load(PL_Controller character) {
 //         // animators
 //         // character.AttackDisplay.runtimeAnimatorController = AC;
 //         // character.crosshairDisplay.runtimeAnimatorController = crosshair;
@@ -58,14 +58,14 @@
 //         This method is called when the attack is taken off the player
 //         use this to un do whatever load does typically
 //     */
-//     public virtual void unLoad(PlayerController character) {
+//     public virtual void unLoad(PL_Controller character) {
 //         // character.Reset();
 //     }
 
 //     /*
 //         Basic attack, you can use this for whatever really
 //     */
-//     public virtual void attack(PlayerController character) {
+//     public virtual void attack(PL_Controller character) {
 //         if (!canShoot) return; // if the attack cannot be used return
 //         if (useAmmo && (currentAmmo - useageAmmo) < 0) return; // if the attack uses ammo and the user has no ammo, return
 
@@ -78,12 +78,12 @@
     
 //         // do something with the attack
 //         if (hit) {
-//             EnemyController enemey = null;
+//             ENM_Controller enemey = null;
 
 //             // character.AS.clip = SF_fire;
 //             // character.AS.Play();
 
-//             if ((enemey = hit.transform.GetComponent<EnemyController>()) != null) {
+//             if ((enemey = hit.transform.GetComponent<ENM_Controller>()) != null) {
 //                 // sound
 //                 // enemey.DealDamage((int)damage, character.transform);
 //             }
@@ -108,7 +108,7 @@
 //     /*
 //         This is what ill use to get a target, so i can run this multiple times with multiple offsets for something like a shotgun
 //     */
-//     public Collider runHit(PlayerController character, float offset = 0) {
+//     public Collider runHit(PL_Controller character, float offset = 0) {
 //         RaycastHit hit;
 //         Vector3 targetDirection = Vector3.forward + new Vector3(offset, 0, 0);
 
