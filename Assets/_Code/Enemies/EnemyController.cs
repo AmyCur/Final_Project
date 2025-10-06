@@ -2,7 +2,7 @@ using UnityEngine;
 using MathsAndSome;
 using System.Collections.Generic;
 
-public abstract class EnemyController : EntityController
+public abstract class EnemyController : Controller
 {
 
 	public enum EnemyState

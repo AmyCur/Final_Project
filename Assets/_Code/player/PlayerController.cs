@@ -27,7 +27,7 @@ namespace PlayerStates {
 
 [RequireComponent(typeof(CapsuleCollider))]     // For Collision
 [RequireComponent(typeof(AudioSource))]
-public class PlayerController : EntityController {
+public class PlayerController : Controller {
 	#region Variables
 
 	readonly Vector2 checkScale = new(.3f, 0.06f);

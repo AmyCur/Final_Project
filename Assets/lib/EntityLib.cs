@@ -1,3 +1,4 @@
+using Elements;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,7 +25,7 @@ namespace EntityLib
 
         public static bool isEnemy(this object m)
         {
-            if (m is RaycastHit h) return !!h.collider.GetComponent<EnemyController>();
+            if (m is RaycastHit h) return !!h.collider.GetComponent<EnemyController>() || h.collider.CompareTag(Globals.glob.enemyTag);
             else if (m is Collider c) return !!c.GetComponent<EnemyController>();
             else if (m is MonoBehaviour mono) return mono is EnemyController;
             return false;

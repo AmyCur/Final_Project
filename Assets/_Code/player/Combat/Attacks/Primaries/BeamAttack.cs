@@ -22,14 +22,14 @@ public class BeamAttack : PrimaryAttack {
         if (!markerPrefab) markerPrefab = Resources.Load<GameObject>("Prefabs/Combat/Marker/Marker");
 
         while (keyStayDown()) {
-            EntityController[] ecs = hitEnemies(pc.playerCamera.transform.position, pc.playerCamera.transform.forward, range);
+            EntityController[] cs = hitEnemies(pc.playerCamera.transform.position, pc.playerCamera.transform.forward, range);
 
-            if (ecs != null) {
-                foreach (EntityController ec in ecs) {
-                    if (ec != null && !hitEnems.Contains(ec)) {
-                        ec.GetComponent<MeshRenderer>().material = selectedMaterial;
-                        hitEnems.Add(ec);
-                        markers.Add(Instantiate(markerPrefab, ec.transform));
+            if (cs != null) {
+                foreach (EntityController c in cs) {
+                    if (c != null && !hitEnems.Contains(c)) {
+                        c.GetComponent<MeshRenderer>().material = selectedMaterial;
+                        hitEnems.Add(c);
+                        markers.Add(Instantiate(markerPrefab, c.transform));
                     }
                 }
             }
@@ -38,10 +38,10 @@ public class BeamAttack : PrimaryAttack {
         }
     }
 
-    IEnumerator SetToDefault(EntityController ec) {
-        ec.GetComponent<MeshRenderer>().material = damagedMaterial;
+    IEnumerator SetToDefault(Controller c) {
+        c.GetComponent<MeshRenderer>().material = damagedMaterial;
         yield return new WaitForSeconds(.2f);
-        if (!hitEnems.Contains(ec) && ec != null) ec.GetComponent<MeshRenderer>().material = defaultMaterial;
+        if (!hitEnems.Contains(c) && c != null) c.GetComponent<MeshRenderer>().material = defaultMaterial;
     }
 
 
@@ -64,9 +64,9 @@ public class BeamAttack : PrimaryAttack {
         // Peaks at 10 enemies for double damage
         float damageMultiplier = Mathf.Clamp(1 + (Mathf.Pow(enemies, 2) / 100), 1, 2);
 
-        foreach (EntityController ec in hitEnems) {
-            pc.StartCoroutine(SetToDefault(ec));
-            ec.TakeDamage(damage * damageMultiplier, element);
+        foreach (Controller c in hitEnems) {
+            pc.StartCoroutine(SetToDefault(c));
+            c.TakeDamage(damage * damageMultiplier, element);
 
         }
 

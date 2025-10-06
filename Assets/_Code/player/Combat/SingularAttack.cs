@@ -1,4 +1,5 @@
 using Elements;
+using EntityLib;
 using MathsAndSome;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,9 +20,8 @@ public abstract class SingularAttack : ScriptableObject {
 
         if (hits.Length > 0) {
             foreach (RaycastHit hit in hits) {
-                if (hit.collider.tag == "Enemy") {
+                if (hit.isEnemy()) {
                     EntityController ec = hit.collider.GetComponent<EntityController>();
-
                     if (!!ec) {
                         ecs.Add(ec);
                     }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BreakableWall : EntityController {
+public class BreakableWall : Controller {
     public override void Start() {
         base.Start();
     }
