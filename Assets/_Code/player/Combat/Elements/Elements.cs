@@ -64,7 +64,7 @@ namespace Elements {
 
         public Element(ElementType type)
         {
-            if(type!=null) this.type = type;
+            this.type = type;
         }
     }
 
@@ -76,7 +76,7 @@ namespace Elements {
 
             foreach (Collider col in cols) {
                 EntityController ec = col.GetComponent<EntityController>();
-                if (ec != null) {
+                if (!!ec) {
                     ec.ApplyElements(element);
                 }
             }

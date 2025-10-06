@@ -26,7 +26,7 @@ public class UpdateWeaponIcon : MonoBehaviour {
     void Start() {
         img = GetComponent<Image>();
 
-        if (img == null) {
+        if (!img) {
             Debug.LogError($"The image on {gameObject.name} is null");
         }
 	}

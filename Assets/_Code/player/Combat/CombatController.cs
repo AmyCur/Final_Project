@@ -16,7 +16,7 @@ public class CombatController : MonoBehaviour {
 	PlayerController pc;
 
 	void Update() {
-		if(ca!=null){
+		if(!!ca){
 			if (ca.primary.keyDown() && ca.primary.canAttack) ca.primary.OnClick();
 			if (ca.primary.keyUp()) ca.primary.OnRelease();
 

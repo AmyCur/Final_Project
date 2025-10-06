@@ -32,7 +32,7 @@ public class Attack : ScriptableObject {
 
 
     void GetPlayer() {
-        if (pc == null) {
+        if (!pc) {
             pc = mas.player.GetPlayer();
         }
     }

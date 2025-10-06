@@ -33,7 +33,7 @@ public abstract class thingie : ScriptableObject{
                 if (hit.collider.tag == "Enemy") {
                     EntityController ec = hit.collider.GetComponent<EntityController>();
 
-                    if (ec != null) {
+                    if (!!ec) {
                         ecs.Add(ec);
                     }
                 }

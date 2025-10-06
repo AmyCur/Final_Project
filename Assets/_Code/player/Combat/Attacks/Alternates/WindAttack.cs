@@ -23,7 +23,7 @@ public class WindAttack : AlternateAttack {
 
         foreach (Collider col in ec) {
             EntityController entityController = col.GetComponent<EntityController>();
-            if (entityController != null) {
+            if (!!entityController) {
                 entityController.TakeDamage(dmg, element);
             }
         }
@@ -32,7 +32,7 @@ public class WindAttack : AlternateAttack {
     IEnumerator Slam() {
         pc.canSlam = false;
         apex = pc.transform.position.y;
-        if (cv != null) Destroy(cv);
+        if (!!cv) Destroy(cv);
         pc.SV.Add(new(new(0, -60, 0), pc));
         yield return new WaitUntil(() => pc.Grounded());
         landingY = pc.transform.position.y;

@@ -22,7 +22,7 @@ public class ThoughtBubble : MonoBehaviour {
 
     void Awake() {
         variablesText = GetComponent<TMP_Text>();
-        if (variablesText == null) Debug.LogError($"Variables text is null on {gameObject.name}");
+        if (!variablesText) Debug.LogError($"Variables text is null on {gameObject.name}");
     }
 
     void Update() {

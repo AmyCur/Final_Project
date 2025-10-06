@@ -22,7 +22,7 @@ public abstract class SingularAttack : ScriptableObject {
                 if (hit.collider.tag == "Enemy") {
                     EntityController ec = hit.collider.GetComponent<EntityController>();
 
-                    if (ec != null) {
+                    if (!!ec) {
                         ecs.Add(ec);
                     }
                 }
@@ -57,7 +57,7 @@ public abstract class SingularAttack : ScriptableObject {
     public AudioClip onReleaseClip;
     public AudioClip onDamageClip;
 
-    protected void PlayClip(AudioClip clip) { if (clip != null) source.PlayOneShot(clip); }
+    protected void PlayClip(AudioClip clip) { if (!!clip) source.PlayOneShot(clip); }
 
     public abstract bool keyDown();
     public abstract bool keyUp();

@@ -51,7 +51,7 @@ public abstract class EnemyController : EntityController
 
 		for (int i = 0; i < transform.childCount; i++)
 		{
-			if (transform.GetChild(i) != null && transform.GetChild(i).CompareTag("Thought")) transform.GetChild(i).gameObject.GetComponent<ThoughtBubble>().SetText(thoughts);
+			if (!!transform.GetChild(i) && transform.GetChild(i).CompareTag("Thought")) transform.GetChild(i).gameObject.GetComponent<ThoughtBubble>().SetText(thoughts);
 		}
 	}
 

@@ -19,7 +19,7 @@ public class BeamAttack : PrimaryAttack {
     [SerializeField] Material damagedMaterial;
 
     IEnumerator CheckForEnemies() {
-        if (markerPrefab == null) markerPrefab = Resources.Load<GameObject>("Prefabs/Combat/Marker/Marker");
+        if (!markerPrefab) markerPrefab = Resources.Load<GameObject>("Prefabs/Combat/Marker/Marker");
 
         while (keyStayDown()) {
             EntityController[] ecs = hitEnemies(pc.playerCamera.transform.position, pc.playerCamera.transform.forward, range);

@@ -1,0 +1,13 @@
+{
+    "Combat": {
+        "drawLightningArcRadius": "false",
+        "drawVortexRadius": "true",
+        "drawSeekRay ": "false",
+        "drawHuntRay ": "false",
+        "showThoughts ": "true"
+    },
+
+    "Player":{
+        "drawJumpCollider":"false"
+    }
+}

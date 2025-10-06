@@ -48,7 +48,7 @@ public class VortexController : MonoBehaviour {
                 if (glob.isEntity(col.tag)) {
                     EntityController ec = col.GetComponent<EntityController>();
 
-                    if (ec == null) {
+                    if (!ec) {
                         Debug.LogError($"{col.name} is an enemy thats missing an EntityController!");
                         break;
                     }

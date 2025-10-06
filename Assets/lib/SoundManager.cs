@@ -1,28 +1,32 @@
-
-/*using System.Collections;
-using MathsAndSome;
 using UnityEngine;
+using SoundManagement;
 
-namespace SoundManager
-{
-    namespace Sound
-    {
-        public static class Play
-        {
-            public static IEnumerator PlaySound(AudioSource source, AudioClip clip)
-            {
-                if (source == null)
-                {
-                    source = new();
-                }
-
-                source.PlayOneShot(clip, 1);
-
-                yield return new WaitForSeconds(clip.length);
-
-                GameObject.Destroy(source);
-            }
-        }
-        
+namespace SoundManagement{
+    public enum Sound{
+        HUM,
+        LIGHTNING_ATTACK,
+        WALKING
     }
-}*/
+}
+
+
+[RequireComponent(typeof(AudioSource))]
+public class SoundManager : MonoBehaviour{
+    [SerializeField] AudioClip[] soundList;
+    static SoundManager instance;
+    AudioSource audioSource;
+
+    void Awake() => instance = this;    
+    void Start() => audioSource = GetComponent<AudioSource>();
+
+    public static void StopSound(){
+        instance.audioSource.Stop();
+    }
+
+    public static void PlaySound(Sound sound, float volume=1){
+
+        // Limit max volume
+        volume = volume > 5 ? Mathf.Clamp(volume, 1, 5) : volume;
+        instance.audioSource.PlayOneShot(instance.soundList[(int)sound]);
+    }
+}
