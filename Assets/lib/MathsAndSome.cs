@@ -191,10 +191,10 @@ namespace MathsAndSome
                 return vector.AbsVector(player.transform.position - gameObject.transform.position);
             }
 
-            public static PL_Controller GetPlayer()
-            {
-                return GameObject.FindGameObjectWithTag(glob.playerTag).GetComponent<PL_Controller>();
-            }
+            public static GameObject GetPlayerObj() => GameObject.FindGameObjectWithTag(glob.playerTag);
+            
+            public static PL_Controller GetPlayer() => GetPlayerObj().GetComponent<PL_Controller>();
+            
 
             // public static CombatController GetCombatController()
             // {

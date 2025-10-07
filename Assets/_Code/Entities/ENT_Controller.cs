@@ -30,9 +30,6 @@ public abstract class ENT_Controller : MonoBehaviour {
     
 
 
-    bool areType(ElementType recent, ElementType other, ElementType type) {
-        return recent == type || other == type;
-    }
 
     protected float Positive(float value) {
         return Mathf.Clamp(value, 0, Mathf.Infinity);
@@ -44,9 +41,9 @@ public abstract class ENT_Controller : MonoBehaviour {
 
     void ElectricFireDamage() { }
     void WaterFireDamage() { }
-    void FireNatureDamage() { }
+    void FireWindDamage() { }
     void WaterElectricDamage() { }
-    void WaterNatureDamage() { }
+    void WaterWindDamage() { }
 
     
 
@@ -71,7 +68,7 @@ public abstract class ENT_Controller : MonoBehaviour {
     
 
 
-    void ElectricNatureDamage() {
+    void ElectricWindDamage() {
         burnDamage = Consts.lightningNatureBurnDamage;
         burnDuration = Consts.lightningNatureBurnTime;
 
@@ -118,7 +115,7 @@ public abstract class ENT_Controller : MonoBehaviour {
                 WaterFireDamage();
             }
             if (recent == ElementType.wind || other == ElementType.wind) {
-                FireNatureDamage();
+                FireWindDamage();
             }
         }
 
@@ -127,13 +124,13 @@ public abstract class ENT_Controller : MonoBehaviour {
                 WaterElectricDamage();
             }
             if (recent == ElementType.wind || other == ElementType.wind) {
-                WaterNatureDamage();
+                WaterWindDamage();
             }
         }
 
         if (recent == ElementType.electric || other == ElementType.electric) {
             if (recent == ElementType.wind || other == ElementType.wind) {
-                ElectricNatureDamage();
+                ElectricWindDamage();
             }
         }
         #endregion
