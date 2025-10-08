@@ -11,11 +11,15 @@ public class Sensitivity {
     public static void Start() {
 
         if (shouldChange) {
-			try {
-				PL_Controller pc = mas.player.GetPlayer();
-				if(pc!=null) if (refreshRate.value > 60) { pc.mouseSensitivityX /= 2f; pc.mouseSensitivityY /= 2f; }
-			}
-			catch {}
+            try
+            {
+                PL_Controller pc = mas.player.GetPlayer();
+                if (pc != null) if (refreshRate.value > 60) { pc.mouseSensitivityX /= 2f; pc.mouseSensitivityY /= 2f; }
+            }
+            catch
+            {
+                Debug.Log("anti fun loser");
+            }
             
         }
         
