@@ -5,8 +5,7 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using UIManager;
 
-public class MainMenuManager : MonoBehaviour
-{
+public class MainMenuManager : MonoBehaviour {
 	// True when buttons are in the centre, false when they have been slid to the left
 
 	public TMP_Text playText;
@@ -17,8 +16,7 @@ public class MainMenuManager : MonoBehaviour
 	public Popup quitPopup;
 
 	[System.Serializable]
-	public class SlideableMenu
-	{
+	public class SlideableMenu {
 		public bool activated = true;
 		public Coroutine routine;
 		public Image menu;
@@ -28,12 +26,10 @@ public class MainMenuManager : MonoBehaviour
 		public Vector2 endPos;
 		public float speed = 7;
 
-		public IEnumerator SlideAnimation(Vector2 target, float speed = 5f)
-		{
+		public IEnumerator SlideAnimation(Vector2 target, float speed = 5f) {
 			this.t = new(this.menu.rectTransform.anchoredPosition.x, this.menu.rectTransform.anchoredPosition.y);
 
-			while (Mathf.Abs(target.x - this.t.x) > 0.01f || Mathf.Abs(target.y - this.t.y) > 0.01f)
-			{
+			while (Mathf.Abs(target.x - this.t.x) > 0.01f || Mathf.Abs(target.y - this.t.y) > 0.01f) {
 				this.t.x = Mathf.Lerp(this.t.x, target.x, Time.deltaTime * speed);
 				this.t.y = Mathf.Lerp(this.t.y, target.y, Time.deltaTime * speed);
 				yield return 0;
@@ -43,8 +39,7 @@ public class MainMenuManager : MonoBehaviour
 
 		}
 
-		public void Slide(MonoBehaviour m)
-		{
+		public void Slide(MonoBehaviour m) {
 			if (this.routine != null) m.StopCoroutine(this.routine);
 			this.routine = m.StartCoroutine(this.SlideAnimation(new Vector2(!activated ? endPos.x : startPos.x, !activated ? endPos.y : startPos.y), speed));
 			this.activated = !this.activated;
@@ -58,58 +53,50 @@ public class MainMenuManager : MonoBehaviour
 
 	Coroutine slideRoutine;
 
-	void Update()
-	{
+	void Update() {
 		buttons.menu.rectTransform.anchoredPosition = new Vector2(buttons.t.x, buttons.t.y);
 		SettingsPage.menu.rectTransform.anchoredPosition = new Vector2(SettingsPage.t.x, SettingsPage.t.y);
 		CreditsPage.menu.rectTransform.anchoredPosition = new Vector2(CreditsPage.t.x, CreditsPage.t.y);
 	}
 
-	void Start()
-	{
+	void Start() {
 		buttons.t = buttons.startPos;
 		SettingsPage.t = SettingsPage.startPos;
 		CreditsPage.t = CreditsPage.startPos;
 	}
 
-	public void SlideButtons()
-	{
+	public void SlideButtons() {
 		if (buttons.routine != null) StopCoroutine(buttons.routine);
 		buttons.routine = StartCoroutine(buttons.SlideAnimation(buttons.endPos, buttons.speed));
 		buttons.activated = !buttons.activated;
 
-		playText.text = "▶️";
-		settingsText.text = "⚙️";
-		creditsText.text = "📜";
-		quitText.text = "🔌";
+		// playText.text = "▶";
+		// settingsText.text = "";
+		// creditsText.text = "";
+		// quitText.text = "";
 	}
 
-	public void UnSlideButtons()
-	{
+	public void UnSlideButtons() {
 		if (buttons.routine != null) StopCoroutine(buttons.routine);
 		buttons.routine = StartCoroutine(buttons.SlideAnimation(buttons.startPos, buttons.speed));
 		buttons.activated = !buttons.activated;
 
-		playText.text = "Play";
-		settingsText.text = "Settings";
-		creditsText.text = "Credits";
-		quitText.text = "Quit";
+		// playText.text = "Play";
+		// settingsText.text = "Settings";
+		// creditsText.text = "Credits";
+		// quitText.text = "Quit";
 	}
 
-	public void PlayGame()
-	{
+	public void PlayGame() {
 		SceneManager.LoadScene("Tutorial");
 	}
 
-	public void LoadCredits()
-	{
+	public void LoadCredits() {
 		if (SettingsPage.activated) SettingsPage.Slide(this);
-		else if (CreditsPage.activated)
-		{
+		else if (CreditsPage.activated) {
 			UnSlideButtons();
 		}
-		else
-		{
+		else {
 			SlideButtons();
 		}
 
@@ -118,25 +105,22 @@ public class MainMenuManager : MonoBehaviour
 
 
 
-	public void LoadSettings()
-	{
+	public void LoadSettings() {
 		if (CreditsPage.activated) CreditsPage.Slide(this);
-		else if (SettingsPage.activated)
-		{
+		else if (SettingsPage.activated) {
 			UnSlideButtons();
 		}
-		else
-		{
+		else {
 			SlideButtons();
 		}
 		SettingsPage.Slide(this);
 	}
 
-	public void QuitGame()
-	{
+	public void QuitGamePopup() {
 		Create.CreatePopup(this, quitPopup);
-		Application.Quit();
 	}
+
+	public void QuitGame() => Application.Quit();
 
 	
 }

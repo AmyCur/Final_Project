@@ -27,12 +27,12 @@ namespace PlayerStates {
 
 [RequireComponent(typeof(CapsuleCollider))]     // For Collision
 [RequireComponent(typeof(AudioSource))]
-public class PL_Controller : ENT_Controller {
+public class PL_Controller : RB_Controller {
 	#region Variables
 
-	readonly Vector2 checkScale = new(.4f, 0.06f);
+	readonly Vector2 checkScale = new(.3f, 0.06f);
 
-	void OnDrawGizmos() {  
+	void OnDrawGizmos() {
 		if (GameDebug.Player.drawJumpCollider) {
 			Vector3 scale = gameObject.transform.localScale;
 			Vector3 pos = gameObject.transform.position;
@@ -66,7 +66,7 @@ public class PL_Controller : ENT_Controller {
 	}
 
 	bool shouldJump => canJump && magic.key.down(keys.jump) && Grounded();
-	bool shouldDash => canDash && magic.key.down(keys.dash) && s != state.sliding && stamina>=dashStamina;
+	bool shouldDash => canDash && magic.key.down(keys.dash) && s != state.sliding && stamina >= dashStamina;
 	bool shouldSlide => canSlide && magic.key.down(keys.slide) && Grounded() && s != state.sliding;
 	bool shouldSlam => canSlam && magic.key.down(keys.slam) && !Grounded();
 	bool shouldKeepRegenStamina => s != state.sliding || s != state.slamming;
@@ -146,6 +146,12 @@ public class PL_Controller : ENT_Controller {
 
 	public float dashStamina = 30f;
 
+	[Header("Walljumping")]
+
+	public int maxWallJumps = 5;
+	public float wallJumpForce=10f;
+	public float wallJumpMultiplier;
+
 	HUDController hc;
 
 
@@ -159,10 +165,10 @@ public class PL_Controller : ENT_Controller {
 
 	Vector3 playerSize;
 	Vector3 halfSize;
-	
+
 	[SerializeField] Vector3 currentVelocity;
 
-	
+
 
 
 	[Header("Objects")]
@@ -176,7 +182,7 @@ public class PL_Controller : ENT_Controller {
 	#endregion
 
 	#region Core Functions
-	
+
 
 	public override void Start() {
 		base.Start();
@@ -198,19 +204,18 @@ public class PL_Controller : ENT_Controller {
 
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
-		
+
 		hc.UpdateAll();
 
 	}
 
 	public override void FixedUpdate() {
-		if (Input.GetKeyDown(KeyCode.Q))
-		{
+		if (Input.GetKeyDown(KeyCode.Q)) {
 			currentElements.Add(new(ElementType.fire));
 		}
 		Vector3 p1 = WASDMovement() + DashForce() + slamForce;
 		movementVector = p1 + SlideForce(Mathf.Clamp(
-			(Mathf.Abs(p1.x)+Mathf.Abs(p1.y)+Mathf.Abs(p1.z)) / 24f, 1f, 5f)
+			(Mathf.Abs(p1.x) + Mathf.Abs(p1.y) + Mathf.Abs(p1.z)) / 24f, 1f, 5f)
 		);
 		if (s == state.sliding) movementVector = new(movementVector.x, 0, movementVector.z);
 		if (adminState == AdminState.standard) {
@@ -231,6 +236,8 @@ public class PL_Controller : ENT_Controller {
 
 	public override void Update() {
 		base.Update();
+
+		WallJump();
 
 		currentVelocity = rb.linearVelocity;
 
@@ -337,8 +344,8 @@ public class PL_Controller : ENT_Controller {
 	#region Regenerations
 	IEnumerator RegenerateStamina() {
 		regeneratingStamina = true;
-		while (stamina < maxStamina && s!=state.sliding && s!=state.slamming) {
-			stamina = Mathf.Clamp(stamina + (movementVector==Vector3.zero ? staminaPerTick: staminaPerTick*1.5f),minStamina, maxStamina);
+		while (stamina < maxStamina && s != state.sliding && s != state.slamming) {
+			stamina = Mathf.Clamp(stamina + (movementVector == Vector3.zero ? staminaPerTick : staminaPerTick * 1.5f), minStamina, maxStamina);
 			hc.UpdateStaminaBars();
 			yield return new WaitForSeconds(deltaTick);
 		}
@@ -360,13 +367,13 @@ public class PL_Controller : ENT_Controller {
 		yield return new WaitForSeconds(.05f);
 
 		while (slideForceMultiplier > 0 || !Grounded()) {
-			if (!canSlide) { slideForceMultiplier = 1f; break;}
+			if (!canSlide) { slideForceMultiplier = 1f; break; }
 			slideForceMultiplier -= reductionIncrement;
 			slideForceMultiplier = Mathf.Clamp(slideForceMultiplier, 0, Mathf.Infinity);
 			yield return new WaitForSeconds(slideReductionIncrementTime);
 		}
 	}
-	
+
 	#endregion
 	#region Dashing
 	IEnumerator Dash() {
@@ -383,9 +390,8 @@ public class PL_Controller : ENT_Controller {
 	}
 	#endregion
 	#region QOL
-	IEnumerator LockPlayerToGround(){
+	IEnumerator LockPlayerToGround() {
 		while (s == state.sliding) {
-
 			if (Physics.Raycast(transform.position, new(0, -1, 0), out RaycastHit hit, 3f)) transform.position = new(transform.position.x, hit.point.y + transform.localScale.y, transform.position.z);
 			yield return 0;
 		}
@@ -409,7 +415,7 @@ public class PL_Controller : ENT_Controller {
 
 		if (shouldJump) StartCoroutine(ReduceSlideForce(slideReductionIncrement));
 		else StartCoroutine(ReduceSlideForce(slideReductionIncrement * 10));
-		
+
 		canSlide = true;
 		s = state.walking;
 	}
@@ -455,8 +461,8 @@ public class PL_Controller : ENT_Controller {
 	}
 	#endregion
 	#region Jumping
-	void Jump(float force=-999) {
-		if (force == -999) force = jumpForce;	
+	void Jump(float force = -999) {
+		if (force == -999) force = jumpForce;
 
 		rb.AddForce(new(0, force * 10, 0));
 	}
@@ -465,7 +471,7 @@ public class PL_Controller : ENT_Controller {
 	void DashDirectionChange() {
 		Vector3 md = new(Math.Sign(MoveDirection().normalized.x), 0, Math.Sign(MoveDirection().normalized.z));
 		Vector3 dd = new(Math.Sign(dashDirection.x), 0, Math.Sign(dashDirection.z));
-		
+
 		// Check if the player is moving in the opposite direciton of the dash and if they are, change the dash direction to suit them
 
 		if (-md.x == dd.x && md.x != 0 && dd.x != 0) {
@@ -473,7 +479,7 @@ public class PL_Controller : ENT_Controller {
 			else if (dashDirection.x > 0) dashDirection = new(dashDirection.x - dashDirectionChangeSpeed, dashDirection.y, dashDirection.z);
 		}
 
-		if (-md.z == dd.z && md.z!=0 && dd.z!=0) {
+		if (-md.z == dd.z && md.z != 0 && dd.z != 0) {
 			if (dashDirection.z < 0) dashDirection = new(dashDirection.x, dashDirection.y, dashDirection.z + dashDirectionChangeSpeed);
 			else if (dashDirection.z > 0) dashDirection = new(dashDirection.x, dashDirection.y, dashDirection.z - dashDirectionChangeSpeed);
 		}
@@ -483,14 +489,14 @@ public class PL_Controller : ENT_Controller {
 	Vector3 DashForce() {
 		Vector3 direction = dashDirection;
 		direction *= dashForce * dashForceMultiplier;
-		if (s != state.sliding) return new(direction.x,0,direction.z);
+		if (s != state.sliding) return new(direction.x, 0, direction.z);
 		return Vector3.zero;
 	}
 
 	Vector3 SlideForce(float velocity) {
 		// Debug.Log($"V: {velocity}");
 		Vector3 direction = slideDirection;
-		direction *= slideForce * slideForceMultiplier*velocity;
+		direction *= slideForce * slideForceMultiplier * velocity;
 		direction = new(direction.x, 0, direction.z);
 		return direction;
 	}
@@ -508,7 +514,7 @@ public class PL_Controller : ENT_Controller {
 	}
 
 	void FullSize() {
-		transform.localScale=playerSize;
+		transform.localScale = playerSize;
 		transform.position = new(transform.position.x, transform.position.y + (transform.localScale.y / 2), transform.position.z);
 	}
 
@@ -532,8 +538,30 @@ public class PL_Controller : ENT_Controller {
 		playerCamera.transform.localRotation = Quaternion.Euler(currentXRotation, 0f, 0f);
 	}
 	#endregion
+	#region WallJumping
+
+	public static Vector2 GetDirectionVectorFromDegrees(float radians) => new Vector2((float) Math.Cos(radians), (float) Math.Sin(radians));
+
+	Vector2 wallJumpDirection() {
+		Vector2 rVector = Vector2.zero;
+		for (int i = 0; i < 360; i++) {
+			float r = i * Mathf.Deg2Rad;
+			Vector2 v = GetDirectionVectorFromDegrees(r);
+
+			if (Physics.Raycast(transform.position, new(v.x, 0, v.y), out RaycastHit hit, .6f)) {
+				rVector += -v;	
+			}
+
+		}
+		return rVector.normalized;
+	}
+
+	public void WallJump() {
+		
+	}
 	#endregion
-	
+	#endregion
+
 	#region Admin
 	void AdminMove() {
 		hInp = Input.GetAxisRaw("Horizontal");

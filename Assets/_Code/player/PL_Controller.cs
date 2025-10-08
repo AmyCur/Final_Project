@@ -65,7 +65,7 @@ public class PL_Controller : RB_Controller {
 
 	}
 
-	bool shouldJump => canJump && magic.key.down(keys.jump) && Grounded();
+	bool shouldJump => canJump && magic.key.down(keys.jump) && jumps>0;
 	bool shouldDash => canDash && magic.key.down(keys.dash) && s != state.sliding && stamina >= dashStamina;
 	bool shouldSlide => canSlide && magic.key.down(keys.slide) && Grounded() && s != state.sliding;
 	bool shouldSlam => canSlam && magic.key.down(keys.slam) && !Grounded();
@@ -84,6 +84,8 @@ public class PL_Controller : RB_Controller {
 	public float jumpForce = 12f;
 	float baseJumpForce;
 	public bool canJump = true;
+	public int maxJumps = 4;
+	public int jumps = 4;
 
 	[Header("Camera")]
 
@@ -145,6 +147,13 @@ public class PL_Controller : RB_Controller {
 	bool regeneratingStamina = false;
 
 	public float dashStamina = 30f;
+
+	[Header("Walljumping")]
+
+	public int maxWallJumps = 5;
+	public float wallJumpForce=10f;
+	public float wallJumpMultiplier;
+	public Vector3 wallJumpVector;
 
 	HUDController hc;
 
@@ -210,7 +219,7 @@ public class PL_Controller : RB_Controller {
 		Vector3 p1 = WASDMovement() + DashForce() + slamForce;
 		movementVector = p1 + SlideForce(Mathf.Clamp(
 			(Mathf.Abs(p1.x) + Mathf.Abs(p1.y) + Mathf.Abs(p1.z)) / 24f, 1f, 5f)
-		);
+		)+wallJumpVector;
 		if (s == state.sliding) movementVector = new(movementVector.x, 0, movementVector.z);
 		if (adminState == AdminState.standard) {
 			if (canMove) {
@@ -228,8 +237,17 @@ public class PL_Controller : RB_Controller {
 		jumpForce = baseJumpForce;
 	}
 
+	bool canResetMaxJump;
+	IEnumerator JumpCooldown() {
+		canResetMaxJump = false;
+		yield return new WaitForSeconds(0.1f);
+		canResetMaxJump = true;
+	}
+
 	public override void Update() {
 		base.Update();
+
+
 
 		currentVelocity = rb.linearVelocity;
 
@@ -237,6 +255,7 @@ public class PL_Controller : RB_Controller {
 
 		// sidewaysSpeed = Grounded() ? defaultSideways : halfSideways;
 		if (Grounded()) {
+			if(canResetMaxJump) jumps = maxJumps;
 			if (slamForce != Vector3.zero) StartCoroutine(SlamJumpTimer());
 			slamForce = Vector3.zero;
 		}
@@ -454,8 +473,11 @@ public class PL_Controller : RB_Controller {
 	#endregion
 	#region Jumping
 	void Jump(float force = -999) {
+		StartCoroutine(JumpCooldown());
+		jumps -= 1;
 		if (force == -999) force = jumpForce;
 
+		rb.linearVelocity = new(rb.linearVelocity.x, 0, rb.linearVelocity.z);
 		rb.AddForce(new(0, force * 10, 0));
 	}
 	#endregion
@@ -528,6 +550,28 @@ public class PL_Controller : RB_Controller {
 		currentXRotation = Mathf.Clamp(currentXRotation, minY, maxY);
 
 		playerCamera.transform.localRotation = Quaternion.Euler(currentXRotation, 0f, 0f);
+	}
+	#endregion
+	#region WallJumping
+
+	public static Vector2 GetDirectionVectorFromDegrees(float radians) => new Vector2((float) Math.Cos(radians), (float) Math.Sin(radians));
+
+	Vector2 wallJumpDirection() {
+		Vector2 rVector = Vector2.zero;
+		for (int i = 0; i < 360; i++) {
+			float r = i * Mathf.Deg2Rad;
+			Vector2 v = GetDirectionVectorFromDegrees(r);
+
+			if (Physics.Raycast(transform.position, new(v.x, 0, v.y), out RaycastHit hit, .6f)) {
+				rVector += -v;	
+			}
+
+		}
+		return rVector.normalized;
+	}
+
+	public void WallJump() {
+		
 	}
 	#endregion
 	#endregion

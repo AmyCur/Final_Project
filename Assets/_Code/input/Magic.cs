@@ -81,7 +81,8 @@ namespace Magical {
 				if (key.Length > 0) {
 					foreach (KeyCode k in key) {
 						if (Input.GetKey(k)) {
-							Debug.Log("hiiiii poookieeeeeeee roxy here, future king over here, ohhh gurdian and you suck");
+							//* Roxies incredible debug message wow isnt she so cool
+							// Debug.Log("hiiiii poookieeeeeeee roxy here, future king over here, ohhh gurdian and you suck");
 							return true;
 						}
 					}
