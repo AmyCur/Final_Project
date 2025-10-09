@@ -65,7 +65,7 @@ public class PL_Controller : RB_Controller {
 
 	}
 
-	bool shouldJump => canJump && magic.key.down(keys.jump) && jumps>0;
+	bool shouldJump => canJump && magic.key.down(keys.jump) && (jumps>0||Grounded());
 	bool shouldDash => canDash && magic.key.down(keys.dash) && s != state.sliding && stamina >= dashStamina;
 	bool shouldSlide => canSlide && magic.key.down(keys.slide) && Grounded() && s != state.sliding;
 	bool shouldSlam => canSlam && magic.key.down(keys.slam) && !Grounded();
@@ -474,7 +474,7 @@ public class PL_Controller : RB_Controller {
 	#region Jumping
 	void Jump(float force = -999) {
 		StartCoroutine(JumpCooldown());
-		jumps -= 1;
+		if(!Grounded()) jumps--;
 		if (force == -999) force = jumpForce;
 
 		rb.linearVelocity = new(rb.linearVelocity.x, 0, rb.linearVelocity.z);
