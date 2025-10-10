@@ -354,7 +354,7 @@ public class PL_Controller : RB_Controller {
 		state = PlayerState.sliding;
 
 		if (slideRoutine != null) StopCoroutine(slideRoutine);
-		StartCoroutine()
+		// StartCoroutine()
 
 		slide.direction = SlideDirection();
 
