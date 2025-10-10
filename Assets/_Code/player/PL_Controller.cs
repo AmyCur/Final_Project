@@ -45,7 +45,6 @@ namespace PlayerStates {
 }
 
 
-[RequireComponent(typeof(CapsuleCollider))]     // For Collision
 [RequireComponent(typeof(AudioSource))]
 public class PL_Controller : RB_Controller {
 
@@ -73,11 +72,11 @@ public class PL_Controller : RB_Controller {
 
 	[Header("States")]
 
-	[SerializeField] JumpState jState;
+	[HideInInspector] [SerializeField] JumpState jState;							// Unimplemented
 	public PlayerState state = PlayerState.walking; 
-	public SlideState slideState = SlideState.not_sliding;
+	[HideInInspector] public SlideState slideState = SlideState.not_sliding;		// Unimplemented - This may need to be implemented inorder to fix sliding spam
 	public AdminState adminState = AdminState.standard;
-	public DashState dashState = DashState.not_dashing;
+	[HideInInspector]  public DashState dashState = DashState.not_dashing;			// Unimplemented - This will likely not need to be implemented
 	public bool adminMode = true;
 
 	[Header("Camera")]
@@ -113,6 +112,7 @@ public class PL_Controller : RB_Controller {
 	[Header("Sliding")]
 
 	public Force slide;
+	Coroutine slideRoutine;
 
 	[Header("Dashing")]
 
@@ -325,9 +325,36 @@ public class PL_Controller : RB_Controller {
 
 	}
 
+	public enum SlidePosition {
+		up,
+		down
+	}
+
+	SlidePosition slidePosition = SlidePosition.up;
+
+	
+
+	public IEnumerator LerpSlideHeight() {
+		slidePosition = (slidePosition == SlidePosition.up) ? SlidePosition.down : SlidePosition.up;
+
+		GameObject col = transform.GetChild(0).gameObject;
+		col.GetComponent<CapsuleCollider>().height /= 2;
+
+
+		// TODO: this, im tired rn and wanna lie down
+		yield return 0;
+
+
+		col.GetComponent<CapsuleCollider>().height *= 2;
+
+	}
+
 	public IEnumerator Slide() {
 
 		state = PlayerState.sliding;
+
+		if (slideRoutine != null) StopCoroutine(slideRoutine);
+		StartCoroutine()
 
 		slide.direction = SlideDirection();
 
@@ -387,7 +414,7 @@ public class PL_Controller : RB_Controller {
 			new Vector3(scale.x * checkScale.x, checkScale.y, scale.z * checkScale.x)
 		).ToList();
 
-		colliders.Remove(GetComponent<CapsuleCollider>());
+		colliders.Remove(transform.GetChild(0).GetComponent<CapsuleCollider>());
 		foreach (Collider c in colliders.ToList()) {
 			if (c.isTrigger) colliders.Remove(c);
 			if (glob.isEntity(c.tag)) colliders.Remove(c);
