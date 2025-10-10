@@ -32,6 +32,12 @@ namespace PlayerStates {
 		not_sliding
 	}
 
+	public enum DashState {
+		just_dashed,
+		dashing,
+		not_dashing
+	}
+
 	public enum AdminState {
 		standard,
 		noclip
@@ -50,7 +56,7 @@ public class PL_Controller : RB_Controller {
 	//* Add slide momentum
 	//* Add slide and dash jumping
 	//* Polish dash force
-	//* You can spam dash and go insanely fast
+	//* You can spam dash and go insanely fast (And slide but less so)
 
 
 
@@ -62,7 +68,8 @@ public class PL_Controller : RB_Controller {
 	bool shouldJump => canJump && Grounded() && magic.key.down(keys.jump);
 	bool shouldSlide => slide.can && magic.key.down(keys.slide) && Grounded() && state != PlayerState.sliding;
 	bool shouldSlam => canSlam && magic.key.down(keys.slam) && !Grounded();
-	bool shouldDash => dash.can && magic.key.down(keys.dash) && state != PlayerState.sliding && (stamina.stamina - 30 > stamina.min);
+	bool shouldDash => dash.can && magic.key.down(keys.dash) && state != PlayerState.sliding && (stamina.stamina - staminaPerDash > stamina.min);
+	bool shouldRegenStamina => stamina.stamina < stamina.max && !stamina.regenerating;
 
 	[Header("States")]
 
@@ -70,6 +77,7 @@ public class PL_Controller : RB_Controller {
 	public PlayerState state = PlayerState.walking; 
 	public SlideState slideState = SlideState.not_sliding;
 	public AdminState adminState = AdminState.standard;
+	public DashState dashState = DashState.not_dashing;
 	public bool adminMode = true;
 
 	[Header("Camera")]
@@ -84,10 +92,17 @@ public class PL_Controller : RB_Controller {
 	[Header("Movement")]
 	public float forwardSpeed = 12f;
 	public float sidewaysSpeed = 5f;
+
+	public float maxSpeed = 13f;
+	float minSpeed => -maxSpeed;
+
+
 	float defaultSpeed;
 
 	float hInp;
 	float vInp;
+
+	static Vector3 moveDirection;
 
 	[Header("Jumping")]
 
@@ -97,6 +112,11 @@ public class PL_Controller : RB_Controller {
 
 	[Header("Sliding")]
 
+	public Force slide;
+
+	[Header("Dashing")]
+
+	public Force dash;
 
 	[Header("Slamming")]
 
@@ -104,8 +124,36 @@ public class PL_Controller : RB_Controller {
 	public float slamForce = 50f;
 
 
+	[Header("Stamina")]
 
-	[System.Serializable]
+	public Stamina stamina;
+	public float staminaPerDash = 30;
+	public float groundedStaminaIncrease = 1.3f;
+
+	
+	[Serializable]
+	public class Stamina {
+		public float min;
+		public float max;
+		public float stamina;
+		public bool regenerating;
+		public float regenTime;
+		[HideInInspector] public PL_Controller pc;
+
+		public IEnumerator RegenerateStamina() {
+			regenerating = true;
+			while (stamina < max) {
+				yield return new WaitForSeconds(regenTime / (pc.Grounded() ? 1.3f : 1f));
+				if(pc.state!=PlayerState.sliding) stamina++;
+			}
+
+			if (stamina > max) stamina = max;
+			regenerating = false;
+		}
+
+	}
+
+	[Serializable]
 	public class Force {
 		public bool can = true;
 		public float force;
@@ -134,41 +182,17 @@ public class PL_Controller : RB_Controller {
 			if (goneBack[0]) this.direction = new(Mathf.Clamp(this.direction.x, -.8f, .8f), this.direction.y, this.direction.z);
 			if (goneBack[1]) this.direction = new(this.direction.x, this.direction.y, Mathf.Clamp(this.direction.z, -.8f, .8f));
 		}
+
+		public void ResetGoneBack() => this.goneBack = new bool[]{false, false};
 	}
 
-	public Force dash;
-	public Force slide;
-
-	static Vector3 moveDirection;
-
-
-	[Serializable]
-	public class Stamina {
-		public float min;
-		public float max;
-		public float stamina;
-		public bool regenerating;
-		public float regenTime;
-
-		public IEnumerator RegenerateStamina() {
-			regenerating = true;
-			while (stamina < max) {
-				yield return new WaitForSeconds(regenTime);
-				stamina++;
-			}
-
-			if (stamina > max) stamina = max;
-			regenerating = false;
-		}
-
-	}
-
-	public Stamina stamina;
 
 	public override void SetStartDefaults() {
 		base.SetStartDefaults();
 
 		defaultSpeed = forwardSpeed;
+
+		stamina.pc = this;
 
 		playerCamera = Camera.main;
 		Cursor.lockState = CursorLockMode.Locked;
@@ -181,22 +205,44 @@ public class PL_Controller : RB_Controller {
 		if (state != PlayerState.sliding && state != PlayerState.slamming) this.Move();
 	}
 
+	public void ClampSpeed() => rb.linearVelocity = new Vector3(
+		Mathf.Clamp(rb.linearVelocity.x, minSpeed, maxSpeed),
+		Mathf.Clamp(rb.linearVelocity.y, -100, 30),
+		Mathf.Clamp(rb.linearVelocity.z, minSpeed, maxSpeed)
+	);
+
+	void SetAdminMode() {
+		ResetForces();
+		forwardSpeed = defaultSpeed * 2;
+		adminState = AdminState.noclip;
+		GetComponent<CapsuleCollider>().isTrigger = true;
+		rb.useGravity = false;
+	}
+	
+	void SetStandardMode() {
+        forwardSpeed = defaultSpeed;
+		adminState = AdminState.standard;
+		GetComponent<CapsuleCollider>().isTrigger = false;
+		rb.useGravity = true;
+    }
+
+
+
 	public override void Update() {
 		base.Update();
 		HandleMouse();
 
-		rb.linearVelocity = new Vector3(
-			Mathf.Clamp(rb.linearVelocity.x, -20, 20),
-			Mathf.Clamp(rb.linearVelocity.y, -100, 30),
-			Mathf.Clamp(rb.linearVelocity.z, -20, 20)
-		);
+		ClampSpeed();
 
-		if (stamina.stamina < stamina.max && !stamina.regenerating) StartCoroutine(stamina.RegenerateStamina());
+		Debug.Log(rb.linearVelocity);
+
+		// If stamina isnt full, regenerate
+		if (shouldRegenStamina) StartCoroutine(stamina.RegenerateStamina());
 
 
 		if (Grounded()) {
-			dash.goneBack = new bool[] { false, false };
-			slide.goneBack = new bool[] { false, false };
+			dash.ResetGoneBack();
+			slide.ResetGoneBack();
 		}
 
 
@@ -211,25 +257,13 @@ public class PL_Controller : RB_Controller {
 		}
 
 		if (magic.key.down(keys.noclip) && adminMode) {
-			if (adminState == AdminState.standard) {
-				ResetForces();
-				forwardSpeed = defaultSpeed * 2;
-				adminState = AdminState.noclip;
-				GetComponent<CapsuleCollider>().isTrigger = true;
-				rb.useGravity = false;
-			}
-			else {
-				forwardSpeed = defaultSpeed;
-				adminState = AdminState.standard;
-				GetComponent<CapsuleCollider>().isTrigger = false;
-				rb.useGravity = true;
-			}
-
+			if (adminState == AdminState.standard) SetAdminMode();
+			else SetStandardMode();
 			rb.linearVelocity = Vector3.zero;
 		}
-		
 
-		Debug.LogWarning($"{slide.can}  {Grounded()}  {magic.key.down(keys.slide)}");
+
+
 	}
 
 	#region Movement
@@ -272,17 +306,7 @@ public class PL_Controller : RB_Controller {
 	
 
 
-	Vector3 DashDirection(bool increaseForward = true) {
-		hInp = Input.GetAxisRaw("Horizontal");
-		vInp = Input.GetAxisRaw("Vertical");
-
-		Vector3 forward = forwardObject.transform.forward;
-		Vector3 right = forwardObject.transform.right;
-
-		
-		if (hInp != 0) return vInp != 0 ? (forward * vInp + right * hInp).normalized : (right * hInp).normalized;
-		else return vInp != 0 ? (forward * vInp).normalized : increaseForward ? forward * 1.1f : forward /*Forward is increased because it feels smaller cos ur not moving*/;
-	}
+	
 
 	Vector3 SlideDirection(bool increaseForward = false) => DashDirection(increaseForward);
 
@@ -304,17 +328,14 @@ public class PL_Controller : RB_Controller {
 	public IEnumerator Slide() {
 
 		state = PlayerState.sliding;
-		Debug.Log("Slide start");
 
 		slide.direction = SlideDirection();
 
-		while (magic.key.gk(keys.slide) && !shouldJump && !shouldSlide) {
-			Debug.Log("Sliding");
+		do {
 			rb.AddForce(slide.direction * slide.force * 10000 * Time.deltaTime);
 			yield return 0;
-		}
-
-		Debug.Log("Slide end");
+		} while (magic.key.gk(keys.slide) && !shouldJump && !shouldSlide);
+ 
 		StartCoroutine(DecaySlide());
 	}
 
@@ -325,23 +346,37 @@ public class PL_Controller : RB_Controller {
 		slide.direction = Vector3.zero;
 	}
 
+	Vector3 DashDirection(bool increaseForward = true) {
+		hInp = Input.GetAxisRaw("Horizontal");
+		vInp = Input.GetAxisRaw("Vertical");
 
-	public IEnumerator Dash(float decaySpeed = 7f) {
+		Vector3 forward = forwardObject.transform.forward;
+		Vector3 right = forwardObject.transform.right;
+
+		
+		if (hInp != 0) return vInp != 0 ? (forward * vInp + right * hInp).normalized : (right * hInp).normalized;
+		else return vInp != 0 ? (forward * vInp).normalized : increaseForward ? forward * 1.1f : forward /*Forward is increased because it feels smaller cos ur not moving*/;
+	}
+
+
+	public IEnumerator Dash(float decaySpeed = 4f) {
 
 		ResetForces();
-		stamina.stamina -= 30f;
+		stamina.stamina -= staminaPerDash;
 
 
 		float df = dash.force;
 		dash.direction = DashDirection();
-		while (df > 0f) {
-			rb.AddForce(new(dash.direction.x * df * (Grounded() ? 1 : .5f) * 100, 0, dash.direction.z * df * (Grounded() ? 1 : .5f) * 100));
+		do {
+			rb.AddForce(new(dash.direction.x * df * (Grounded() ? 1 : .3f) * 100, 0, dash.direction.z * df * (Grounded() ? 1 : .3f) * 100));
 			if (Grounded()) df = Mathf.Lerp(df, 0, Time.deltaTime * decaySpeed);
 			yield return 0;
-		}
+
+			// // Cancels the dash if another dash is started (Waits atleast one frame so that the dash is not instantly cancelled)
+			// if (shouldDash) break;
+		} while (df > 0f && !shouldDash);
 
 	}
-
 
 	public bool Grounded() {
 		Vector3 scale = gameObject.transform.localScale;
@@ -386,6 +421,14 @@ public class PL_Controller : RB_Controller {
 		Vector3 forward = playerCamera.transform.forward;
 
 		rb.linearVelocity = (forward * vInp + right * hInp).normalized * forwardSpeed;
+
+		if (magic.key.gk(keys.jump)) rb.linearVelocity = new(rb.linearVelocity.x, 30, rb.linearVelocity.z);
+		if (magic.key.gk(keys.dash)) rb.linearVelocity = new(rb.linearVelocity.x, -30, rb.linearVelocity.z);
+        if (magic.key.down(keys.teleport)) {
+            if(Physics.Raycast(transform.position, playerCamera.transform.forward, out RaycastHit hit, 1000f)) {
+				transform.position = hit.point;
+            }
+        }
 	}
 	#endregion
 }
