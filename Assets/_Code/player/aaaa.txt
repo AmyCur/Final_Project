@@ -1,0 +1,297 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using Magical;
+using PlayerStates;
+using MathsAndSome;
+using Globals;
+using Elements;
+using UnityEngine.InputSystem;
+
+namespace PlayerStates {
+	public enum PlayerState {
+		walking,
+		sliding,
+		slamming,
+		crawling,
+		dead
+	}
+
+	public enum JumpState {
+		just_jumped,
+		jumped,
+		not_jumped
+	}
+
+	public enum SlideState {
+		just_started_slide,
+		sliding,
+		just_ended_slide,
+		not_sliding
+	}
+
+	public enum AdminState {
+		standard,
+		noclip
+	}
+}
+
+
+[RequireComponent(typeof(CapsuleCollider))]     // For Collision
+[RequireComponent(typeof(AudioSource))]
+public class PL_Controller : RB_Controller {
+
+	readonly Vector2 checkScale = new(.3f, 0.06f);
+
+	//TODO:
+	//* Add dash and slide direction change
+	//* Add slide momentum
+	//* Add slide and dash jumping
+	//* Polish dash force
+
+
+	public GameObject forwardObject;
+	[HideInInspector] public bool justDashed;
+	[HideInInspector] public float dashForceMultiplier;
+	[HideInInspector] public float maxStamina;
+	[HideInInspector] public float stamina;
+	[HideInInspector] public float minStamina;
+
+	bool shouldJump => canJump && Grounded() && magic.key.down(keys.jump);
+	bool shouldSlide => canSlide && magic.key.down(keys.slide) && Grounded() && state != PlayerState.sliding;
+	bool shouldSlam => canSlam && magic.key.down(keys.slam) && !Grounded();
+	bool shouldDash => canDash && magic.key.down(keys.dash) && state != PlayerState.sliding;
+
+
+	[Header("Camera")]
+
+	[HideInInspector] public Camera playerCamera;
+	float currentXRotation;
+	[Min(0.1f)] public float mouseSensitivityX = 2f;
+	[Min(0.1f)] public float mouseSensitivityY = 2f;
+	[Range(-90, -60)] [SerializeField] float minY = -90;
+	[Range(60, 90)]   [SerializeField] float maxY = 90;
+
+	[Header("Movement")]
+	public float forwardSpeed = 12f;
+	public float sidewaysSpeed = 5f;
+	public PlayerState state=PlayerState.walking;
+
+	float hInp;
+	float vInp;
+
+	[Header("Jumping")]
+
+	public float jumpForce = 32f;
+	public float justJumpedTime = 0.1f;
+	public bool canJump = true;
+	[SerializeField] JumpState jState;
+
+	[Header("Sliding")]
+
+	public bool canSlide=true;
+	public float slideForce = 40f;
+
+	[Header("Slamming")]
+
+	public bool canSlam=true;
+	public float slamForce = 50f;
+
+	[Header("Dashing")]
+
+	public bool canDash;
+	public float dashForce;
+	public float dashDirectionChangeSpeed;
+
+	Vector3 moveDirection;
+
+	public override void SetStartDefaults() {
+		base.SetStartDefaults();
+		playerCamera = Camera.main;
+		Cursor.lockState = CursorLockMode.Locked;
+		Cursor.visible = false;
+	}
+
+	public override void FixedUpdate() {
+		base.FixedUpdate();
+
+		if (state != PlayerState.sliding && state != PlayerState.slamming) this.Move();
+	}
+
+	public override void Update() {
+		base.Update();
+		HandleMouse();
+
+		if (shouldJump) Jump();
+		if (shouldSlide) StartCoroutine(Slide());
+		if (shouldSlam) Slam();
+		if (shouldDash) StartCoroutine(Dash());
+
+		Debug.LogWarning($"{canSlide}  {Grounded()}  {magic.key.down(keys.slide)}");
+	}
+
+	#region Movement
+
+	public new void Move() {
+
+		DashDirectionChange();
+
+		hInp = Input.GetAxisRaw("Horizontal");
+		vInp = Input.GetAxisRaw("Vertical");
+
+		Vector3 forward = forwardObject.transform.forward;
+		Vector3 right = forwardObject.transform.right;
+
+		Vector3 force = (forward * vInp * (forwardSpeed * 100)) + (right * hInp * (sidewaysSpeed * 100));
+
+		rb.AddForce(force);
+		moveDirection = force.normalized;
+
+	}
+
+	#endregion
+
+	#region Jumping
+
+	IEnumerator JustJumpedRoutine() {
+		yield return new WaitForSeconds(justJumpedTime);
+		jState = JumpState.jumped;
+	}
+
+	public void Jump(float multiplier = 1) {
+		jState = JumpState.just_jumped;
+		StartCoroutine(JustJumpedRoutine());
+		rb.AddForce(0, jumpForce*multiplier*100, 0);
+	}
+
+	#endregion
+
+	void DashDirectionChange() {
+		Vector3 md = new(Math.Sign(moveDirection.x), 0, Math.Sign(moveDirection.z));
+		Vector3 dd = new(Math.Sign(dashDirection.x), 0, Math.Sign(dashDirection.z));
+
+		// Check if the player is moving in the opposite direciton of the dash and if they are, change the dash direction to suit them
+
+		if (-md.x == dd.x && md.x != 0 && dd.x != 0) {
+			if (dashDirection.x < 0) dashDirection = new(dashDirection.x + dashDirectionChangeSpeed, dashDirection.y, dashDirection.z);
+			else if (dashDirection.x > 0) dashDirection = new(dashDirection.x - dashDirectionChangeSpeed, dashDirection.y, dashDirection.z);
+		}
+
+		if (-md.z == dd.z && md.z != 0 && dd.z != 0) {
+			if (dashDirection.z < 0) dashDirection = new(dashDirection.x, dashDirection.y, dashDirection.z + dashDirectionChangeSpeed);
+			else if (dashDirection.z > 0) dashDirection = new(dashDirection.x, dashDirection.y, dashDirection.z - dashDirectionChangeSpeed);
+		}
+	}
+
+
+	Vector3 DashDirection(bool increaseForward = true) {
+		hInp = Input.GetAxisRaw("Horizontal");
+		vInp = Input.GetAxisRaw("Vertical");
+
+		Vector3 forward = forwardObject.transform.forward;
+		Vector3 right = forwardObject.transform.right;
+
+		
+		if (hInp != 0) return vInp != 0 ? (forward * vInp + right * hInp).normalized : (right * hInp).normalized;
+		else return vInp != 0 ? (forward * vInp).normalized : increaseForward ? forward * 1.1f : forward /*Forward is increased because it feels smaller cos ur not moving*/;
+	}
+
+	Vector3 SlideDirection(bool increaseForward = false) => DashDirection(increaseForward);
+
+
+	public IEnumerator DecaySlide(float decaySpeed = 7f) {
+
+		state = PlayerState.walking;
+
+		float sf = slideForce;
+		Vector3 slideDirection = SlideDirection();
+
+		while (sf > 1f && !shouldSlide) {
+			rb.AddForce(slideDirection * sf * 10000 * Time.deltaTime);
+			if (Grounded()) sf = Mathf.Lerp(sf, 0, Time.deltaTime * decaySpeed);
+			yield return 0;
+		}
+
+	}
+
+	public IEnumerator Slide() {
+
+		state = PlayerState.sliding;
+		Debug.Log("Slide start");
+
+		Vector3 slideDirection = SlideDirection();
+
+		while (magic.key.gk(keys.slide) && !shouldJump && !shouldSlide) {
+			Debug.Log("Sliding");
+			rb.AddForce(slideDirection * slideForce * 10000 * Time.deltaTime);
+			yield return 0;
+		}
+
+		Debug.Log("Slide end");
+		StartCoroutine(DecaySlide());
+	}
+
+	void Slam() => rb.AddForce(0, -slamForce*100, 0);
+
+	Vector3 dashDirection;
+
+	public IEnumerator Dash(float decaySpeed = 7f) {
+		float df = dashForce;
+		dashDirection = DashDirection();
+		while (df > 0f) {
+			rb.AddForce(new(dashDirection.x * df * (Grounded() ? 1 : .5f) * 100, 0, dashDirection.z * df * (Grounded() ? 1 : .5f) * 100));
+			if (Grounded()) df = Mathf.Lerp(df, 0, Time.deltaTime * decaySpeed);
+			yield return 0;
+		}
+
+	}
+
+
+	public bool Grounded() {
+		Vector3 scale = gameObject.transform.localScale;
+		Vector3 pos = gameObject.transform.position;
+
+		List<Collider> colliders = Physics.OverlapBox(
+			new Vector3(pos.x, pos.y - scale.y - (checkScale.y / 2), pos.z),
+			new Vector3(scale.x * checkScale.x, checkScale.y, scale.z * checkScale.x)
+		).ToList();
+
+		colliders.Remove(GetComponent<CapsuleCollider>());
+		foreach (Collider c in colliders.ToList()) {
+			if (c.isTrigger) colliders.Remove(c);
+			if (glob.isEntity(c.tag)) colliders.Remove(c);
+		}
+
+		if (colliders.Count() > 0)
+			return true;
+		return false;
+	}
+	
+	#region Mouse
+	void HandleMouse() {
+		float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensitivityX;
+		float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensitivityY;
+
+		transform.Rotate(Vector3.up * mouseX);
+
+		currentXRotation -= mouseY;
+		currentXRotation = Mathf.Clamp(currentXRotation, minY, maxY);
+
+		playerCamera.transform.localRotation = Quaternion.Euler(currentXRotation, 0f, 0f);
+	}
+	#endregion
+
+	#region Admin
+	void AdminMove() {
+		hInp = Input.GetAxisRaw("Horizontal");
+		vInp = Input.GetAxisRaw("Vertical");
+
+		Vector3 right = playerCamera.transform.right;
+		Vector3 forward = playerCamera.transform.forward;
+
+		rb.linearVelocity = (forward * vInp + right * hInp).normalized * forwardSpeed;
+	}
+	#endregion
+}

@@ -33,11 +33,11 @@ public class HUDController : MonoBehaviour {
 
     public void UpdateStaminaBars() {
         
-        float stamina = pc.stamina;
-        float maxStamina = pc.maxStamina;
-        float minStamina = pc.minStamina;
+        float stamina = pc.stamina.stamina;
+        float maxStamina = pc.stamina.max;
+        float minStamina = pc.stamina.min;
 
-        float maxStaminaPerBar = pc.maxStamina / staminaBars.Length;
+        float maxStaminaPerBar = pc.stamina.max / staminaBars.Length;
         float currentStamina = stamina;
 
 
