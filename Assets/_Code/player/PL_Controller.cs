@@ -56,13 +56,27 @@ public class PL_Controller : RB_Controller {
 	//* Add slide and dash jumping
 	//* Polish dash force
 	//* You can spam dash and go insanely fast (And slide but less so)
+	//* Need to add a check to see if the player is oscilating between two points while sliding, and if they are increasing the slide direction until they stop oscilating
 
 
+	Transform collider;
 
 	public GameObject forwardObject;
 	[HideInInspector] public bool justDashed;
 	[HideInInspector] public float dashForceMultiplier;
+
+	enum SlidePosition {
+		up,
+		down
+	}
+
 	
+	public Transform tallPos;
+	public Transform shortPos;
+
+	public float playerHeight;
+
+
 
 	bool shouldJump => canJump && Grounded() && magic.key.down(keys.jump);
 	bool shouldSlide => slide.can && magic.key.down(keys.slide) && Grounded() && state != PlayerState.sliding;
@@ -72,11 +86,12 @@ public class PL_Controller : RB_Controller {
 
 	[Header("States")]
 
-	[HideInInspector] [SerializeField] JumpState jState;							// Unimplemented
-	public PlayerState state = PlayerState.walking; 
-	[HideInInspector] public SlideState slideState = SlideState.not_sliding;		// Unimplemented - This may need to be implemented inorder to fix sliding spam
+	[HideInInspector][SerializeField] JumpState jState;                         // Unimplemented
+	public PlayerState state = PlayerState.walking;
+	[HideInInspector] public SlideState slideState = SlideState.not_sliding;        // Unimplemented - This may need to be implemented inorder to fix sliding spam
 	public AdminState adminState = AdminState.standard;
-	[HideInInspector]  public DashState dashState = DashState.not_dashing;			// Unimplemented - This will likely not need to be implemented
+	[HideInInspector] public DashState dashState = DashState.not_dashing;           // Unimplemented - This will likely not need to be implemented
+	[SerializeField] SlidePosition slidePosition = SlidePosition.up;
 	public bool adminMode = true;
 
 	[Header("Camera")]
@@ -85,8 +100,9 @@ public class PL_Controller : RB_Controller {
 	float currentXRotation;
 	[Min(0.1f)] public float mouseSensitivityX = 2f;
 	[Min(0.1f)] public float mouseSensitivityY = 2f;
-	[Range(-90, -60)] [SerializeField] float minY = -90;
-	[Range(60, 90)]   [SerializeField] float maxY = 90;
+	[Range(-90, -60)][SerializeField] float minY = -90;
+	[Range(60, 90)][SerializeField] float maxY = 90;
+	[SerializeField] float cameraLerpSpeed = 50f;
 
 	[Header("Movement")]
 	public float forwardSpeed = 12f;
@@ -120,7 +136,7 @@ public class PL_Controller : RB_Controller {
 
 	[Header("Slamming")]
 
-	public bool canSlam=true;
+	public bool canSlam = true;
 	public float slamForce = 50f;
 
 
@@ -130,7 +146,7 @@ public class PL_Controller : RB_Controller {
 	public float staminaPerDash = 30;
 	public float groundedStaminaIncrease = 1.3f;
 
-	
+
 	[Serializable]
 	public class Stamina {
 		public float min;
@@ -144,7 +160,7 @@ public class PL_Controller : RB_Controller {
 			regenerating = true;
 			while (stamina < max) {
 				yield return new WaitForSeconds(regenTime / (pc.Grounded() ? 1.3f : 1f));
-				if(pc.state!=PlayerState.sliding) stamina++;
+				if (pc.state != PlayerState.sliding) stamina++;
 			}
 
 			if (stamina > max) stamina = max;
@@ -183,12 +199,17 @@ public class PL_Controller : RB_Controller {
 			if (goneBack[1]) this.direction = new(this.direction.x, this.direction.y, Mathf.Clamp(this.direction.z, -.8f, .8f));
 		}
 
-		public void ResetGoneBack() => this.goneBack = new bool[]{false, false};
+		public void ResetGoneBack() => this.goneBack = new bool[] { false, false };
 	}
 
 
 	public override void SetStartDefaults() {
 		base.SetStartDefaults();
+
+		slidePosition = SlidePosition.up;
+
+		collider = transform.GetChild(0);
+		playerHeight = collider.GetComponent<CapsuleCollider>().height;
 
 		defaultSpeed = forwardSpeed;
 
@@ -215,16 +236,16 @@ public class PL_Controller : RB_Controller {
 		ResetForces();
 		forwardSpeed = defaultSpeed * 2;
 		adminState = AdminState.noclip;
-		GetComponent<CapsuleCollider>().isTrigger = true;
+		transform.GetChild(0).GetComponent<CapsuleCollider>().isTrigger = true;
 		rb.useGravity = false;
 	}
-	
+
 	void SetStandardMode() {
-        forwardSpeed = defaultSpeed;
+		forwardSpeed = defaultSpeed;
 		adminState = AdminState.standard;
-		GetComponent<CapsuleCollider>().isTrigger = false;
+		transform.GetChild(0).GetComponent<CapsuleCollider>().isTrigger = false;
 		rb.useGravity = true;
-    }
+	}
 
 
 
@@ -234,7 +255,7 @@ public class PL_Controller : RB_Controller {
 
 		ClampSpeed();
 
-		Debug.Log(rb.linearVelocity);
+	
 
 		// If stamina isnt full, regenerate
 		if (shouldRegenStamina) StartCoroutine(stamina.RegenerateStamina());
@@ -298,15 +319,15 @@ public class PL_Controller : RB_Controller {
 	public void Jump(float multiplier = 1) {
 		jState = JumpState.just_jumped;
 		StartCoroutine(JustJumpedRoutine());
-		rb.AddForce(0, jumpForce*multiplier*100, 0);
+		rb.AddForce(0, jumpForce * multiplier * 100, 0);
 	}
 
 	#endregion
 
-	
 
 
-	
+
+
 
 	Vector3 SlideDirection(bool increaseForward = false) => DashDirection(increaseForward);
 
@@ -325,27 +346,55 @@ public class PL_Controller : RB_Controller {
 
 	}
 
-	public enum SlidePosition {
-		up,
-		down
+
+
+
+	public IEnumerator ManageSlidePlayerHeight() {
+		collider.GetComponent<CapsuleCollider>().height = playerHeight / 4;
+
+		collider.transform.position = new(
+			collider.transform.position.x,
+			collider.transform.position.y - (playerHeight / (4*3/transform.localScale.y)),
+			collider.transform.position.z
+		);
+
+		yield return new WaitUntil(() => magic.key.up(keys.slide));
+
+		collider.GetComponent<CapsuleCollider>().height = playerHeight;
+
+		collider.transform.position = new(
+			collider.transform.position.x,
+			collider.transform.position.y + (playerHeight / (4*3/transform.localScale.y)),
+			collider.transform.position.z
+		);
 	}
 
-	SlidePosition slidePosition = SlidePosition.up;
-
-	
-
-	public IEnumerator LerpSlideHeight() {
-		slidePosition = (slidePosition == SlidePosition.up) ? SlidePosition.down : SlidePosition.up;
-
-		GameObject col = transform.GetChild(0).gameObject;
-		col.GetComponent<CapsuleCollider>().height /= 2;
 
 
-		// TODO: this, im tired rn and wanna lie down
-		yield return 0;
+	IEnumerator LerpSlideHeight(SlidePosition targetHeight) {
+
+		Debug.Log(targetHeight);
+
+		StartCoroutine(ManageSlidePlayerHeight());
 
 
-		col.GetComponent<CapsuleCollider>().height *= 2;
+		Dictionary<SlidePosition, Transform> SlideTrans = new() {
+			{SlidePosition.up, tallPos},
+			{SlidePosition.down, shortPos}
+		};
+
+		bool condition;
+
+		do {
+			condition = targetHeight == SlidePosition.up ? !shouldSlide : state == PlayerState.sliding;
+
+			playerCamera.transform.localPosition = new(
+				playerCamera.transform.localPosition.x,
+				Mathf.Lerp(playerCamera.transform.localPosition.y, SlideTrans[targetHeight].localPosition.y, Time.deltaTime * cameraLerpSpeed),
+				playerCamera.transform.localPosition.z
+			);
+			yield return 0;
+		} while (playerCamera.transform.localPosition.y != SlideTrans[targetHeight].localPosition.y && condition);
 
 	}
 
@@ -354,7 +403,7 @@ public class PL_Controller : RB_Controller {
 		state = PlayerState.sliding;
 
 		if (slideRoutine != null) StopCoroutine(slideRoutine);
-		// StartCoroutine()
+		slideRoutine = StartCoroutine(LerpSlideHeight(SlidePosition.down));
 
 		slide.direction = SlideDirection();
 
@@ -362,8 +411,13 @@ public class PL_Controller : RB_Controller {
 			rb.AddForce(slide.direction * slide.force * 10000 * Time.deltaTime);
 			yield return 0;
 		} while (magic.key.gk(keys.slide) && !shouldJump && !shouldSlide);
- 
+
+		if (slideRoutine != null) StopCoroutine(slideRoutine);
+		slideRoutine = StartCoroutine(LerpSlideHeight(SlidePosition.up));
+		
 		StartCoroutine(DecaySlide());
+		
+		
 	}
 
 	void Slam() => rb.AddForce(0, -slamForce*100, 0);
@@ -405,12 +459,22 @@ public class PL_Controller : RB_Controller {
 
 	}
 
+	void OnDrawGizmos() {
+		Vector3 scale = collider.transform.localScale;
+		if(!!collider){
+			Vector3 pos = collider.position;
+			Gizmos.DrawCube(new Vector3(pos.x, pos.y - (scale.y  * collider.GetComponent<CapsuleCollider>().height == 2 ? 1 : 0.5f)- (checkScale.y / 2), pos.z),
+				new Vector3(scale.x * checkScale.x, checkScale.y, scale.z * checkScale.x)
+			);
+		}
+	}
+
 	public bool Grounded() {
 		Vector3 scale = gameObject.transform.localScale;
-		Vector3 pos = gameObject.transform.position;
+		Vector3 pos = collider.position;
 
 		List<Collider> colliders = Physics.OverlapBox(
-			new Vector3(pos.x, pos.y - scale.y - (checkScale.y / 2), pos.z),
+			new Vector3(pos.x, pos.y - (scale.y  * collider.GetComponent<CapsuleCollider>().height == 2 ? 1 : 0.5f)- (checkScale.y / 2), pos.z),
 			new Vector3(scale.x * checkScale.x, checkScale.y, scale.z * checkScale.x)
 		).ToList();
 
