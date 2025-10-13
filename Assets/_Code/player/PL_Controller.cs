@@ -61,7 +61,6 @@ public class PL_Controller : RB_Controller {
 
 	Transform collider;
 
-	public GameObject forwardObject;
 	[HideInInspector] public bool justDashed;
 	[HideInInspector] public float dashForceMultiplier;
 
@@ -69,14 +68,10 @@ public class PL_Controller : RB_Controller {
 		up,
 		down
 	}
-
-	
+	[Header("Objects")]
+	public GameObject forwardObject;
 	public Transform tallPos;
 	public Transform shortPos;
-
-	public float playerHeight;
-
-
 
 	bool shouldJump => canJump && Grounded() && magic.key.down(keys.jump);
 	bool shouldSlide => slide.can && magic.key.down(keys.slide) && Grounded() && state != PlayerState.sliding;
@@ -128,23 +123,27 @@ public class PL_Controller : RB_Controller {
 	[Header("Sliding")]
 
 	public Force slide;
+	public float playerHeight;
 	Coroutine slideRoutine;
 
 	[Header("Dashing")]
 
 	public Force dash;
 
-	[Header("Slamming")]
-
-	public bool canSlam = true;
-	public float slamForce = 50f;
-
-
 	[Header("Stamina")]
 
 	public Stamina stamina;
 	public float staminaPerDash = 30;
 	public float groundedStaminaIncrease = 1.3f;
+
+	[Header("Slamming")]
+
+	public bool canSlam = true;
+	public float slamForce = 90f;
+	public float slamJumpForceMultiplier = 1.2f;
+
+	float defaultJumpForce;
+	float slamJumpForce => defaultJumpForce * slamJumpForceMultiplier;
 
 
 	[Serializable]
@@ -205,6 +204,8 @@ public class PL_Controller : RB_Controller {
 
 	public override void SetStartDefaults() {
 		base.SetStartDefaults();
+
+		defaultJumpForce = jumpForce;
 
 		slidePosition = SlidePosition.up;
 
@@ -270,7 +271,7 @@ public class PL_Controller : RB_Controller {
 		if (adminState == AdminState.standard) {
 			if (shouldJump) Jump();
 			if (shouldSlide) StartCoroutine(Slide());
-			if (shouldSlam) Slam();
+			if (shouldSlam) StartCoroutine(Slam());
 			if (shouldDash) StartCoroutine(Dash());
 		}
 		else {
@@ -420,7 +421,19 @@ public class PL_Controller : RB_Controller {
 		
 	}
 
-	void Slam() => rb.AddForce(0, -slamForce*100, 0);
+	IEnumerator Slam() {
+		rb.linearVelocity = Vector3.zero;
+		rb.AddForce(0, -slamForce * 100, 0);
+		state = PlayerState.slamming;
+
+		while (!Grounded() && adminState == AdminState.standard){ yield return 0; }
+
+		state = PlayerState.walking;
+		jumpForce = slamJumpForce;
+		yield return new WaitForSeconds(0.2f);
+		jumpForce = defaultJumpForce;
+		
+	}
 
 	void ResetForces() {
 		dash.direction = Vector3.zero;
@@ -443,6 +456,7 @@ public class PL_Controller : RB_Controller {
 	public IEnumerator Dash(float decaySpeed = 4f) {
 
 		ResetForces();
+		rb.linearVelocity = Vector3.zero;
 		stamina.stamina -= staminaPerDash;
 
 
@@ -460,8 +474,8 @@ public class PL_Controller : RB_Controller {
 	}
 
 	void OnDrawGizmos() {
-		Vector3 scale = collider.transform.localScale;
 		if(!!collider){
+			Vector3 scale = collider.transform.localScale;
 			Vector3 pos = collider.position;
 			Gizmos.DrawCube(new Vector3(pos.x, pos.y - (scale.y  * collider.GetComponent<CapsuleCollider>().height == 2 ? 1 : 0.5f)- (checkScale.y / 2), pos.z),
 				new Vector3(scale.x * checkScale.x, checkScale.y, scale.z * checkScale.x)
