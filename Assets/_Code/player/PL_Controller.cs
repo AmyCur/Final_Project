@@ -511,7 +511,7 @@ public class PL_Controller : RB_Controller {
 		float df = dashEndForce;
 
 		do {
-			rb.AddForce(new(dash.direction.x * df * (Grounded() ? 1 : .3f) * 100, 0, dash.direction.z * df * (Grounded() ? 1 : .3f) * 100));
+			rb.AddForce(new Vector3(dash.direction.x * df * (Grounded() ? 1 : .3f) * 10_000, 0, dash.direction.z * df * (Grounded() ? 1 : .3f) * 10_000) * Time.deltaTime);
 			if (Grounded()) df = Mathf.Lerp(df, 0, Time.deltaTime * decaySpeed * (dash.forceState == Force.ForceState.end ? 5 : 1));
 			yield return 0;
 
