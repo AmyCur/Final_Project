@@ -64,14 +64,18 @@ public class PL_Controller : RB_Controller {
 	[HideInInspector] public bool justDashed;
 	[HideInInspector] public float dashForceMultiplier;
 
-	enum SlidePosition {
+	enum SlidePosition
+	{
 		up,
 		down
 	}
+
+	
 	[Header("Objects")]
 	public GameObject forwardObject;
 	public Transform tallPos;
 	public Transform shortPos;
+	[SerializeField] HUDController hc;
 
 	bool shouldJump => canJump && Grounded() && magic.key.down(keys.jump);
 	bool shouldSlide => slide.can && magic.key.down(keys.slide) && Grounded() && state != PlayerState.sliding;
@@ -119,6 +123,7 @@ public class PL_Controller : RB_Controller {
 	public float jumpForce = 32f;
 	public float justJumpedTime = 0.1f;
 	public bool canJump = true;
+	public float groundedRange = 0.55f;
 
 	[Header("Sliding")]
 
@@ -268,6 +273,11 @@ public class PL_Controller : RB_Controller {
 		HandleMouse();
 
 		ClampSpeed();
+		
+		if(!!collider) Debug.DrawRay(collider.position, Vector3.down * groundedRange*collider.transform.localScale.y, Color.red);
+
+
+		hc.UpdateStaminaBars();
 
 
 
@@ -481,6 +491,8 @@ public class PL_Controller : RB_Controller {
 
 		ResetForces();
 
+		stamina.s -= staminaPerDash;
+
 		rb.useGravity = false;
 
 		rb.linearVelocity = new(
@@ -492,6 +504,7 @@ public class PL_Controller : RB_Controller {
 		dash.direction = DashDirection();
 
 		dash.forceState = Force.ForceState.start;
+		dashState = DashState.just_dashed;
 
 		float df = dash.force;
 
@@ -510,7 +523,8 @@ public class PL_Controller : RB_Controller {
 	public IEnumerator DashEnd(float decaySpeed = 15f) {
 		float df = dashEndForce;
 
-		do {
+		do
+		{
 			rb.AddForce(new Vector3(dash.direction.x * df * (Grounded() ? 1 : .3f) * 10_000, 0, dash.direction.z * df * (Grounded() ? 1 : .3f) * 10_000) * Time.deltaTime);
 			if (Grounded()) df = Mathf.Lerp(df, 0, Time.deltaTime * decaySpeed * (dash.forceState == Force.ForceState.end ? 5 : 1));
 			yield return 0;
@@ -518,6 +532,8 @@ public class PL_Controller : RB_Controller {
 			// // Cancels the dash if another dash is started (Waits atleast one frame so that the dash is not instantly cancelled)
 			// if (shouldDash) break;
 		} while (df > 0f && !shouldDash);
+		
+		dashState = DashState.not_dashing;
 	}
 
 
@@ -548,34 +564,42 @@ public class PL_Controller : RB_Controller {
 		yield return 0;
 	}
 
-	void OnDrawGizmos() {
-		if (!!collider) {
-			Vector3 scale = collider.transform.localScale;
-			Vector3 pos = collider.position;
-			Gizmos.DrawCube(new Vector3(pos.x, pos.y - (scale.y * collider.GetComponent<CapsuleCollider>().height == 2 ? 1 : 0.5f) - (checkScale.y / 2), pos.z),
-				new Vector3(scale.x * checkScale.x, checkScale.y, scale.z * checkScale.x)
-			);
-		}
+	void OnDrawGizmos()
+	{
+        // Vector3 scale = transform.localScale;
+        // Vector3 pos = transform.position;
+        // Gizmos.DrawCube(
+        // 	new Vector3(pos.x, pos.y - ((scale.y - (checkScale.y / 2)) / (state == PlayerState.sliding ? 1.15f : 1)), pos.z),
+        // 	new Vector3(scale.x * checkScale.x, checkScale.y, scale.z * checkScale.x)
+        // );
+
+        // if (!!collider)
+        // {
+		// 	Gizmos.DrawRay(collider.position, collider.transform.position + (Vector3.down) * 1.5f);
+        // }
 	}
 
 	public bool Grounded() {
-		Vector3 scale = gameObject.transform.localScale;
-		Vector3 pos = collider.position;
+		return Physics.Raycast(collider.position, Vector3.down, transform.localScale.y * groundedRange);
+		
+		// Vector3 scale = transform.localScale;
+		// Vector3 pos = transform.position;
 
-		List<Collider> colliders = Physics.OverlapBox(
-			new Vector3(pos.x, pos.y - (scale.y * collider.GetComponent<CapsuleCollider>().height == 2 ? 1 : 0.5f) - (checkScale.y / 2), pos.z),
-			new Vector3(scale.x * checkScale.x, checkScale.y, scale.z * checkScale.x)
-		).ToList();
+		// List<Collider> colliders = Physics.OverlapBox(
+		// 	new Vector3(pos.x, pos.y - ((scale.y - (checkScale.y / 2)) / (state == PlayerState.sliding ? 1.15f : 1)), pos.z),
+		// 	new Vector3(scale.x * checkScale.x, checkScale.y, scale.z * checkScale.x)
+		// ).ToList();
 
-		colliders.Remove(transform.GetChild(0).GetComponent<CapsuleCollider>());
-		foreach (Collider c in colliders.ToList()) {
-			if (c.isTrigger) colliders.Remove(c);
-			if (glob.isEntity(c.tag)) colliders.Remove(c);
-		}
+		// colliders.Remove(transform.GetChild(0).GetComponent<CapsuleCollider>());
+		
+		// foreach (Collider c in colliders.ToList()) {
+		// 	if (c.isTrigger) colliders.Remove(c);
+		// 	if (glob.isEntity(c.tag)) colliders.Remove(c);
+		// }
 
-		if (colliders.Count() > 0)
-			return true;
-		return false;
+		// if (colliders.Count() > 0)
+		// 	return true;
+		// return false;
 	}
 
 	#region Mouse
