@@ -5,9 +5,9 @@
 // using System;
 
 // // [CanEditMultipleObjects]
-// // [CustomEditor(typeof(PL_Controller))]
+// // [CustomEditor(typeof(Player.PL_Controller))]
 // public class PlayerInspector : Editor {
-//     PL_Controller pc;
+//     Player.PL_Controller pc;
 
 
 
@@ -57,7 +57,7 @@
 
 //     void OnEnable()
 //     {
-//         pc = target as PL_Controller;
+//         pc = target as Player.PL_Controller;
 
 //         slideReductionIncrement = serializedObject.FindProperty("slideReductionIncrement");
 //         slideReductionIncrementTime = serializedObject.FindProperty("slideReductionIncrementTime");

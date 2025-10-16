@@ -13,7 +13,7 @@ public class Sensitivity {
         if (shouldChange) {
             try
             {
-                PL_Controller pc = mas.player.GetPlayer();
+                Player.PL_Controller pc = mas.player.GetPlayer();
                 if (pc != null) if (refreshRate.value > 60) { pc.mouseSensitivityX /= 2f; pc.mouseSensitivityY /= 2f; }
             }
             catch

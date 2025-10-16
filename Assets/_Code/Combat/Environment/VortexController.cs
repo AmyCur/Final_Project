@@ -63,7 +63,7 @@ public class VortexController : MonoBehaviour {
                                 enemC.SV.Add(new(dir * f, enemC));
                             break;
                         case Pullable.player:
-                            if (c is PL_Controller pc)
+                            if (c is Player.PL_Controller pc)
                                 pc.SV.Add(new(dir * f, pc));
                             break;
                         case Pullable.both:

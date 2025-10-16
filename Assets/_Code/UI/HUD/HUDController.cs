@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class HUDController : MonoBehaviour {
     // Paths
-    PL_Controller pc;
+    Player.PL_Controller pc;
 
     const string baseIconPath = "UI/Icons/Elements/";
     const string windPath = baseIconPath + "Wind";

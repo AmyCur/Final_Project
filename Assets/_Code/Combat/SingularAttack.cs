@@ -37,7 +37,7 @@ public abstract class SingularAttack : ScriptableObject {
     }
 
 
-    protected PL_Controller pc => mas.player.GetPlayer();
+    protected Player.PL_Controller pc => mas.player.GetPlayer();
 
     public enum AttackType {
         single,

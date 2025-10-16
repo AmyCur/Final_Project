@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class CrosshairManager : MonoBehaviour
 {
-    PL_Controller pc;
+    Player.PL_Controller pc;
     Image image;
 
     [Header("Images")]

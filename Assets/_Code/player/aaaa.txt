@@ -41,7 +41,7 @@ namespace PlayerStates {
 
 [RequireComponent(typeof(CapsuleCollider))]     // For Collision
 [RequireComponent(typeof(AudioSource))]
-public class PL_Controller : RB_Controller {
+public class Player.PL_Controller : RB_Controller {
 
 	readonly Vector2 checkScale = new(.3f, 0.06f);
 

@@ -13,7 +13,7 @@ public class CombatController : MonoBehaviour {
 	[Tooltip("Current Weapon")][SerializeField] Attack ca;
 	public List<Attack> attacks;
 	HUDController hc;
-	PL_Controller pc;
+	Player.PL_Controller pc;
 
 	void Update() {
 		if(!!ca){
@@ -28,7 +28,7 @@ public class CombatController : MonoBehaviour {
 	}
 
 	void Start() {
-		pc = GetComponent<PL_Controller>();
+		pc = GetComponent<Player.PL_Controller>();
 		hc = mas.get.HC();
 		if (!ca) ca = attacks[0];
 		UpdateIcons();

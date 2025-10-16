@@ -193,7 +193,7 @@ namespace MathsAndSome
 
             public static GameObject GetPlayerObj() => GameObject.FindGameObjectWithTag(glob.playerTag);
             
-            public static PL_Controller GetPlayer() => GetPlayerObj().GetComponent<PL_Controller>();
+            public static Player.PL_Controller GetPlayer() => GetPlayerObj().GetComponent<Player.PL_Controller>();
             
 
             // public static CombatController GetCombatController()
@@ -218,10 +218,10 @@ namespace MathsAndSome
                 return list;
             }
 
-            public static Vector3 PlayerForward()
-            {
-                return GetPlayer().forwardObject.transform.forward;
-            }
+            // public static Vector3 PlayerForward()
+            // {
+            //     return GetPlayer().forwardObject.transform.forward;
+            // }
 
             // public static Mon GetMono()
             // {
