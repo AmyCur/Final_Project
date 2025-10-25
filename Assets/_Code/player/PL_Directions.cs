@@ -1,10 +1,10 @@
 using UnityEngine;
 
 namespace Player {
-    static class Directions{
-        static Vector3 SlideDirection(this PL_Controller pc, bool increaseForward = false) => pc.DashDirection(increaseForward);
+    public static class Directions{
+        public static Vector3 SlideDirection(this PL_Controller pc, bool increaseForward = false) => pc.DashDirection(increaseForward);
             
-        static Vector3 DashDirection(this PL_Controller pc, bool increaseForward = true)
+        public static Vector3 DashDirection(this PL_Controller pc, bool increaseForward = true)
         {
             float hInp = Input.GetAxisRaw("Horizontal");
             float vInp = Input.GetAxisRaw("Vertical");
