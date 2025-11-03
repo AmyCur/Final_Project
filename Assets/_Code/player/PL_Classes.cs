@@ -14,6 +14,7 @@ namespace Player
         public bool regenerating;
         public float regenTime;
         public float staminaPerTick = 1f;
+        
         [HideInInspector] public PL_Controller pc;
 
         public IEnumerator RegenerateStamina()
@@ -82,6 +83,9 @@ namespace Player
 
         public Vector3 direction;
         [Range(0.01f, 0.075f)] public float directionChangeSpeed = 0.03f;
+        
+        [Header("State")]
+        public MovementState state = MovementState.none;
 
         public void ChangeDirection(Vector3 moveDirection)
         {
