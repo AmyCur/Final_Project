@@ -13,6 +13,7 @@ namespace Player
         public float s;
         public bool regenerating;
         public float regenTime;
+        public float staminaPerTick = 1f;
         [HideInInspector] public PL_Controller pc;
 
         public IEnumerator RegenerateStamina()
@@ -27,6 +28,27 @@ namespace Player
             if (s > max) s = max;
             regenerating = false;
         }
+
+
+
+        public void Add(float value)
+        {
+            s += value;
+            if(pc.hc!=null) pc.hc.UpdateStaminaBars();
+        }
+
+        public void Subtract(float value)
+        {
+            s -= value;
+            if(pc.hc!=null) pc.hc.UpdateStaminaBars();
+        }
+
+        // public void operator +=(float value)
+        // {
+        //     this.s = this.s + value;
+        //     pc.hc.UpdateStaminaBars();
+        // }
+        // public Stamina operator -=(float value) => s -= value;
 
     }
 

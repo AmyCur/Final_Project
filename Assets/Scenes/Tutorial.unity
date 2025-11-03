@@ -1850,10 +1850,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3994985137764270263, guid: d4211814a6a149142a4832bf221360ef, type: 3}
-      propertyPath: m_LinearDamping
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5766768589114410277, guid: d4211814a6a149142a4832bf221360ef, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1
@@ -1902,78 +1898,6 @@ PrefabInstance:
       propertyPath: hc
       value: 
       objectReference: {fileID: 1711913160}
-    - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
-      propertyPath: health
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
-      propertyPath: collider
-      value: 
-      objectReference: {fileID: 985488818}
-    - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
-      propertyPath: dashForce
-      value: 480
-      objectReference: {fileID: 0}
-    - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
-      propertyPath: jumpForce
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
-      propertyPath: slamForce
-      value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
-      propertyPath: stamina.s
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
-      propertyPath: dash.force
-      value: 35
-      objectReference: {fileID: 0}
-    - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
-      propertyPath: dash.speed
-      value: 300
-      objectReference: {fileID: 0}
-    - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
-      propertyPath: slideSpeed
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
-      propertyPath: dashEndForce
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
-      propertyPath: forwardSpeed
-      value: 35
-      objectReference: {fileID: 0}
-    - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
-      propertyPath: groundedRange
-      value: 1.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
-      propertyPath: noGravDashTime
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
-      propertyPath: slideDecaySpeed
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
-      propertyPath: slide.decaySpeed
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
-      propertyPath: dash.decayIncrements
-      value: 1000
-      objectReference: {fileID: 0}
-    - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
-      propertyPath: slideDecayIncrements
-      value: 1000
-      objectReference: {fileID: 0}
-    - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
-      propertyPath: slide.decayIncrements
-      value: 1000
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4999,11 +4923,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!136 &985488818 stripped
-CapsuleCollider:
-  m_CorrespondingSourceObject: {fileID: 2370751716845391844, guid: d4211814a6a149142a4832bf221360ef, type: 3}
-  m_PrefabInstance: {fileID: 757930969}
-  m_PrefabAsset: {fileID: 0}
 --- !u!43 &995003714
 Mesh:
   m_ObjectHideFlags: 0
@@ -6628,57 +6547,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!1 &1370621734
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1370621736}
-  - component: {fileID: 1370621735}
-  m_Layer: 5
-  m_Name: HUD
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1370621735
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1370621734}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_PanelSettings: {fileID: 11400000, guid: cb42722faf99cc8cb91bef1e80227a66, type: 2}
-  m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 39161326a0f4fd9a0b745c9e757165d0, type: 3}
-  m_SortingOrder: 0
-  m_WorldSpaceSizeMode: 1
-  m_WorldSpaceWidth: 1920
-  m_WorldSpaceHeight: 1080
---- !u!4 &1370621736
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1370621734}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1375712480
 GameObject:
   m_ObjectHideFlags: 0
@@ -11867,7 +11735,6 @@ SceneRoots:
   - {fileID: 398579012}
   - {fileID: 1497283110}
   - {fileID: 59419322}
-  - {fileID: 1370621736}
   - {fileID: 1168470625}
   - {fileID: 1711913159}
   - {fileID: 911901630380932869}

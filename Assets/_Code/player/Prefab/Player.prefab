@@ -408,10 +408,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8234333527592107431}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 5
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 1
+  m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -440,7 +440,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90e2e910219492f4387f003fbfdf2ada, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 20
+  health: 0.1
   defence: 11
   currentElements: []
   burnDamage: 1e+12
@@ -451,59 +451,51 @@ MonoBehaviour:
   movementVector: {x: 0, y: 0, z: 0}
   rb: {fileID: 0}
   SV: []
-  justDashed: 0
-  dashForceMultiplier: 0
-  forwardObject: {fileID: 9003766077271217922}
-  tallPos: {fileID: 5361198314660246385}
-  shortPos: {fileID: 9131946972242882942}
-  jState: 0
-  state: 0
-  slideState: 3
-  adminState: 0
-  dashState: 2
-  slidePosition: 0
-  adminMode: 1
-  playerCamera: {fileID: 0}
-  mouseSensitivityX: 2
-  mouseSensitivityY: 2
-  minY: -90
-  maxY: 90
-  cameraLerpSpeed: 50
   forwardSpeed: 35
   sidewaysSpeed: 28
-  maxSpeed: 13
-  jumpForce: 32
-  justJumpedTime: 0.1
   canJump: 1
+  jumpForce: 30
+  groundedRange: 1.01
+  canSlam: 1
   slide:
-    forceState: 0
     can: 1
-    force: 32
-    directionChangeSpeed: 0.03
+    speed: 45
+    decayIncrements: 1000
+    decaySpeed: 12
     direction: {x: 0, y: 0, z: 0}
-    goneBack: 0000
-  playerHeight: 0
+    directionChangeSpeed: 0.03
   dash:
-    forceState: 0
     can: 1
-    force: 50
-    directionChangeSpeed: 0.03
+    speed: 300
+    decayIncrements: 1000
+    decaySpeed: 10
     direction: {x: 0, y: 0, z: 0}
-    goneBack: 0000
-  dashEndForce: 35
-  dashTime: 0.2
+    directionChangeSpeed: 0.05
+    hardCDTime: 0.1
+    staminaPer: 30
+    gravityDashForce: 50
+    noGravDashTime: 0.3
+  dashDecaySpeed: 10
+  mouseSensitivityX: 2
+  mouseSensitivityY: 2
+  maxY: 90
+  minY: -90
+  state: 0
+  jumpState: 3
+  slideState: 3
+  slamState: 3
   stamina:
     min: 0
     max: 100
-    stamina: 100
+    s: 100
     regenerating: 0
     regenTime: 0.08
+    staminaPerTick: 1
     pc: {fileID: 0}
-  staminaPerDash: 30
-  groundedStaminaIncrease: 1.3
-  canSlam: 1
-  slamForce: 90
-  slamJumpForceMultiplier: 1.2
+  playerCamera: {fileID: 0}
+  collider: {fileID: 2370751716845391844}
+  forwardObject: {fileID: 9003766077271217922}
+  hc: {fileID: 0}
 --- !u!82 &4819737068671345320
 AudioSource:
   m_ObjectHideFlags: 0

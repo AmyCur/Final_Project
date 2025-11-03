@@ -92,14 +92,20 @@ namespace Player {
 		
 		float hInp;
 		float vInp;
-	
+
 		public GameObject forwardObject;
+
+		[Header("UI")]
+
+		public HUDController hc;
 
 
 		public override void SetStartDefaults() {
 			base.SetStartDefaults();
 
-		
+			stamina.pc = this;
+
+			StartCoroutine(RegenerateStamina());
 			playerCamera = Camera.main;
 			Cursor.lockState = CursorLockMode.Locked;
 			Cursor.visible = false;
@@ -122,7 +128,29 @@ namespace Player {
 			if (shouldDash) Dash();
 		}
 
-		public IEnumerator DecaySlide(float decaySpeed=-1f)
+		//* Stamina
+
+		public IEnumerator RegenerateStamina()
+		{
+            while (true)
+            {
+				if (stamina.s < stamina.max && state != PlayerState.sliding && rb.useGravity)
+				{
+
+					// If not moving and on the ground
+					float movementMultiplier = Input.GetAxisRaw("Horizontal") == 0 && Input.GetAxisRaw("Vertical") == 0 && Grounded() ? 2 : 1;
+
+
+					stamina.Add(stamina.staminaPerTick*(Grounded() ? 1.5f : 1)*movementMultiplier);
+					if (stamina.s > stamina.max) stamina.s = stamina.max;
+					yield return new WaitForSeconds(stamina.regenTime);
+				}
+                else yield return 0;
+            }
+            
+        }
+
+		public IEnumerator DecaySlide(float decaySpeed = -1f)
 		{
 			if (decaySpeed == -1f) decaySpeed = slide.decaySpeed;
 			float force = slide.speed;
@@ -185,14 +213,19 @@ namespace Player {
 			if (shouldJump) { StartCoroutine(PreserveSlideJump()); }
 
 			// No longer pressing slide -> Fast decay
-			else if (!magic.key.gk(keys.slide)) StartCoroutine(DecaySlide(decaySpeed: slide.decaySpeed)); 
+			else if (!magic.key.gk(keys.slide)) StartCoroutine(DecaySlide(decaySpeed: slide.decaySpeed));
+
+			state = PlayerState.walking;
         }
 
 		public void Jump() {
 			rb.AddForce(0, jumpForce * 100f, 0);
 		}
 
-		public void Dash() => StartCoroutine(NoGravityDash());
+		public void Dash() {
+			stamina.Subtract(dash.staminaPer);
+			StartCoroutine(NoGravityDash());
+		}
 
 		void Set0G() => timerOver = true;
 
@@ -207,7 +240,9 @@ namespace Player {
 			// idk if this needs to be a do while
 			do
 			{
-				rb.AddForce(dash.direction * force * 10_000f * Time.deltaTime);
+				Vector3 forceToAdd = dash.direction * force * 1_000f * Time.deltaTime;
+				Debug.Log(forceToAdd);
+				rb.AddForce(forceToAdd);
 				force = Mathf.Lerp(force, 0, Time.deltaTime * decaySpeed);
 				yield return 0;
 			} while (force > 0.1f && !shouldDash);
@@ -262,12 +297,6 @@ namespace Player {
 			else StartCoroutine(DecayDash());
         }
 
-
-
-
-
-
-
 		void SetAdminMode() {
 			// ResetForces();
 			// forwardSpeed = defaultSpeed * 2;
@@ -301,6 +330,7 @@ namespace Player {
 			Vector3 force = (forward * vInp * (Grounded() ? fwSpeed : sdSpeed) * airChange) + (right * hInp * sdSpeed * airChange);
 			
 			slide.ChangeDirection(force.normalized);
+			dash.ChangeDirection(force.normalized);
 
 			rb.AddForce(force);
 			// moveDirection = force.normalized;
