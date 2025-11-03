@@ -217,7 +217,7 @@ namespace Player
 				Vector3 moveD = new(Math.Sign(moveDirection.x), 0, Math.Sign(moveDirection.z));
 				Vector3 forceD = new(Math.Sign(this.direction.x), 0, Math.Sign(this.direction.z));
 
-				// Check if the player is moving in the opposite direciton of the dash and if they are, change the dash direction to suit them
+				// Check if the player is moving in the opposite direction of the dash and if they are, change the dash direction to suit them
 
 				if (-moveD.x == forceD.x && moveD.x != 0 && forceD.x != 0)
 				{

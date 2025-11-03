@@ -16,8 +16,8 @@ namespace Player {
 
 
 		bool shouldJump => 	canJump  && Grounded() && magic.key.down(keys.jump);
-		bool shouldSlide => canSlide && Grounded() && magic.key.gk(keys.slide) && state != PlayerState.sliding;
-		bool shouldDash =>  canDash  && magic.key.down(keys.dash) && stamina.s - staminaPerDash >= 0;
+		bool shouldSlide => slide.can && Grounded() && magic.key.gk(keys.slide) && state != PlayerState.sliding;
+		bool shouldDash =>  dash.can  && magic.key.down(keys.dash) && stamina.s - dash.staminaPer >= 0;
 
 
 		[Header("Movement")]
@@ -37,19 +37,28 @@ namespace Player {
 
 		[Header("Sliding")]
 
-		public bool canSlide = true;
-		public float slideSpeed = 45f;
+		public Force slide;
+		// public bool canSlide = true;
+		// public float slideSpeed = 45f;
+		// [Range(500, 2000)] public int slideDecayIncrements = 30;
+		// public float slideDecaySpeed = 10f;
 
 		[Header("Dashing")]
-		
-		[Header("Mutual")]
-		public bool canDash = true;
-		public float dashHardCDTime = 0.1f;
-		[Range(0, 100)] public float staminaPerDash = 30f;
 
-		[Header("No Gravity")]
-		public float dashForce = 12f;
-		public float noGravDashTime = 0.3f;
+		public Dash dash;
+
+		// [Header("Mutual")]
+		// public bool canDash = true;
+		// public float dashHardCDTime = 0.1f;
+		// [Range(0, 100)] public float staminaPerDash = 30f;
+
+		// [Header("No Gravity")]
+		// public float dashForce = 12f;
+		// public float noGravDashTime = 0.3f;
+
+		[Header("Gravity")]
+
+		public float dashDecaySpeed = 10f;
 		
 		
 		[Header("Mouse")]
@@ -101,7 +110,8 @@ namespace Player {
 			if (state != PlayerState.sliding && state != PlayerState.slamming && canMove) this.Move();
 		}
 
-		public override void Update() {
+		public override void Update()
+		{
 			base.Update();
 			HandleMouse();
 
@@ -111,15 +121,56 @@ namespace Player {
 			if (shouldSlide) StartCoroutine(Slide());
 			if (shouldDash) Dash();
 		}
+
+		public IEnumerator DecaySlide(float decaySpeed=-1f)
+		{
+			if (decaySpeed == -1f) decaySpeed = slide.decaySpeed;
+			float force = slide.speed;
+
+			// idk if this needs to be a do while
+			do
+			{
+				rb.AddForce(slide.direction * force * 10_000f * Time.deltaTime);
+				force = Mathf.Lerp(force, 0, Time.deltaTime * decaySpeed);
+				Debug.LogWarning(force);
+				// ???? Couldve just used yield return 0
+				yield return new WaitForSeconds(decaySpeed / (float)slide.decayIncrements);
+			} while (force > 0.1f && !shouldSlide);
+		}
 		
+		IEnumerator WaitForSlideJumpPreservation()
+        {
+			yield return new WaitForSeconds(0.1f);
+			canBreakFromSlidePreservation = true;
+        }
+
+		bool canBreakFromSlidePreservation = false;
+
+		public IEnumerator PreserveSlideJump()
+		{
+			canBreakFromSlidePreservation = false;
+
+			StartCoroutine(WaitForSlideJumpPreservation());
+
+			do
+			{
+				rb.AddForce(slide.direction * slide.speed * 10_000f * Time.deltaTime);
+				yield return 0;
+
+				// if ((Grounded() && canBreakFromSlidePreservation) || shouldDash) break;
+			} while (!((Grounded() && canBreakFromSlidePreservation) || shouldDash));
+
+			if(Grounded()) StartCoroutine(DecaySlide(decaySpeed: slide.decaySpeed));
+		}
+
 		public IEnumerator Slide() {
 
-			Vector3 slideDirection = Directions.SlideDirection(this);
+			slide.direction = Directions.SlideDirection(this);
 
 			state = PlayerState.sliding;
 
 			do {
-				rb.AddForce(slideDirection * slideSpeed * 10000f * Time.deltaTime);
+				rb.AddForce(slide.direction * slide.speed * 10_000f * Time.deltaTime);
 				yield return 0;
 			} while (magic.key.gk(keys.slide) && !shouldJump && Grounded());
 
@@ -127,52 +178,89 @@ namespace Player {
 
 			// Handle Slide End based on how the slide has ended
 
-			// No longer pressing slide -> Fast decay
-			if (!magic.key.gk(keys.slide)) { }
+			// No Grounded -> Medium decay
+			// if (!Grounded()) StartCoroutine(DecaySlide(direction: slideDirection, decaySpeed: 2f)); 
 
 			// Jumped -> No decay
-			else if (shouldJump) { }
+			if (shouldJump) { StartCoroutine(PreserveSlideJump()); }
 
-			// No Grounded -> Medium decay
-			else if (!Grounded()) { }
-
-
+			// No longer pressing slide -> Fast decay
+			else if (!magic.key.gk(keys.slide)) StartCoroutine(DecaySlide(decaySpeed: slide.decaySpeed)); 
         }
 
 		public void Jump() {
-			rb.AddForce(0, jumpForce * 1000f, 0);
+			rb.AddForce(0, jumpForce * 100f, 0);
 		}
 
 		public void Dash() => StartCoroutine(NoGravityDash());
-
-		
 
 		void Set0G() => timerOver = true;
 
 
 		bool timerOver = false;
 
-		public IEnumerator GravityDash() {
-			yield return 0;
+		public IEnumerator DecayDash(float decaySpeed = -1f)
+		{
+			if (decaySpeed == -1f) decaySpeed = dash.decaySpeed;
+			float force = dash.speed;
+
+			// idk if this needs to be a do while
+			do
+			{
+				rb.AddForce(dash.direction * force * 10_000f * Time.deltaTime);
+				force = Mathf.Lerp(force, 0, Time.deltaTime * decaySpeed);
+				// ???? Couldve just used yield return 0
+				yield return 0;
+			} while (force > 0.1f && !shouldDash);
+		
         }
+
+		bool canBreakFromGravityDash = false;
+
+		IEnumerator WaitForGravityDash()
+        {
+			yield return new WaitForSeconds(0.1f);
+			canBreakFromGravityDash = true;
+        }
+    
+
+		public IEnumerator GravityDash()
+		{
+			canBreakFromGravityDash = false;
+
+			StartCoroutine(WaitForGravityDash());
+
+			do
+			{
+				rb.AddForce(dash.direction * dash.gravityDashForce * 10_000f * Time.deltaTime);
+				Debug.Log("Adding dash force (gravity)");
+				yield return 0;
+
+				// if ((Grounded() && canBreakFromSlidePreservation) || shouldDash) break;
+			} while (!((Grounded() && canBreakFromGravityDash) || shouldDash));
+
+			if(Grounded()) StartCoroutine(DecayDash(decaySpeed: slide.decaySpeed));
+		}
 
 		// Dash where gravity is disabled (The only dash if youre on the ground)
 		public IEnumerator NoGravityDash() {
 			timerOver = false;
 			rb.useGravity = false;
 
-			Invoke(nameof(Set0G), noGravDashTime);
+			Invoke(nameof(Set0G), dash.noGravDashTime);
 
-			Vector3 dashDirection = Directions.DashDirection(this, true);
+			dash.direction = Directions.DashDirection(this, true);
+
 			rb.linearVelocity = Vector3.zero;
 			while (!timerOver) {
-				rb.AddForce(dashDirection*dashForce);
+				rb.AddForce(dash.direction*dash.speed*Time.deltaTime* 1_000f);
 				yield return 0;
 			}
 			
 			rb.useGravity = true;
 
 			if (!Grounded()) StartCoroutine(GravityDash());
+			else StartCoroutine(DecayDash());
         }
 
 
@@ -202,6 +290,7 @@ namespace Player {
 			vInp = Grounded() ? Input.GetAxisRaw("Vertical") : Input.GetAxis("Vertical");
 
 
+
 			Vector3 forward = forwardObject.transform.forward;
 			Vector3 right = forwardObject.transform.right;
 
@@ -211,6 +300,8 @@ namespace Player {
 			float airChange = Consts.Movement.AirSpeedChange(Grounded());
 
 			Vector3 force = (forward * vInp * (Grounded() ? fwSpeed : sdSpeed) * airChange) + (right * hInp * sdSpeed * airChange);
+			
+			slide.ChangeDirection(force.normalized);
 
 			rb.AddForce(force);
 			// moveDirection = force.normalized;

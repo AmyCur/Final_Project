@@ -172,7 +172,7 @@ public class Player.PL_Controller : RB_Controller {
 		Vector3 md = new(Math.Sign(moveDirection.x), 0, Math.Sign(moveDirection.z));
 		Vector3 dd = new(Math.Sign(dashDirection.x), 0, Math.Sign(dashDirection.z));
 
-		// Check if the player is moving in the opposite direciton of the dash and if they are, change the dash direction to suit them
+		// Check if the player is moving in the opposite direction of the dash and if they are, change the dash direction to suit them
 
 		if (-md.x == dd.x && md.x != 0 && dd.x != 0) {
 			if (dashDirection.x < 0) dashDirection = new(dashDirection.x + dashDirectionChangeSpeed, dashDirection.y, dashDirection.z);
