@@ -209,7 +209,6 @@ namespace Player {
 			{
 				rb.AddForce(dash.direction * force * 10_000f * Time.deltaTime);
 				force = Mathf.Lerp(force, 0, Time.deltaTime * decaySpeed);
-				// ???? Couldve just used yield return 0
 				yield return 0;
 			} while (force > 0.1f && !shouldDash);
 		
