@@ -26,8 +26,7 @@ namespace Player {
 
     }
 
-
-
+  
 
     [Serializable]
     public class Force {

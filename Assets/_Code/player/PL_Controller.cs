@@ -16,7 +16,8 @@ namespace Player {
 
 
 		bool shouldJump => 	canJump  && Grounded() && magic.key.down(keys.jump);
-		bool shouldSlide => canSlide && Grounded() && magic.key.gk(keys.slide)  && state!=PlayerState.sliding;
+		bool shouldSlide => canSlide && Grounded() && magic.key.gk(keys.slide) && state != PlayerState.sliding;
+		bool shouldDash =>  canDash  && magic.key.down(keys.dash) && stamina.s - staminaPerDash >= 0;
 
 
 		[Header("Movement")]
@@ -38,6 +39,17 @@ namespace Player {
 
 		public bool canSlide = true;
 		public float slideSpeed = 45f;
+
+		[Header("Dashing")]
+		
+		[Header("Mutual")]
+		public bool canDash = true;
+		public float dashHardCDTime = 0.1f;
+		[Range(0, 100)] public float staminaPerDash = 30f;
+
+		[Header("No Gravity")]
+		public float dashForce = 12f;
+		public float noGravDashTime = 0.3f;
 		
 		
 		[Header("Mouse")]
@@ -97,6 +109,7 @@ namespace Player {
 
 			if (shouldJump) Jump();
 			if (shouldSlide) StartCoroutine(Slide());
+			if (shouldDash) Dash();
 		}
 		
 		public IEnumerator Slide() {
@@ -127,7 +140,39 @@ namespace Player {
         }
 
 		public void Jump() {
-			rb.AddForce(0, jumpForce*1000f, 0);
+			rb.AddForce(0, jumpForce * 1000f, 0);
+		}
+
+		public void Dash() => StartCoroutine(NoGravityDash());
+
+		
+
+		void Set0G() => timerOver = true;
+
+
+		bool timerOver = false;
+
+		public IEnumerator GravityDash() {
+			yield return 0;
+        }
+
+		// Dash where gravity is disabled (The only dash if youre on the ground)
+		public IEnumerator NoGravityDash() {
+			timerOver = false;
+			rb.useGravity = false;
+
+			Invoke(nameof(Set0G), noGravDashTime);
+
+			Vector3 dashDirection = Directions.DashDirection(this, true);
+			rb.linearVelocity = Vector3.zero;
+			while (!timerOver) {
+				rb.AddForce(dashDirection*dashForce);
+				yield return 0;
+			}
+			
+			rb.useGravity = true;
+
+			if (!Grounded()) StartCoroutine(GravityDash());
         }
 
 
@@ -160,7 +205,12 @@ namespace Player {
 			Vector3 forward = forwardObject.transform.forward;
 			Vector3 right = forwardObject.transform.right;
 
-			Vector3 force = (forward * vInp * (forwardSpeed * 100) / (!Grounded() ? 1.4f : 1)) + (right * hInp * (sidewaysSpeed * 100) / (!Grounded() ? 1.4f : 1));
+			float fwSpeed = forwardSpeed * 100f;
+			float sdSpeed = sidewaysSpeed * 100f;
+
+			float airChange = Consts.Movement.AirSpeedChange(Grounded());
+
+			Vector3 force = (forward * vInp * (Grounded() ? fwSpeed : sdSpeed) * airChange) + (right * hInp * sdSpeed * airChange);
 
 			rb.AddForce(force);
 			// moveDirection = force.normalized;
