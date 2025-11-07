@@ -1898,6 +1898,34 @@ PrefabInstance:
       propertyPath: hc
       value: 
       objectReference: {fileID: 1711913160}
+    - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
+      propertyPath: jumpForce
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
+      propertyPath: dash.force
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
+      propertyPath: slam.force
+      value: 135
+      objectReference: {fileID: 0}
+    - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
+      propertyPath: forwardSpeed
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
+      propertyPath: dash.decayIncrements
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
+      propertyPath: slam.decayIncrements
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
+      propertyPath: dash.gravityDashForce
+      value: 30
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

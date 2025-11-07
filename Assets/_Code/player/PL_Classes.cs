@@ -74,8 +74,8 @@ namespace Player
         bool[] goneBack = new bool[2];
 
         [Header("Force")]
-        public float speed = 45f;
-        [Range(500, 2000)] public int decayIncrements = 30;
+        public float force = 45f;
+        [Range(500, 2000)] public int decayIncrements = 1000;
         public float decaySpeed = 10f;
 
         [Header("Directions")]

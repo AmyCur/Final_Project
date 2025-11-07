@@ -17,8 +17,17 @@ namespace Player {
 
 		bool shouldJump => 	canJump  && Grounded() && magic.key.down(keys.jump);
 		bool shouldSlide => slide.can && Grounded() && magic.key.gk(keys.slide) && state != PlayerState.sliding;
-		bool shouldDash =>  dash.can  && magic.key.down(keys.dash) && stamina.s - dash.staminaPer >= 0;
+		bool shouldDash => dash.can && magic.key.down(keys.dash) && stamina.s - dash.staminaPer >= 0;
+		bool shouldSlam => slam.can && magic.key.down(keys.slam) && !Grounded() && state != PlayerState.slamming;
 
+		[Header("Player")]
+		[Header("States")]
+
+		public PlayerState 				state;
+		public MovementState 			jumpState 			= MovementState.none;
+		public MovementState 			slideState 			= MovementState.none;
+		public MovementState 			slamState 			= MovementState.none;
+		public AdminState 				adminState 			= AdminState.standard;
 
 		[Header("Movement")]
 		public float 					forwardSpeed 		= 12f;
@@ -56,9 +65,9 @@ namespace Player {
 		// public float dashForce = 12f;
 		// public float noGravDashTime = 0.3f;
 
-		[Header("Gravity")]
+		// [Header("Gravity")]
 
-		public float dashDecaySpeed = 10f;
+		// public float dashDecaySpeed = 10f;
 		
 		
 		[Header("Mouse")]
@@ -71,18 +80,15 @@ namespace Player {
 		
 		float 							currentXRotation;
 
-		[Header("States")]
-
-		public PlayerState 				state;
-		public MovementState 			jumpState 			= MovementState.none;
-		public MovementState 			slideState 			= MovementState.none;
-		public MovementState 			slamState 			= MovementState.none;
+		
 
 		[Header("Stamina")]
 
 		public Stamina stamina;
-		
 
+		[Header("Slamming")]
+
+		public Force slam;
 
 		[HideInInspector] public Camera playerCamera;
 		[SerializeField] CapsuleCollider collider;
@@ -99,6 +105,10 @@ namespace Player {
 
 		public HUDController hc;
 
+		[Header("Admin")]
+
+		[SerializeField] bool admin=true;
+
 
 		public override void SetStartDefaults() {
 			base.SetStartDefaults();
@@ -111,29 +121,51 @@ namespace Player {
 			Cursor.visible = false;
 		}
 
-		public override void FixedUpdate() {
+		public override void FixedUpdate()
+		{
 			base.FixedUpdate();
-			if (state != PlayerState.sliding && state != PlayerState.slamming && canMove) this.Move();
+			if (state != PlayerState.sliding && state != PlayerState.slamming && canMove) {
+				if (adminState == AdminState.standard) this.Move();
+				else this.AdminMove();
+			}
 		}
+
+
 
 		public override void Update()
 		{
 			base.Update();
 			HandleMouse();
 
-			// Movement
+			if (Grounded() && state == PlayerState.slamming) state = PlayerState.walking; 
 
-			if (shouldJump) Jump();
-			if (shouldSlide) StartCoroutine(Slide());
-			if (shouldDash) Dash();
+            // Movement
+
+            if (adminState != AdminState.noclip)
+            {
+                if (shouldJump) Jump();
+				if (shouldSlide) StartCoroutine(Slide());
+				if (shouldDash) Dash();
+				if (shouldSlam) Slam();
+            }
+			
+
+			if (magic.key.down(keys.noclip)) CheckForAdmin();
+
 		}
+		
+		void CheckForAdmin()
+        {
+			if (admin) adminState = adminState == AdminState.standard ? AdminState.noclip : AdminState.standard;
+        }
+
 
 		//* Stamina
 
 		public IEnumerator RegenerateStamina()
 		{
-            while (true)
-            {
+			while (true)
+			{
 				if (stamina.s < stamina.max && state != PlayerState.sliding && rb.useGravity)
 				{
 
@@ -141,24 +173,34 @@ namespace Player {
 					float movementMultiplier = Input.GetAxisRaw("Horizontal") == 0 && Input.GetAxisRaw("Vertical") == 0 && Grounded() ? 2 : 1;
 
 
-					stamina.Add(stamina.staminaPerTick*(Grounded() ? 1.5f : 1)*movementMultiplier);
+					stamina.Add(stamina.staminaPerTick * (Grounded() ? 1.5f : 1) * movementMultiplier);
 					if (stamina.s > stamina.max) stamina.s = stamina.max;
 					yield return new WaitForSeconds(stamina.regenTime);
 				}
-                else yield return 0;
-            }
-            
+				else yield return 0;
+			}
+
+		}
+		
+		//* Stamina
+
+		public void Slam()
+        {
+			state = PlayerState.slamming;
+			rb.linearVelocity = Vector3.zero;
+			rb.AddForce(0, -slam.force * Consts.Multipliers.SLAM_MULTIPLIER * Time.deltaTime, 0);
+
         }
 
 		public IEnumerator DecaySlide(float decaySpeed = -1f)
 		{
 			if (decaySpeed == -1f) decaySpeed = slide.decaySpeed;
-			float force = slide.speed;
+			float force = slide.force;
 
 			// idk if this needs to be a do while
 			do
 			{
-				rb.AddForce(slide.direction * force * 10_000f * Time.deltaTime);
+				rb.AddForce(slide.direction * force * Consts.Multipliers.SLIDE_MULTIPLIER * Time.deltaTime);
 				force = Mathf.Lerp(force, 0, Time.deltaTime * decaySpeed);
 				Debug.LogWarning(force);
 				// ???? Couldve just used yield return 0
@@ -182,11 +224,11 @@ namespace Player {
 
 			do
 			{
-				rb.AddForce(slide.direction * slide.speed * 10_000f * Time.deltaTime);
+				rb.AddForce(slide.direction * slide.force * Consts.Multipliers.SLIDE_MULTIPLIER * Time.deltaTime * .8f);
 				yield return 0;
 
 				// if ((Grounded() && canBreakFromSlidePreservation) || shouldDash) break;
-			} while (!((Grounded() && canBreakFromSlidePreservation) || shouldDash));
+			} while (!((Grounded() && canBreakFromSlidePreservation) || shouldDash || shouldSlam));
 
 			if(Grounded()) StartCoroutine(DecaySlide(decaySpeed: slide.decaySpeed));
 		}
@@ -198,7 +240,7 @@ namespace Player {
 			state = PlayerState.sliding;
 
 			do {
-				rb.AddForce(slide.direction * slide.speed * 10_000f * Time.deltaTime);
+				rb.AddForce(slide.direction * slide.force * Consts.Multipliers.SLIDE_MULTIPLIER * Time.deltaTime);
 				yield return 0;
 			} while (magic.key.gk(keys.slide) && !shouldJump && Grounded());
 
@@ -219,7 +261,7 @@ namespace Player {
         }
 
 		public void Jump() {
-			rb.AddForce(0, jumpForce * 100f, 0);
+			rb.AddForce(0, jumpForce * Consts.Multipliers.JUMP_MULTIPLIER, 0);
 		}
 
 		public void Dash() {
@@ -235,7 +277,7 @@ namespace Player {
 		public IEnumerator DecayDash(float decaySpeed = -1f)
 		{
 			if (decaySpeed == -1f) decaySpeed = dash.decaySpeed;
-			float force = dash.speed;
+			float force = dash.force;
 
 			// idk if this needs to be a do while
 			do
@@ -266,12 +308,12 @@ namespace Player {
 
 			do
 			{
-				rb.AddForce(dash.direction * dash.gravityDashForce * 10_000f * Time.deltaTime);
+				rb.AddForce(dash.direction * dash.gravityDashForce * Consts.Multipliers.DASH_MULTIPLIER * Time.deltaTime);
 				Debug.Log("Adding dash force (gravity)");
 				yield return 0;
 
 				// if ((Grounded() && canBreakFromSlidePreservation) || shouldDash) break;
-			} while (!((Grounded() && canBreakFromGravityDash) || shouldDash));
+			} while (!((Grounded() && canBreakFromGravityDash) || shouldDash || shouldSlam));
 
 			if(Grounded()) StartCoroutine(DecayDash(decaySpeed: slide.decaySpeed));
 		}
@@ -287,7 +329,7 @@ namespace Player {
 
 			rb.linearVelocity = Vector3.zero;
 			while (!timerOver) {
-				rb.AddForce(dash.direction*dash.speed*Time.deltaTime* 1_000f);
+				rb.AddForce(dash.direction*dash.force*Time.deltaTime* Consts.Multipliers.DASH_MULTIPLIER);
 				yield return 0;
 			}
 			
