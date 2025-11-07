@@ -1899,6 +1899,7 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1711913160}
     - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
+<<<<<<< HEAD
       propertyPath: jumpForce
       value: 35
       objectReference: {fileID: 0}
@@ -1925,6 +1926,10 @@ PrefabInstance:
     - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
       propertyPath: dash.gravityDashForce
       value: 30
+=======
+      propertyPath: dash.gravityDashForce
+      value: 35
+>>>>>>> 94e314174604c63a8c41f3e21630bb5730293afc
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

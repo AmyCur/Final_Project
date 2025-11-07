@@ -152,6 +152,14 @@ namespace Player {
 
 			if (magic.key.down(keys.noclip)) CheckForAdmin();
 
+<<<<<<< HEAD
+=======
+			float jumpMultiplier = (state == PlayerState.sliding) ? 0.9f : (dash.state != MovementState.none ? 0.7f : 1f);
+
+			if (shouldJump) Jump(jumpMultiplier);
+			if (shouldSlide) StartCoroutine(Slide());
+			if (shouldDash) Dash();
+>>>>>>> 94e314174604c63a8c41f3e21630bb5730293afc
 		}
 		
 		void CheckForAdmin()
@@ -244,7 +252,6 @@ namespace Player {
 				yield return 0;
 			} while (magic.key.gk(keys.slide) && !shouldJump && Grounded());
 
-			state = PlayerState.walking;
 
 			// Handle Slide End based on how the slide has ended
 
@@ -260,11 +267,17 @@ namespace Player {
 			state = PlayerState.walking;
         }
 
+<<<<<<< HEAD
 		public void Jump() {
 			rb.AddForce(0, jumpForce * Consts.Multipliers.JUMP_MULTIPLIER, 0);
+=======
+		public void Jump(float multplier=1f) {
+			rb.AddForce(0, jumpForce * 100f*multplier, 0);
+>>>>>>> 94e314174604c63a8c41f3e21630bb5730293afc
 		}
 
 		public void Dash() {
+			dash.state = MovementState.start;
 			stamina.Subtract(dash.staminaPer);
 			StartCoroutine(NoGravityDash());
 		}
@@ -280,14 +293,15 @@ namespace Player {
 			float force = dash.force;
 
 			// idk if this needs to be a do while
-			do
-			{
+			do {
 				Vector3 forceToAdd = dash.direction * force * 1_000f * Time.deltaTime;
 				Debug.Log(forceToAdd);
 				rb.AddForce(forceToAdd);
 				force = Mathf.Lerp(force, 0, Time.deltaTime * decaySpeed);
 				yield return 0;
 			} while (force > 0.1f && !shouldDash);
+			
+			dash.state = MovementState.none;
 		
         }
 
@@ -306,16 +320,30 @@ namespace Player {
 
 			StartCoroutine(WaitForGravityDash());
 
+<<<<<<< HEAD
 			do
 			{
 				rb.AddForce(dash.direction * dash.gravityDashForce * Consts.Multipliers.DASH_MULTIPLIER * Time.deltaTime);
+=======
+			do {
+				rb.AddForce(dash.direction * dash.gravityDashForce * 10_000f * Time.deltaTime);
+>>>>>>> 94e314174604c63a8c41f3e21630bb5730293afc
 				Debug.Log("Adding dash force (gravity)");
 				yield return 0;
 
 				// if ((Grounded() && canBreakFromSlidePreservation) || shouldDash) break;
+<<<<<<< HEAD
 			} while (!((Grounded() && canBreakFromGravityDash) || shouldDash || shouldSlam));
+=======
+			} while (!((Grounded() && canBreakFromGravityDash) || shouldDash));
+			
+			dash.state = MovementState.end;
+>>>>>>> 94e314174604c63a8c41f3e21630bb5730293afc
 
-			if(Grounded()) StartCoroutine(DecayDash(decaySpeed: slide.decaySpeed));
+			if (Grounded()) StartCoroutine(DecayDash(decaySpeed: slide.decaySpeed));
+			
+			dash.state = MovementState.none;
+			
 		}
 
 		// Dash where gravity is disabled (The only dash if youre on the ground)
@@ -329,9 +357,16 @@ namespace Player {
 
 			rb.linearVelocity = Vector3.zero;
 			while (!timerOver) {
+<<<<<<< HEAD
 				rb.AddForce(dash.direction*dash.force*Time.deltaTime* Consts.Multipliers.DASH_MULTIPLIER);
+=======
+				rb.AddForce(dash.direction * dash.speed * Time.deltaTime * 1_000f);
+>>>>>>> 94e314174604c63a8c41f3e21630bb5730293afc
 				yield return 0;
 			}
+
+			dash.state = MovementState.middle;
+			
 			
 			rb.useGravity = true;
 
