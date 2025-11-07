@@ -215,7 +215,7 @@ namespace Player {
 
 		bool canBreakFromSlidePreservation = false;
 
-		public IEnumerator PreserveSlideJump()
+		public IEnumerator PreserveSlideJump(Vector3 direction)
 		{
 			canBreakFromSlidePreservation = false;
 
@@ -223,7 +223,7 @@ namespace Player {
 
 			do
 			{
-				rb.AddForce(slide.direction * slide.force * Consts.Multipliers.SLIDE_MULTIPLIER * Time.deltaTime * .8f);
+				rb.AddForce(direction * slide.force * Consts.Multipliers.SLIDE_MULTIPLIER * Time.deltaTime * .8f);
 				yield return 0;
 
 				// if ((Grounded() && canBreakFromSlidePreservation) || shouldDash) break;
@@ -235,11 +235,12 @@ namespace Player {
 		public IEnumerator Slide() {
 
 			slide.direction = Directions.SlideDirection(this);
+			Vector3 direction = slide.direction;
 
 			state = PlayerState.sliding;
 
 			do {
-				rb.AddForce(slide.direction * slide.force * Consts.Multipliers.SLIDE_MULTIPLIER * Time.deltaTime);
+				rb.AddForce(direction * slide.force * Consts.Multipliers.SLIDE_MULTIPLIER * Time.deltaTime);
 				yield return 0;
 			} while (magic.key.gk(keys.slide) && !shouldJump && Grounded());
 
@@ -250,7 +251,7 @@ namespace Player {
 			// if (!Grounded()) StartCoroutine(DecaySlide(direction: slideDirection, decaySpeed: 2f)); 
 
 			// Jumped -> No decay
-			if (shouldJump) { StartCoroutine(PreserveSlideJump()); }
+			if (shouldJump) { StartCoroutine(PreserveSlideJump(direction)); }
 
 			// No longer pressing slide -> Fast decay
 			else if (!magic.key.gk(keys.slide)) StartCoroutine(DecaySlide(decaySpeed: slide.decaySpeed));
