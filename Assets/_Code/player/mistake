@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -137,22 +137,31 @@ namespace Player {
 			base.Update();
 			HandleMouse();
 
-			if (Grounded() && state == PlayerState.slamming) state = PlayerState.walking;
+			if (Grounded() && state == PlayerState.slamming) state = PlayerState.walking; 
 
-			// Movement
+            // Movement
 
-			if (adminState != AdminState.noclip)
-			{
-				if (shouldJump) Jump();
+            if (adminState != AdminState.noclip)
+            {
+                if (shouldJump) Jump();
 				if (shouldSlide) StartCoroutine(Slide());
 				if (shouldDash) Dash();
 				if (shouldSlam) Slam();
-			}
-
+            }
+			
 
 			if (magic.key.down(keys.noclip)) CheckForAdmin();
-		}
 
+<<<<<<< HEAD
+=======
+			float jumpMultiplier = (state == PlayerState.sliding) ? 0.9f : (dash.state != MovementState.none ? 0.7f : 1f);
+
+			if (shouldJump) Jump(jumpMultiplier);
+			if (shouldSlide) StartCoroutine(Slide());
+			if (shouldDash) Dash();
+>>>>>>> 94e314174604c63a8c41f3e21630bb5730293afc
+		}
+		
 		void CheckForAdmin()
         {
 			if (admin) adminState = adminState == AdminState.standard ? AdminState.noclip : AdminState.standard;
@@ -258,10 +267,13 @@ namespace Player {
 			state = PlayerState.walking;
         }
 
-
+<<<<<<< HEAD
 		public void Jump() {
 			rb.AddForce(0, jumpForce * Consts.Multipliers.JUMP_MULTIPLIER, 0);
-
+=======
+		public void Jump(float multplier=1f) {
+			rb.AddForce(0, jumpForce * 100f*multplier, 0);
+>>>>>>> 94e314174604c63a8c41f3e21630bb5730293afc
 		}
 
 		public void Dash() {
@@ -308,20 +320,25 @@ namespace Player {
 
 			StartCoroutine(WaitForGravityDash());
 
-
+<<<<<<< HEAD
 			do
 			{
 				rb.AddForce(dash.direction * dash.gravityDashForce * Consts.Multipliers.DASH_MULTIPLIER * Time.deltaTime);
-
-		
+=======
+			do {
+				rb.AddForce(dash.direction * dash.gravityDashForce * 10_000f * Time.deltaTime);
+>>>>>>> 94e314174604c63a8c41f3e21630bb5730293afc
+				Debug.Log("Adding dash force (gravity)");
 				yield return 0;
 
 				// if ((Grounded() && canBreakFromSlidePreservation) || shouldDash) break;
-
+<<<<<<< HEAD
 			} while (!((Grounded() && canBreakFromGravityDash) || shouldDash || shouldSlam));
-
+=======
+			} while (!((Grounded() && canBreakFromGravityDash) || shouldDash));
+			
 			dash.state = MovementState.end;
-
+>>>>>>> 94e314174604c63a8c41f3e21630bb5730293afc
 
 			if (Grounded()) StartCoroutine(DecayDash(decaySpeed: slide.decaySpeed));
 			
@@ -340,9 +357,11 @@ namespace Player {
 
 			rb.linearVelocity = Vector3.zero;
 			while (!timerOver) {
-
+<<<<<<< HEAD
 				rb.AddForce(dash.direction*dash.force*Time.deltaTime* Consts.Multipliers.DASH_MULTIPLIER);
-
+=======
+				rb.AddForce(dash.direction * dash.speed * Time.deltaTime * 1_000f);
+>>>>>>> 94e314174604c63a8c41f3e21630bb5730293afc
 				yield return 0;
 			}
 
