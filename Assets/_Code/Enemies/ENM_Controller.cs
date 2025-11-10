@@ -1,6 +1,7 @@
 using UnityEngine;
 using MathsAndSome;
 using System.Collections.Generic;
+using UnityEngine.AI;
 
 public abstract class ENM_Controller : RB_Controller
 {
@@ -32,6 +33,8 @@ public abstract class ENM_Controller : RB_Controller
 	[SerializeField] protected bool canHunt = true;
 	[SerializeField] protected bool canIdle = true;
 
+	protected NavMeshAgent agent;
+
 	void CheckRanges() => maxHuntRange = Mathf.Clamp(maxHuntRange, minSeekRange, Mathf.Infinity);
 
 	public abstract bool shouldHunt();
@@ -45,8 +48,8 @@ public abstract class ENM_Controller : RB_Controller
 		thoughts = new() {
 			{nameof(health), health},
 			{nameof(defence), defence},
-			{"shouldHunt", shouldHunt()},
-			{"shouldSeek", shouldSeek()},
+			{nameof(shouldHunt), shouldHunt()},
+			{nameof(shouldSeek), shouldSeek()},
 		};
 
 		for (int i = 0; i < transform.childCount; i++)
@@ -70,6 +73,8 @@ public abstract class ENM_Controller : RB_Controller
 	public override void Start() {
 		base.Start();
 		CheckRanges();
+		if(TryGetComponent<NavMeshAgent>(out NavMeshAgent ag)) agent = ag;
+        
 
 		
 	}

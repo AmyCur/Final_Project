@@ -31,6 +31,8 @@ public sealed class MeleeEnemy : ENM_Controller
         return false;
     }
 
-    public override void Hunt() { }
+    public override void Hunt() {
+        agent.SetDestination(playerPosition);
+    }
     public override void Seek() { }
 }
