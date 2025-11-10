@@ -17,7 +17,9 @@ namespace EntityLib
 
         public static bool isPlayer(this object m)
         {
-            if (m is RaycastHit h) return !!h.collider.GetComponent<Player.PL_Controller>();
+            if (m is RaycastHit h) {
+                return h.collider.CompareTag(Globals.glob.playerChildTag) || !!h.collider.GetComponent<Player.PL_Controller>() || h.collider.CompareTag(Globals.glob.playerTag );
+            }
             else if (m is Collider c) return !!(c.GetComponent<Player.PL_Controller>()) || c.CompareTag(Globals.glob.playerChildTag);
             else if (m is MonoBehaviour mono) return mono is Player.PL_Controller;
             return false;

@@ -3,84 +3,147 @@ using static EntityLib.Entity;
 using static GameDebug.Combat;
 using MathsAndSome;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
-public class RangedEnemy : ENM_Controller
-{
+public class RangedEnemy : ENM_Controller {
 
     Vector3 pos => transform.position;
     Vector3 direction => (playerPosition - pos).normalized;
 
 
-    public enum MovementChoice
-    {
+    public enum MovementChoice {
         to_player,
         walk_random,
         retreat
     }
 
+    public enum Projectile {
+        bullet,
+        pipe
+    }
+
+    [SerializeField] protected Projectile projectile;
+
     MovementChoice[] MovementChoices = { MovementChoice.to_player, MovementChoice.walk_random, MovementChoice.retreat };
     MovementChoice choice = MovementChoice.to_player;
+    System.Random rand = new System.Random();
 
     [Header("Hunting Choices")]
-    [SerializeField] protected MovementChoice rc=MovementChoice.to_player;
-    [SerializeField] protected float movementChoiceTime=5f;
+    [SerializeField] protected MovementChoice rc = MovementChoice.to_player;
+    [SerializeField] protected float movementChoiceTime = 5f;
     [SerializeField] protected Vector2[] Offset = new Vector2[2];
-    protected bool canChangeHuntChoice=true;
+    [SerializeField] protected float retreatDistance;
+    protected bool canChangeHuntChoice = true;
 
+    protected GameObject bullet;
+    [SerializeField] protected string bulletPath = "Prefabs/Combat/Projectiles/Bullet";
 
-    protected IEnumerator MovementChoiceCD()
-    {
+    protected GameObject pipe;
+    [SerializeField] protected string pipePath = "Prefabs/Combat/Projectiles/Pipe";
+
+    Dictionary<MovementChoice, float> MovementChoiceMultiplier = new() {
+        {MovementChoice.to_player, 1f},
+        {MovementChoice.retreat, .8f},
+        {MovementChoice.walk_random, .35f}
+    };
+
+    protected IEnumerator MovementChoiceCD() {
         canChangeHuntChoice = false;
-        yield return new WaitForSeconds(movementChoiceTime);
+        yield return new WaitForSeconds(movementChoiceTime*MovementChoiceMultiplier[choice]);
         canChangeHuntChoice = true;
     }
 
-    Vector3 RandomOffset()
-    {
-        return new System.Random().NextDouble()
+    Vector3 RandomOffset() {
+        return new Vector3(
+            Mathf.Lerp(Offset[0].x, Offset[1].x, (float) rand.NextDouble()),
+            0,
+            Mathf.Lerp(Offset[0].y, Offset[1].y, (float) rand.NextDouble())
+        );
     }
+
+    Vector3 BackwardsVector() => -(direction * Mathf.Clamp((float) rand.NextDouble(), 0.5f, 1f));
 
 
     public override void Seek() { }
     public override void Hunt() {
-        if (canChangeHuntChoice)
-        {
-            choice = MovementChoices[new System.Random().Next(3)];
+        if (canChangeHuntChoice) {
+            // 0 -> 9
+            int randint = new System.Random().Next(10);
+
+            if (randint <= 7) choice = MovementChoices[0];
+
+            else {
+                randint -= 7;
+                choice = MovementChoices[randint];
+
+            }
+            StartCoroutine(MovementChoiceCD());
+            Debug.Log(choice);
         }
 
-        Vector3 destination = choice switch
-        {
-            MovementChoice.to_player => playerPosition+,
-            MovementChoice.walk_random => playerPosition          
+        Vector3 destination = choice switch {
+            MovementChoice.to_player => playerPosition + BackwardsVector(),
+            MovementChoice.walk_random => RandomOffset(),
+            MovementChoice.retreat => playerPosition + (BackwardsVector() * retreatDistance),
+            _ => transform.position
         };
-    }
-    public override void Attack() { }
 
-    public override bool shouldHunt()
-    {
-        if (drawHuntRay)
-        {
-            Debug.DrawLine(pos, pos + (direction * minHuntRange) + (direction * (maxHuntRange - minHuntRange)), Color.red);
-            Debug.DrawLine(pos, pos + (direction * minHuntRange), Color.yellow);
+        agent.destination = destination;
+    }
+    
+    public override void Attack() {
+        // If the player is in line of sight
+        if (canAttack && Physics.Raycast(pos, direction * attackRange)) {
+            switch (projectile) {
+                case Projectile.bullet:
+                    GameObject bulletObj = Instantiate(bullet, transform.position, Quaternion.identity);
+                    if (bulletObj.TryGetComponent<BulletController>(out BulletController bc)) {
+                        bc.damage = damage;
+                        bc.parent = GetComponent<CapsuleCollider>();
+                    }
+                    bulletObj.transform.LookAt(playerPosition);
+                    break;
+            }
+
+            StartCoroutine(CooldownAttack());
         }
-        if (Physics.Raycast(pos, direction, out RaycastHit hit, maxHuntRange)) return hit.isEntity() && hit.distance.inRange(minHuntRange, maxHuntRange) && canHunt;
+        
+    }
+
+    public override bool shouldHunt() {
+        foreach(RaycastHit hit in Physics.RaycastAll(pos, direction, maxHuntRange)) {
+            Debug.Log(hit.collider.name);
+            if (hit.collider.isPlayer()) return hit.distance.inRange(minHuntRange, maxHuntRange) && canHunt;
+            
+        }
+        
         return false;
     }
-    public override bool shouldSeek()
-    {
-        if (drawSeekRay)
-        {
-            Debug.DrawLine(pos, pos + (direction * minSeekRange) + (direction * (maxSeekRange - minSeekRange)), Color.green);
-            Debug.DrawLine(pos, pos + (direction * minSeekRange), Color.blue);
-        }
 
-        if (Physics.Raycast(pos, direction, out RaycastHit hit, maxSeekRange)) return hit.isEntity() && hit.distance.inRange(minSeekRange, maxSeekRange) && canSeek;
+    public override bool shouldSeek() {
+        foreach(RaycastHit hit in Physics.RaycastAll(pos, direction, maxSeekRange)) {
+            if(hit.isPlayer()) return hit.distance.inRange(minSeekRange, maxSeekRange) && canSeek;
+        }
+        
         return false;
     }
 
-    public override bool shouldAttack()
-    {
+    public override bool shouldAttack() {
+        // To attack it should have line of sight
         if (Physics.Raycast(pos, direction, out RaycastHit hit, maxSeekRange)) return hit.isEntity() && hit.distance.inRange(minAttackRange, maxAttackRange) && canAttack;
         return false;
+    }
+
+    public override void Update() {
+        base.Update();
+    }
+
+    public override void Start() {
+        base.Start();
+        rand = new System.Random();
+
+        bullet = Resources.Load<GameObject>(bulletPath);
+        pipe = Resources.Load<GameObject>(pipePath);
     }
 }

@@ -201,7 +201,7 @@ namespace Player {
 			{
 				rb.AddForce(slide.direction * force * Consts.Multipliers.SLIDE_MULTIPLIER * Time.deltaTime);
 				force = Mathf.Lerp(force, 0, Time.deltaTime * decaySpeed);
-				Debug.LogWarning(force);
+				// Debug.LogWarning(force);
 				// ???? Couldve just used yield return 0
 				yield return new WaitForSeconds(decaySpeed / (float)slide.decayIncrements);
 			} while (force > 0.1f && !shouldSlide);
@@ -285,7 +285,7 @@ namespace Player {
 			// idk if this needs to be a do while
 			do {
 				Vector3 forceToAdd = dash.direction * force * 1_000f * Time.deltaTime;
-				Debug.Log(forceToAdd);
+				// Debug.Log(forceToAdd);
 				rb.AddForce(forceToAdd);
 				force = Mathf.Lerp(force, 0, Time.deltaTime * decaySpeed);
 				yield return 0;
