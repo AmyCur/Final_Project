@@ -25,18 +25,20 @@ public class ThoughtBubbleCreator : MonoBehaviour {
     void OnTriggerEnter(Collider other) {
         List<GameObject> currentBubbles = GameObject.FindGameObjectsWithTag("Thought").ToList();
 
-        if (other.isEnemy()) {
-            bool contains = false;
-            for (int i = 0; i < other.transform.childCount - 1; i++) {
-                if (currentBubbles.Contains(other.transform.GetChild(i).gameObject)) contains = true;
-            }
+        if(Settings.Settings.Development.displayThoughts){
+            if (other.isEnemy()) {
+                bool contains = false;
+                for (int i = 0; i < other.transform.childCount - 1; i++) {
+                    if (currentBubbles.Contains(other.transform.GetChild(i).gameObject)) contains = true;
+                }
 
-            if (!contains) {
-                GameObject bu = Instantiate(textMenu, other.transform.position, Quaternion.identity);
-                bu.transform.SetParent(other.transform);
-                bu.transform.position = new(bu.transform.position.x, bu.transform.position.y + other.transform.localScale.y*1.1f, bu.transform.position.z);
-                ThoughtBubble tb = bu.GetComponent<ThoughtBubble>();
-                tb.SetText(other.GetComponent<RB_Controller>().thoughts);
+                if (!contains) {
+                    GameObject bu = Instantiate(textMenu, other.transform.position, Quaternion.identity);
+                    bu.transform.SetParent(other.transform);
+                    bu.transform.position = new(bu.transform.position.x, bu.transform.position.y + other.transform.localScale.y*1.1f, bu.transform.position.z);
+                    ThoughtBubble tb = bu.GetComponent<ThoughtBubble>();
+                    tb.SetText(other.GetComponent<RB_Controller>().thoughts);
+                }
             }
         }
     }

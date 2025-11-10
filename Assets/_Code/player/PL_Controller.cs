@@ -91,7 +91,7 @@ namespace Player {
 		public Force slam;
 
 		[HideInInspector] public Camera playerCamera;
-		[SerializeField] CapsuleCollider collider;
+		[SerializeField] new CapsuleCollider collider;
 		float 							playerHeight => collider.height;
 		//
 		
@@ -434,10 +434,11 @@ namespace Player {
 
 			playerCamera.transform.localRotation = Quaternion.Euler(currentXRotation, 0f, 0f);
 		}
-	
 
-	
-		void AdminMove() {
+
+
+		void AdminMove()
+		{
 			hInp = Input.GetAxisRaw("Horizontal");
 			vInp = Input.GetAxisRaw("Vertical");
 
@@ -448,12 +449,16 @@ namespace Player {
 
 			if (magic.key.gk(keys.jump)) rb.linearVelocity = new(rb.linearVelocity.x, 30, rb.linearVelocity.z);
 			if (magic.key.gk(keys.dash)) rb.linearVelocity = new(rb.linearVelocity.x, -30, rb.linearVelocity.z);
-			if (magic.key.down(keys.teleport)) {
-				if (Physics.Raycast(transform.position, playerCamera.transform.forward, out RaycastHit hit, 1000f)) {
+			if (magic.key.down(keys.teleport))
+			{
+				if (Physics.Raycast(transform.position, playerCamera.transform.forward, out RaycastHit hit, 1000f))
+				{
 					transform.position = hit.point;
 				}
 			}
 		}
+
+		public override void Die() => Destroy(gameObject);
 		
 	}
 }

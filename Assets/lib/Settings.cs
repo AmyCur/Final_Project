@@ -2,7 +2,7 @@ using UnityEngine;
 using Globals;
 using TMPro;
 
-namespace AmyCurr.Settings
+namespace Settings
 {
     [System.Serializable]
     public enum languages
@@ -15,9 +15,12 @@ namespace AmyCurr.Settings
 
     public static class Settings
     {
+        
+
         public static class Development
         {
             public static bool devMode = true;
+            public static bool displayThoughts = false;
         }
 
         /*public static class Language

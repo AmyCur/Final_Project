@@ -28,6 +28,7 @@ namespace Elements {
             {ElementType.water, 5f},
             {ElementType.electric, 2f},
             {ElementType.wind, 3f},
+            {ElementType.None, 0f}
         };
     }
 

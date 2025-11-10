@@ -1,7 +1,9 @@
 using UnityEngine;
 using MathsAndSome;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine.AI;
+using Elements;
 
 public abstract class ENM_Controller : RB_Controller
 {
@@ -16,6 +18,7 @@ public abstract class ENM_Controller : RB_Controller
 	[Header("Enemy")]
 	[Header("State")]
 	public EnemyState eState;
+	protected Player.PL_Controller pc; 
 	protected Vector3 playerPosition=>mas.player.GetPlayer().transform.position;
 
 	[Header("Seeking")]
@@ -27,21 +30,44 @@ public abstract class ENM_Controller : RB_Controller
 	[SerializeField] protected float minHuntRange = 10f;
 	[SerializeField] protected float maxHuntRange = 10f;
 
+	[Header("Attacking")]
+
+	[SerializeField] protected float minAttackRange = 10f;
+	[SerializeField] protected float maxAttackRange = 10f;
+	[Space(10)]
+	[SerializeField] protected float attackRange = 10f;
+	[SerializeField] protected float attackCD = 1f;
+	[SerializeField] protected float damage=10f;
+	
+
 	[Header("Cans")]
 
 	[SerializeField] protected bool canSeek = true;
 	[SerializeField] protected bool canHunt = true;
 	[SerializeField] protected bool canIdle = true;
+	[SerializeField] protected bool canAttack = true;
+
+	[Header("Elements")]
+	[SerializeField] protected Element attackElement;
 
 	protected NavMeshAgent agent;
 
 	void CheckRanges() => maxHuntRange = Mathf.Clamp(maxHuntRange, minSeekRange, Mathf.Infinity);
 
+	protected IEnumerator CooldownAttack()
+    {
+		canAttack = false;
+		yield return new WaitForSeconds(attackCD);
+		canAttack = true;
+    }
+
 	public abstract bool shouldHunt();
 	public abstract bool shouldSeek();
+	public abstract bool shouldAttack();
 
 	public abstract void Hunt();
 	public abstract void Seek();
+	public abstract void Attack();
 
 	public override void UpdateThoughts()
 	{
@@ -61,8 +87,9 @@ public abstract class ENM_Controller : RB_Controller
 	public override void Update()
 	{
 		base.Update();
-		if (shouldHunt()) Hunt();
 		if (shouldSeek()) Seek();
+		else if (shouldHunt()) Hunt();
+		else if (shouldAttack()) Attack();
 
 		
 	}
@@ -73,6 +100,7 @@ public abstract class ENM_Controller : RB_Controller
 	public override void Start() {
 		base.Start();
 		CheckRanges();
+		pc = mas.player.GetPlayer();
 		if(TryGetComponent<NavMeshAgent>(out NavMeshAgent ag)) agent = ag;
         
 
