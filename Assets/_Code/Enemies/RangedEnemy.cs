@@ -6,145 +6,148 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-public class RangedEnemy : ENM_Controller {
+namespace Combat {
+    public class RangedEnemy : ENM_Controller {
 
-    Vector3 pos => transform.position;
-    Vector3 direction => (playerPosition - pos).normalized;
+        Vector3 pos => transform.position;
+        Vector3 direction => (playerPosition - pos).normalized;
 
 
-    public enum MovementChoice {
-        to_player,
-        walk_random,
-        retreat
-    }
+        public enum MovementChoice {
+            to_player,
+            walk_random,
+            retreat
+        }
 
-    public enum Projectile {
-        bullet,
-        pipe
-    }
 
-    [SerializeField] protected Projectile projectile;
+        MovementChoice[] MovementChoices = { MovementChoice.to_player, MovementChoice.walk_random, MovementChoice.retreat };
+        MovementChoice choice = MovementChoice.to_player;
+        System.Random rand = new System.Random();
 
-    MovementChoice[] MovementChoices = { MovementChoice.to_player, MovementChoice.walk_random, MovementChoice.retreat };
-    MovementChoice choice = MovementChoice.to_player;
-    System.Random rand = new System.Random();
+        [Header("Hunting Choices")]
+        [SerializeField] protected MovementChoice rc = MovementChoice.to_player;
+        [SerializeField] protected float movementChoiceTime = 5f;
+        [SerializeField] protected Vector2[] Offset = new Vector2[2];
+        [SerializeField] protected float retreatDistance;
+        protected bool canChangeHuntChoice = true;
 
-    [Header("Hunting Choices")]
-    [SerializeField] protected MovementChoice rc = MovementChoice.to_player;
-    [SerializeField] protected float movementChoiceTime = 5f;
-    [SerializeField] protected Vector2[] Offset = new Vector2[2];
-    [SerializeField] protected float retreatDistance;
-    protected bool canChangeHuntChoice = true;
+        protected GameObject bullet;
+        [SerializeField] protected string bulletPath = "Prefabs/Combat/Projectiles/Bullet";
 
-    protected GameObject bullet;
-    [SerializeField] protected string bulletPath = "Prefabs/Combat/Projectiles/Bullet";
+        protected GameObject pipe;
+        [SerializeField] protected string pipePath = "Prefabs/Combat/Projectiles/Pipe";
 
-    protected GameObject pipe;
-    [SerializeField] protected string pipePath = "Prefabs/Combat/Projectiles/Pipe";
-
-    Dictionary<MovementChoice, float> MovementChoiceMultiplier = new() {
+        Dictionary<MovementChoice, float> MovementChoiceMultiplier = new() {
         {MovementChoice.to_player, 1f},
         {MovementChoice.retreat, .8f},
         {MovementChoice.walk_random, .35f}
     };
 
-    protected IEnumerator MovementChoiceCD() {
-        canChangeHuntChoice = false;
-        yield return new WaitForSeconds(movementChoiceTime*MovementChoiceMultiplier[choice]);
-        canChangeHuntChoice = true;
-    }
-
-    Vector3 RandomOffset() {
-        return new Vector3(
-            Mathf.Lerp(Offset[0].x, Offset[1].x, (float) rand.NextDouble()),
-            0,
-            Mathf.Lerp(Offset[0].y, Offset[1].y, (float) rand.NextDouble())
-        );
-    }
-
-    Vector3 BackwardsVector() => -(direction * Mathf.Clamp((float) rand.NextDouble(), 0.5f, 1f));
-
-
-    public override void Seek() { }
-    public override void Hunt() {
-        if (canChangeHuntChoice) {
-            // 0 -> 9
-            int randint = new System.Random().Next(10);
-
-            if (randint <= 7) choice = MovementChoices[0];
-
-            else {
-                randint -= 7;
-                choice = MovementChoices[randint];
-
-            }
-            StartCoroutine(MovementChoiceCD());
-            Debug.Log(choice);
+        protected IEnumerator MovementChoiceCD() {
+            canChangeHuntChoice = false;
+            yield return new WaitForSeconds(movementChoiceTime * MovementChoiceMultiplier[choice]);
+            canChangeHuntChoice = true;
         }
 
-        Vector3 destination = choice switch {
-            MovementChoice.to_player => playerPosition + BackwardsVector(),
-            MovementChoice.walk_random => RandomOffset(),
-            MovementChoice.retreat => playerPosition + (BackwardsVector() * retreatDistance),
-            _ => transform.position
-        };
+        Vector3 RandomOffset() {
+            return new Vector3(
+                Mathf.Lerp(Offset[0].x, Offset[1].x, (float) rand.NextDouble()),
+                0,
+                Mathf.Lerp(Offset[0].y, Offset[1].y, (float) rand.NextDouble())
+            );
+        }
 
-        agent.destination = destination;
-    }
-    
-    public override void Attack() {
-        // If the player is in line of sight
-        if (canAttack && Physics.Raycast(pos, direction * attackRange)) {
-            agent.destination = transform.position;
-            switch (projectile) {
-                case Projectile.bullet:
-                    GameObject bulletObj = Instantiate(bullet, transform.position, Quaternion.identity);
-                    if (bulletObj.TryGetComponent<BulletController>(out BulletController bc)) {
-                        bc.damage = damage;
-                        bc.parent = GetComponent<CapsuleCollider>();
-                    }
-                    bulletObj.transform.LookAt(playerPosition);
-                    break;
+        Vector3 BackwardsVector() => -(direction * Mathf.Clamp((float) rand.NextDouble(), 0.5f, 1f));
+
+
+        public override void Seek() { }
+        public override void Hunt() {
+            if (canChangeHuntChoice) {
+                // 0 -> 9
+                int randint = new System.Random().Next(10);
+
+                if (randint <= 7) choice = MovementChoices[0];
+
+                else {
+                    randint -= 7;
+                    choice = MovementChoices[randint];
+
+                }
+                StartCoroutine(MovementChoiceCD());
+                Debug.Log(choice);
             }
 
-            StartCoroutine(CooldownAttack());
+            Vector3 destination = choice switch {
+                MovementChoice.to_player => playerPosition + BackwardsVector(),
+                MovementChoice.walk_random => RandomOffset(),
+                MovementChoice.retreat => playerPosition + (BackwardsVector() * retreatDistance),
+                _ => transform.position
+            };
+
+            agent.destination = destination;
         }
-        
-    }
 
-    public override bool shouldHunt() {
-        foreach(RaycastHit hit in Physics.RaycastAll(pos, direction, maxHuntRange)) {
-            // Debug.Log(hit.collider.name);
-            if (hit.collider.isEntity(typeof(Player.PL_Controller))) return hit.distance.inRange(minHuntRange, maxHuntRange) && canHunt &&!attackOnCD;
-            
+        IEnumerator Shoot() {
+            for(int i = 0; i < (attackData as RangedData).bulletsPerShot; i++) {
+                GameObject bulletObj = Instantiate(bullet, transform.position, Quaternion.identity);
+                if (bulletObj.TryGetComponent<BulletController>(out BulletController bc)) {
+                    bc.damage = attackData.damage;
+                    bc.parent = GetComponent<CapsuleCollider>();
+                }
+                bulletObj.transform.LookAt(playerPosition);
+                yield return new WaitForSeconds((attackData as RangedData).timeBetweenBurstShot);
+            }
         }
-        
-        return false;
-    }
 
-    public override bool shouldSeek() {
-        foreach(RaycastHit hit in Physics.RaycastAll(pos, direction, maxSeekRange)) {
-            if(hit.isEntity(typeof(Player.PL_Controller))) return hit.distance.inRange(minSeekRange, maxSeekRange) && canSeek;
+        public override void Attack() {
+            // If the player is in line of sight
+            if (canAttack && Physics.Raycast(pos, direction * attackData.attackRange)) {
+                agent.destination = transform.position;
+                switch ((attackData as RangedData).projectile) {
+                    case Projectile.bullet:
+                        StartCoroutine(Shoot());
+                        break;
+                }
+
+                StartCoroutine(CooldownAttack());
+            }
+
         }
-        
-        return false;
-    }
 
-    public override bool shouldAttack() {
-        // To attack it should have line of sight
-        if (Physics.Raycast(pos, direction, out RaycastHit hit, maxSeekRange)) return hit.isEntity() && hit.distance.inRange(minAttackRange, maxAttackRange) && canAttack;
-        return false;
-    }
+        public override bool shouldHunt() {
+            foreach (RaycastHit hit in Physics.RaycastAll(pos, direction, maxHuntRange)) {
+                // Debug.Log(hit.collider.name);
+                if (hit.collider.isEntity(typeof(Player.PL_Controller))) return hit.distance.inRange(minHuntRange, maxHuntRange) && canHunt && !attackOnCD;
 
-    public override void Update() {
-        base.Update();
-    }
+            }
 
-    public override void Start() {
-        base.Start();
-        rand = new System.Random();
+            return false;
+        }
 
-        bullet = Resources.Load<GameObject>(bulletPath);
-        pipe = Resources.Load<GameObject>(pipePath);
+        public override bool shouldSeek() {
+            foreach (RaycastHit hit in Physics.RaycastAll(pos, direction, maxSeekRange)) {
+                if (hit.isEntity(typeof(Player.PL_Controller))) return hit.distance.inRange(minSeekRange, maxSeekRange) && canSeek;
+            }
+
+            return false;
+        }
+
+        public override bool shouldAttack() {
+            // To attack it should have line of sight
+            if (Physics.Raycast(pos, direction, out RaycastHit hit, maxSeekRange)) return hit.isEntity() && hit.distance.inRange(minAttackRange, maxAttackRange) && canAttack;
+            return false;
+        }
+
+        public override void Update() {
+            base.Update();
+        }
+
+        public override void Start() {
+            base.Start();
+            rand = new System.Random();
+
+            bullet = Resources.Load<GameObject>(bulletPath);
+            pipe = Resources.Load<GameObject>(pipePath);
+        }
     }
 }

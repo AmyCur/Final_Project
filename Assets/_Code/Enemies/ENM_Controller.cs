@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.AI;
 using Elements;
+using Combat;
 
 public abstract class ENM_Controller : RB_Controller
 {
@@ -34,10 +35,7 @@ public abstract class ENM_Controller : RB_Controller
 
 	[SerializeField] protected float minAttackRange = 10f;
 	[SerializeField] protected float maxAttackRange = 10f;
-	[Space(10)]
-	[SerializeField] protected float attackRange = 10f;
-	[SerializeField] protected float attackCD = 1f;
-	[SerializeField] protected float damage=10f;
+	[SerializeField] protected AttackData attackData;
 	
 
 	[Header("Cans")]
@@ -60,7 +58,10 @@ public abstract class ENM_Controller : RB_Controller
 	{
 		attackOnCD = true;
 		canAttack = false;
-		yield return new WaitForSeconds(attackCD);
+		yield return new WaitForSeconds(
+			attackData.attackCD +
+			((attackData as RangedData).timeBetweenBurstShot * ((attackData as RangedData).bulletsPerShot-1))
+		);
 		canAttack = true;
 		attackOnCD = false;
     }

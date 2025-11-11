@@ -16,7 +16,7 @@ namespace GunUtils {
 }
 
 [Serializable]
-[CreateAssetMenu(fileName = "New Gun", menuName = "Weapons/Create Gun", order = 0)]
+// [CreateAssetMenu(fileName = "New Gun", menuName = "Weapons/Create Gun", order = 0)]
 public class Gun : ScriptableObject {
 
 	[Header("Attack Stats")]

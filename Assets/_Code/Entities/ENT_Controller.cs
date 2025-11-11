@@ -183,6 +183,6 @@ public abstract class ENT_Controller : MonoBehaviour {
 
     void OnDrawGizmos() {
         Gizmos.color = Color.red;
-        if (Combat.drawLightningArcRadius) Gizmos.DrawWireSphere(transform.position, Consts.lightningArcRange);
+        if (GameDebug.Combat.drawLightningArcRadius) Gizmos.DrawWireSphere(transform.position, Consts.lightningArcRange);
 	}
 }

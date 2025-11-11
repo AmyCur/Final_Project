@@ -74,9 +74,9 @@ public sealed class MeleeEnemy : ENM_Controller
 
         if (canAttack)
         {
-            if (Physics.Raycast(pos, direction, attackRange))
+            if (Physics.Raycast(pos, direction, attackData.attackRange))
             {
-                if (attackSuccessful()) pc.TakeDamage(damage, attackElement);
+                if (attackSuccessful()) pc.TakeDamage(attackData.damage, attackElement);
                 
                 StartCoroutine(CooldownAttack());
             }

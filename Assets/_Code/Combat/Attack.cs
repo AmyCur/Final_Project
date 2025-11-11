@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Attack", menuName = "Attacks/Create", order = 0)]
+[CreateAssetMenu(fileName = "New Attack", menuName = "Attacks/Create/New Attack", order = 0)]
 public class Attack : ScriptableObject {
 
     // [Header("Main Attack")]

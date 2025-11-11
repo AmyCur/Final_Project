@@ -5,7 +5,7 @@ using Magical;
 
 public class ManageDropdown : MonoBehaviour
 {
-    public void EnableThoughts(bool status) => Combat.showThoughts = status;
+    public void EnableThoughts(bool status) => GameDebug.Combat.showThoughts = status;
     [SerializeField] GameObject dropdown;
 
 
