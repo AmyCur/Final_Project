@@ -95,6 +95,7 @@ public class RangedEnemy : ENM_Controller {
     public override void Attack() {
         // If the player is in line of sight
         if (canAttack && Physics.Raycast(pos, direction * attackRange)) {
+            agent.destination = transform.position;
             switch (projectile) {
                 case Projectile.bullet:
                     GameObject bulletObj = Instantiate(bullet, transform.position, Quaternion.identity);
@@ -113,8 +114,8 @@ public class RangedEnemy : ENM_Controller {
 
     public override bool shouldHunt() {
         foreach(RaycastHit hit in Physics.RaycastAll(pos, direction, maxHuntRange)) {
-            Debug.Log(hit.collider.name);
-            if (hit.collider.isPlayer()) return hit.distance.inRange(minHuntRange, maxHuntRange) && canHunt;
+            // Debug.Log(hit.collider.name);
+            if (hit.collider.isEntity(typeof(Player.PL_Controller))) return hit.distance.inRange(minHuntRange, maxHuntRange) && canHunt &&!attackOnCD;
             
         }
         
@@ -123,7 +124,7 @@ public class RangedEnemy : ENM_Controller {
 
     public override bool shouldSeek() {
         foreach(RaycastHit hit in Physics.RaycastAll(pos, direction, maxSeekRange)) {
-            if(hit.isPlayer()) return hit.distance.inRange(minSeekRange, maxSeekRange) && canSeek;
+            if(hit.isEntity(typeof(Player.PL_Controller))) return hit.distance.inRange(minSeekRange, maxSeekRange) && canSeek;
         }
         
         return false;

@@ -31,7 +31,7 @@ public abstract class thingie : ScriptableObject{
 
         if (hits.Length > 0) {
             foreach (RaycastHit hit in hits) {
-                if (hit.isEnemy()) {
+                if (hit.isEntity(typeof(ENM_Controller))) {
                     ENT_Controller ec = hit.collider.GetComponent<ENT_Controller>();
 
                     if (!!ec) {

@@ -52,13 +52,17 @@ public abstract class ENM_Controller : RB_Controller
 
 	protected NavMeshAgent agent;
 
+    protected bool attackOnCD;
+
 	void CheckRanges() => maxHuntRange = Mathf.Clamp(maxHuntRange, minSeekRange, Mathf.Infinity);
 
 	protected IEnumerator CooldownAttack()
-    {
+	{
+		attackOnCD = true;
 		canAttack = false;
 		yield return new WaitForSeconds(attackCD);
 		canAttack = true;
+		attackOnCD = false;
     }
 
 	public abstract bool shouldHunt();
@@ -87,9 +91,12 @@ public abstract class ENM_Controller : RB_Controller
 	public override void Update()
 	{
 		base.Update();
-		if (shouldSeek()) Seek();
+
+		//* Should be in this order so the enemy isnt stuck seeking!!!!
+
+		if (shouldAttack()) Attack();
 		else if (shouldHunt()) Hunt();
-		else if (shouldAttack()) Attack();
+		else if (shouldSeek()) Seek();
 
 		
 	}

@@ -8,7 +8,7 @@ public class ColliderController : MonoBehaviour {
 
     void OnTriggerEnter(Collider other) {
         
-        if (other.isEnemy()) {
+        if (other.isEntity(typeof(ENM_Controller))) {
             // atk.AddEnemy(other.GetComponent<ENT_Controller>());
         }
     }

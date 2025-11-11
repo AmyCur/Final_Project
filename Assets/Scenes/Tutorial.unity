@@ -12016,12 +12016,12 @@ MonoBehaviour:
   rb: {fileID: 0}
   SV: []
   eState: 0
-  minSeekRange: 10.1
+  minSeekRange: 100
   maxSeekRange: 1000
-  minHuntRange: 5
-  maxHuntRange: 100
+  minHuntRange: 0.1
+  maxHuntRange: 6
   minAttackRange: 0
-  maxAttackRange: 50
+  maxAttackRange: 5
   attackRange: 10
   attackCD: 1
   damage: 10

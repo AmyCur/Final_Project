@@ -26,7 +26,7 @@ public class ThoughtBubbleCreator : MonoBehaviour {
         List<GameObject> currentBubbles = GameObject.FindGameObjectsWithTag("Thought").ToList();
 
         if(Settings.Settings.Development.displayThoughts){
-            if (other.isEnemy()) {
+            if (other.isEntity(typeof(ENM_Controller))) {
                 bool contains = false;
                 for (int i = 0; i < other.transform.childCount - 1; i++) {
                     if (currentBubbles.Contains(other.transform.GetChild(i).gameObject)) contains = true;
@@ -44,7 +44,7 @@ public class ThoughtBubbleCreator : MonoBehaviour {
     }
 
 	void OnTriggerExit(Collider other) {
-        if (other.isEnemy())
+        if (other.isEntity(typeof(ENM_Controller)))
         {
             for (int i = 0; i < other.transform.childCount; i++)
             {

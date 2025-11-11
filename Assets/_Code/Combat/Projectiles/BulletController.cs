@@ -14,13 +14,17 @@ public class BulletController : MonoBehaviour {
         rb.linearVelocity = transform.forward * speed;
     }
 
-	void OnTriggerEnter(Collider other) {
-        if (other.isEntity() && other!=parent) other.GetComponent<ENT_Controller>().TakeDamage(damage, new Element(ElementType.None));
-        
-        Destroy(gameObject);
-	}
+    void OnTriggerEnter(Collider other) {
+        if (other.isEntity(typeof(Player.PL_Controller)) && other != parent) {
+            Debug.Log(other.name);
+            ENT_Controller ec = other.GetComponent<ENT_Controller>();
+            ec ??= other.transform.parent.GetComponent<ENT_Controller>();
+            ec.TakeDamage(damage, new Element(ElementType.None));
+        }
+        if (other.isEntity(typeof(Player.PL_Controller))) Destroy(gameObject);
+    }
 
-	void Awake() {
+    void Awake() {
         if (TryGetComponent<Rigidbody>(out Rigidbody r)) rb = r;
-	}
+    }
 }
