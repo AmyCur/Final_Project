@@ -1,30 +1,56 @@
-using EntityLib;
+﻿using EntityLib;
 using UnityEngine;
 using Elements;
+using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
-public class BulletController : MonoBehaviour {
+public class BulletController : MonoBehaviour
+{
     Rigidbody rb;
 
     [SerializeField] float speed;
     [HideInInspector] public float damage;
     [HideInInspector] public Collider parent;
 
-    void FixedUpdate() {
+    bool canHitEntity = false;
+    void FixedUpdate()
+    {
         rb.linearVelocity = transform.forward * speed;
     }
 
-    void OnTriggerEnter(Collider other) {
-        if (other.isEntity(typeof(Player.PL_Controller)) && other != parent) {
-            Debug.Log(other.name);
+    IEnumerator WaitAfterSpawn()
+    {
+        yield return new WaitForSeconds(0.7f);
+        canHitEntity = true;
+    }    
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.isEntity(typeof(Player.PL_Controller)) && other != parent)
+        {
             ENT_Controller ec = other.GetComponent<ENT_Controller>();
             ec ??= other.transform.parent.GetComponent<ENT_Controller>();
             ec.TakeDamage(damage, new Element(ElementType.None));
         }
-        if (other.isEntity(typeof(Player.PL_Controller))) Destroy(gameObject);
+
+        
+        if (
+				other.isEntity(typeof(Player.PL_Controller)) ||
+				(other.isEntity() && canHitEntity) ||
+				(!other.isEntity() && other.tag != "Thought")
+		) Destroy(gameObject);
+
     }
 
-    void Awake() {
+	IEnumerator DestroyBullet(){
+		yield return new WaitForSeconds(30f);
+		Destroy(gameObject);
+	}
+
+    void Awake()
+    {
         if (TryGetComponent<Rigidbody>(out Rigidbody r)) rb = r;
+        StartCoroutine(WaitAfterSpawn());
+		StartCoroutine(DestroyBullet());
     }
 }

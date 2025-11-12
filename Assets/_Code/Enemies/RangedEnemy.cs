@@ -9,10 +9,6 @@ using System.Linq;
 namespace Combat {
     public class RangedEnemy : ENM_Controller {
 
-        Vector3 pos => transform.position;
-        Vector3 direction => (playerPosition - pos).normalized;
-
-
         public enum MovementChoice {
             to_player,
             walk_random,

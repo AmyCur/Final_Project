@@ -204,7 +204,7 @@ namespace Player {
 				// Debug.LogWarning(force);
 				// ???? Couldve just used yield return 0
 				yield return new WaitForSeconds(decaySpeed / (float)slide.decayIncrements);
-			} while (force > 0.1f && !shouldSlide);
+			} while (force > 0.1f && !shouldSlide && !shouldSlam);
 		}
 		
 		IEnumerator WaitForSlideJumpPreservation()
@@ -243,7 +243,7 @@ namespace Player {
 			do {
 				rb.AddForce(direction * slide.force * Consts.Multipliers.SLIDE_MULTIPLIER * Time.deltaTime);
 				yield return 0;
-			} while (magic.key.gk(keys.slide) && !shouldJump && Grounded());
+			} while (magic.key.gk(keys.slide) && !shouldJump && Grounded() && !shouldSlam);
 
 
 			// Handle Slide End based on how the slide has ended
@@ -289,7 +289,7 @@ namespace Player {
 				rb.AddForce(forceToAdd);
 				force = Mathf.Lerp(force, 0, Time.deltaTime * decaySpeed);
 				yield return 0;
-			} while (force > 0.1f && !shouldDash);
+			} while (force > 0.1f && !shouldDash && !shouldSlam);
 			
 			dash.state = MovementState.none;
 		
@@ -341,7 +341,7 @@ namespace Player {
 			dash.direction = Directions.DashDirection(this, true);
 
 			rb.linearVelocity = Vector3.zero;
-			while (!timerOver) {
+			while (!timerOver && !shouldSlam) {
 
 				rb.AddForce(dash.direction*dash.force*Time.deltaTime* Consts.Multipliers.DASH_MULTIPLIER);
 

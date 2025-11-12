@@ -6,12 +6,7 @@ using MathsAndSome;
 
 public sealed class MeleeEnemy : ENM_Controller
 {
-    Vector3 pos => transform.position;
-    Vector3 direction => (playerPosition - pos).normalized;
 
-    [Header("Melee")]
-
-    [SerializeField] float velocityFailureSpeed = 10f;
 
     public override bool shouldHunt()
     {

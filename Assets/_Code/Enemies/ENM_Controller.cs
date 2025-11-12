@@ -16,6 +16,9 @@ public abstract class ENM_Controller : RB_Controller
 		attacking
 	}
 
+	protected Vector3 pos => transform.position;
+    protected Vector3 direction => (playerPosition - pos).normalized;
+
 	[Header("Enemy")]
 	[Header("State")]
 	public EnemyState eState;
