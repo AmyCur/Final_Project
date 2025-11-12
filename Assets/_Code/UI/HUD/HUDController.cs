@@ -30,6 +30,7 @@ public class HUDController : MonoBehaviour {
 
 	[SerializeField] Slider[] staminaBars;
 	[SerializeField] Slider healthBar;
+	[SerializeField] Slider altCDBar;
 
 	[Header("Text")]
 
@@ -56,6 +57,13 @@ public class HUDController : MonoBehaviour {
 	public void UpdateHeath() {
 		healthBar.value = pc.health.health;
 		healthText.text = Mathf.CeilToInt(pc.health.health).ToString() + " +";
+	}
+
+	public void UpdateAltCD() {
+		CombatController cc = pc.GetComponent<CombatController>();
+		// Maxes at 1
+		altCDBar.value = (float) cc.ca.alt.cooldownProgress / cc.ca.alt.attackCDIncrements * 100f;
+		Debug.Log(cc.ca.alt.cooldownProgress / cc.ca.alt.attackCDIncrements);
 	}
 
 	public void UpdateAll(ElementType? IconType = null) {

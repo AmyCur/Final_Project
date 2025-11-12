@@ -1,4 +1,4 @@
-using Globals;
+﻿using Globals;
 using Magical;
 using MathsAndSome;
 using System.Collections.Generic;
@@ -10,13 +10,13 @@ public class CombatController : MonoBehaviour {
 	[Header("Shooting")]
 
 	[Header("Weapons")]
-	[Tooltip("Current Weapon")][SerializeField] Attack ca;
+	[Tooltip("Current Weapon")] public Attack ca;
 	public List<Attack> attacks;
 	HUDController hc;
 	Player.PL_Controller pc;
 
 	void Update() {
-		if(!!ca){
+		if (!!ca) {
 			if (ca.primary.keyDown() && ca.primary.canAttack) ca.primary.OnClick();
 			if (ca.primary.keyUp()) ca.primary.OnRelease();
 
@@ -108,6 +108,6 @@ public class CombatController : MonoBehaviour {
 	// }
 
 	// void OnDrawGizmos() {
-		
+
 	// }
 }

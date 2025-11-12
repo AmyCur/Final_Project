@@ -4,7 +4,6 @@ using MathsAndSome;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Entity;
 
 public abstract class SingularAttack : ScriptableObject {
 
@@ -67,7 +66,7 @@ public abstract class SingularAttack : ScriptableObject {
 	public virtual void OnClick() { }
 	public virtual void OnRelease() { }
 
-	protected IEnumerator AttackCooldown() {
+	public virtual IEnumerator AttackCooldown() {
 		canAttack = false;
 		yield return new WaitForSeconds(attackCD);
 		canAttack = true;

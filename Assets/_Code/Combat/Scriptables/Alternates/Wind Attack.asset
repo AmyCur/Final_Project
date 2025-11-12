@@ -12,16 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 451ef631bd8ea59bd832e27b15ab24e0, type: 3}
   m_Name: Wind Attack
   m_EditorClassIdentifier: 
+  attackType: 0
   damage: 100
-  attackCD: 5
+  attackCD: 0.5
   range: 0
   canAttack: 1
   element:
     type: 8
-    f: 0
-  altCD: 5
-  altAttackCD: 5
-  canAltAttack: 1
-  pc: {fileID: 0}
-  upVortex: {fileID: 7815764750616903993, guid: a5b66675126cf729b805b443d0799d35, type: 3}
-  downVortex: {fileID: 7815764750616903993, guid: 97d2a6ded0d3ddba49e286f57e4974a7, type: 3}
+    f: 3.6878767
+  onClickClip: {fileID: 0}
+  onReleaseClip: {fileID: 0}
+  onDamageClip: {fileID: 0}
+  cooldownProgress: 21
+  attackCDIncrements: 20
+  upDamage: 5
+  downDamage: 45

@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -24,7 +24,7 @@ namespace Magical {
 
 		//* Combat
 		public static KeyCode[] attack = { KeyCode.Mouse0 };
-		public static KeyCode[] altAttack = { KeyCode.Mouse1 };
+		public static KeyCode[] altAttack = { KeyCode.E };
 		public static KeyCode[] hook = { KeyCode.R };
 
 		public static KeyCode[] killAllKey = { KeyCode.LeftBracket };
