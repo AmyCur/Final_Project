@@ -2,15 +2,16 @@ using Elements;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Entity;
 
 namespace EntityLib
 {
     public static class Entity
     {
         // public static bool isEntity(this object m) {
-        //     if (m is RaycastHit h) return !!(h.collider.GetComponent<ENT_Controller>()) || h.collider.CompareTag(Globals.glob.playerChildTag);
-        //     else if (m is Collider c) return !!(c.GetComponent<ENT_Controller>()) || c.CompareTag(Globals.glob.playerChildTag);
-        //     else if (m is MonoBehaviour mono) return mono is ENT_Controller;
+        //     if (m is RaycastHit h) return !!(h.collider.GetComponent<Entity.ENT_Controller>()) || h.collider.CompareTag(Globals.glob.playerChildTag);
+        //     else if (m is Collider c) return !!(c.GetComponent<Entity.ENT_Controller>()) || c.CompareTag(Globals.glob.playerChildTag);
+        //     else if (m is MonoBehaviour mono) return mono is Entity.ENT_Controller;
 
         //     return false;
         // }

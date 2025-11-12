@@ -1,74 +1,75 @@
-using Elements;
+﻿using Elements;
 using EntityLib;
 using MathsAndSome;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Entity;
 
 public abstract class SingularAttack : ScriptableObject {
 
-    protected AudioSource source;
+	protected AudioSource source;
 
-    protected ENT_Controller[] hitEnemies(Vector3 startPos, Vector3 direction, float range) {
-        Debug.DrawLine(startPos, startPos + (direction * range), Color.red, 1);
-        List<ENT_Controller> ecs = new();
-        Vector3 pos = startPos;
-        float dist = range;
+	protected Entity.ENT_Controller[] hitEnemies(Vector3 startPos, Vector3 direction, float range) {
+		Debug.DrawLine(startPos, startPos + (direction * range), Color.red, 1);
+		List<Entity.ENT_Controller> ecs = new();
+		Vector3 pos = startPos;
+		float dist = range;
 
-        RaycastHit[] hits = Physics.RaycastAll(startPos, direction, range);
-
-
-        if (hits.Length > 0) {
-            foreach (RaycastHit hit in hits) {
-                if (hit.isEntity(typeof(ENM_Controller))) {
-                    ENT_Controller ec = hit.collider.GetComponent<ENT_Controller>();
-                    if (!!ec) {
-                        ecs.Add(ec);
-                    }
-                }
-            }
-        }
-
-        if (ecs.Count > 0) {
-            return ecs.ToArray();
-        }
-
-        return null;
-    }
+		RaycastHit[] hits = Physics.RaycastAll(startPos, direction, range);
 
 
-    protected Player.PL_Controller pc => mas.player.GetPlayer();
+		if (hits.Length > 0) {
+			foreach (RaycastHit hit in hits) {
+				if (hit.isEntity(typeof(ENM_Controller))) {
+					Entity.ENT_Controller ec = hit.collider.GetComponent<Entity.ENT_Controller>();
+					if (!!ec) {
+						ecs.Add(ec);
+					}
+				}
+			}
+		}
 
-    public enum AttackType {
-        single,
-        hold
-    }
+		if (ecs.Count > 0) {
+			return ecs.ToArray();
+		}
 
-    public AttackType attackType;
-    public float damage;
-    public float attackCD;
-    public float range;
-    public bool canAttack = true;
-    
+		return null;
+	}
 
-    public Element element;
 
-    public AudioClip onClickClip;
-    public AudioClip onReleaseClip;
-    public AudioClip onDamageClip;
+	protected Player.PL_Controller pc => mas.player.GetPlayer();
 
-    protected void PlayClip(AudioClip clip) { if (!!clip) source.PlayOneShot(clip); }
+	public enum AttackType {
+		single,
+		hold
+	}
 
-    public abstract bool keyDown();
-    public abstract bool keyUp();
-    public abstract bool keyStayDown();
+	public AttackType attackType;
+	public float damage;
+	public float attackCD;
+	public float range;
+	public bool canAttack = true;
 
-    public virtual void OnClick() { }
-    public virtual void OnRelease() { }
 
-    protected IEnumerator AttackCooldown() {
-        canAttack = false;
-        yield return new WaitForSeconds(attackCD);
-        canAttack = true;
-    }
+	public Element element;
+
+	public AudioClip onClickClip;
+	public AudioClip onReleaseClip;
+	public AudioClip onDamageClip;
+
+	protected void PlayClip(AudioClip clip) { if (!!clip) source.PlayOneShot(clip); }
+
+	public abstract bool keyDown();
+	public abstract bool keyUp();
+	public abstract bool keyStayDown();
+
+	public virtual void OnClick() { }
+	public virtual void OnRelease() { }
+
+	protected IEnumerator AttackCooldown() {
+		canAttack = false;
+		yield return new WaitForSeconds(attackCD);
+		canAttack = true;
+	}
 }

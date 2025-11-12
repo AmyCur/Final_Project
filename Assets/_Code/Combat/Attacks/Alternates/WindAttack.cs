@@ -22,7 +22,7 @@ public class WindAttack : AlternateAttack {
         Collider[] ec = Physics.OverlapSphere(pc.transform.position, upVortex.GetComponent<VortexController>().radius);
 
         foreach (Collider col in ec) {
-            ENT_Controller RB_Controller = col.GetComponent<ENT_Controller>();
+            Entity.ENT_Controller RB_Controller = col.GetComponent<Entity.ENT_Controller>();
             if (!!RB_Controller) {
                 RB_Controller.TakeDamage(dmg, element);
             }

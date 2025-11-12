@@ -15,7 +15,7 @@ namespace Player {
 
 
 
-		bool shouldJump => 	canJump  && Grounded() && magic.key.down(keys.jump);
+		bool shouldJump => canJump && Grounded() && magic.key.down(keys.jump);
 		bool shouldSlide => slide.can && Grounded() && magic.key.gk(keys.slide) && state != PlayerState.sliding;
 		bool shouldDash => dash.can && magic.key.down(keys.dash) && stamina.s - dash.staminaPer >= 0;
 		bool shouldSlam => slam.can && magic.key.down(keys.slam) && !Grounded() && state != PlayerState.slamming;
@@ -23,21 +23,21 @@ namespace Player {
 		[Header("Player")]
 		[Header("States")]
 
-		public PlayerState 				state;
-		public MovementState 			jumpState 			= MovementState.none;
-		public MovementState 			slideState 			= MovementState.none;
-		public MovementState 			slamState 			= MovementState.none;
-		public AdminState 				adminState 			= AdminState.standard;
+		public PlayerState state;
+		public MovementState jumpState = MovementState.none;
+		public MovementState slideState = MovementState.none;
+		public MovementState slamState = MovementState.none;
+		public AdminState adminState = AdminState.standard;
 
 		[Header("Movement")]
-		public float 					forwardSpeed 		= 12f;
-		public float 					sidewaysSpeed 		= 12f;
+		public float forwardSpeed = 12f;
+		public float sidewaysSpeed = 12f;
 
-		
+
 		[Header("Jumping")]
 		public bool canJump;
-		public float 					jumpForce;
-		[SerializeField] float 			groundedRange 		= 1.08f;
+		public float jumpForce;
+		[SerializeField] float groundedRange = 1.08f;
 
 
 		[Header("Slam")]
@@ -68,19 +68,19 @@ namespace Player {
 		// [Header("Gravity")]
 
 		// public float dashDecaySpeed = 10f;
-		
-		
+
+
 		[Header("Mouse")]
 
-		public float 					mouseSensitivityX;
-		public float 					mouseSensitivityY;
-		
-		[SerializeField] float 			maxY				= 90;
-		[SerializeField] float 			minY 				= -90;
-		
-		float 							currentXRotation;
+		public float mouseSensitivityX;
+		public float mouseSensitivityY;
 
-		
+		[SerializeField] float maxY = 90;
+		[SerializeField] float minY = -90;
+
+		float currentXRotation;
+
+
 
 		[Header("Stamina")]
 
@@ -92,10 +92,10 @@ namespace Player {
 
 		[HideInInspector] public Camera playerCamera;
 		[SerializeField] new CapsuleCollider collider;
-		float 							playerHeight => collider.height;
+		float playerHeight => collider.height;
 		//
-		
-		
+
+
 		float hInp;
 		float vInp;
 
@@ -107,7 +107,7 @@ namespace Player {
 
 		[Header("Admin")]
 
-		[SerializeField] bool admin=true;
+		[SerializeField] bool admin = true;
 
 
 		public override void SetStartDefaults() {
@@ -121,8 +121,7 @@ namespace Player {
 			Cursor.visible = false;
 		}
 
-		public override void FixedUpdate()
-		{
+		public override void FixedUpdate() {
 			base.FixedUpdate();
 			if (state != PlayerState.sliding && state != PlayerState.slamming && canMove) {
 				if (adminState == AdminState.standard) this.Move();
@@ -132,17 +131,19 @@ namespace Player {
 
 
 
-		public override void Update()
-		{
+		public override void Update() {
 			base.Update();
+
+			if (hc != null) hc.UpdateHeath();
+
+
 			HandleMouse();
 
 			if (Grounded() && state == PlayerState.slamming) state = PlayerState.walking;
 
 			// Movement
 
-			if (adminState != AdminState.noclip)
-			{
+			if (adminState != AdminState.noclip) {
 				if (shouldJump) Jump();
 				if (shouldSlide) StartCoroutine(Slide());
 				if (shouldDash) Dash();
@@ -153,20 +154,16 @@ namespace Player {
 			if (magic.key.down(keys.noclip)) CheckForAdmin();
 		}
 
-		void CheckForAdmin()
-        {
+		void CheckForAdmin() {
 			if (admin) adminState = adminState == AdminState.standard ? AdminState.noclip : AdminState.standard;
-        }
+		}
 
 
 		//* Stamina
 
-		public IEnumerator RegenerateStamina()
-		{
-			while (true)
-			{
-				if (stamina.s < stamina.max && state != PlayerState.sliding && rb.useGravity)
-				{
+		public IEnumerator RegenerateStamina() {
+			while (true) {
+				if (stamina.s < stamina.max && state != PlayerState.sliding && rb.useGravity) {
 
 					// If not moving and on the ground
 					float movementMultiplier = Input.GetAxisRaw("Horizontal") == 0 && Input.GetAxisRaw("Vertical") == 0 && Grounded() ? 2 : 1;
@@ -180,49 +177,43 @@ namespace Player {
 			}
 
 		}
-		
+
 		//* Stamina
 
-		public void Slam()
-        {
+		public void Slam() {
 			state = PlayerState.slamming;
 			rb.linearVelocity = Vector3.zero;
 			rb.AddForce(0, -slam.force * Consts.Multipliers.SLAM_MULTIPLIER * Time.deltaTime, 0);
 
-        }
+		}
 
-		public IEnumerator DecaySlide(float decaySpeed = -1f)
-		{
+		public IEnumerator DecaySlide(float decaySpeed = -1f) {
 			if (decaySpeed == -1f) decaySpeed = slide.decaySpeed;
 			float force = slide.force;
 
 			// idk if this needs to be a do while
-			do
-			{
+			do {
 				rb.AddForce(slide.direction * force * Consts.Multipliers.SLIDE_MULTIPLIER * Time.deltaTime);
 				force = Mathf.Lerp(force, 0, Time.deltaTime * decaySpeed);
 				// Debug.LogWarning(force);
 				// ???? Couldve just used yield return 0
-				yield return new WaitForSeconds(decaySpeed / (float)slide.decayIncrements);
+				yield return new WaitForSeconds(decaySpeed / (float) slide.decayIncrements);
 			} while (force > 0.1f && !shouldSlide && !shouldSlam);
 		}
-		
-		IEnumerator WaitForSlideJumpPreservation()
-        {
+
+		IEnumerator WaitForSlideJumpPreservation() {
 			yield return new WaitForSeconds(0.1f);
 			canBreakFromSlidePreservation = true;
-        }
+		}
 
 		bool canBreakFromSlidePreservation = false;
 
-		public IEnumerator PreserveSlideJump(Vector3 direction)
-		{
+		public IEnumerator PreserveSlideJump(Vector3 direction) {
 			canBreakFromSlidePreservation = false;
 
 			StartCoroutine(WaitForSlideJumpPreservation());
 
-			do
-			{
+			do {
 				rb.AddForce(direction * slide.force * Consts.Multipliers.SLIDE_MULTIPLIER * Time.deltaTime * .8f);
 				direction = slide.direction;
 				yield return 0;
@@ -230,7 +221,7 @@ namespace Player {
 				// if ((Grounded() && canBreakFromSlidePreservation) || shouldDash) break;
 			} while (!((Grounded() && canBreakFromSlidePreservation) || shouldDash || shouldSlam));
 
-			if(Grounded()) StartCoroutine(DecaySlide(decaySpeed: slide.decaySpeed));
+			if (Grounded()) StartCoroutine(DecaySlide(decaySpeed: slide.decaySpeed));
 		}
 
 		public IEnumerator Slide() {
@@ -258,7 +249,7 @@ namespace Player {
 			else if (!magic.key.gk(keys.slide)) StartCoroutine(DecaySlide(decaySpeed: slide.decaySpeed));
 
 			state = PlayerState.walking;
-        }
+		}
 
 
 		public void Jump() {
@@ -277,8 +268,7 @@ namespace Player {
 
 		bool timerOver = false;
 
-		public IEnumerator DecayDash(float decaySpeed = -1f)
-		{
+		public IEnumerator DecayDash(float decaySpeed = -1f) {
 			if (decaySpeed == -1f) decaySpeed = dash.decaySpeed;
 			float force = dash.force;
 
@@ -290,32 +280,29 @@ namespace Player {
 				force = Mathf.Lerp(force, 0, Time.deltaTime * decaySpeed);
 				yield return 0;
 			} while (force > 0.1f && !shouldDash && !shouldSlam);
-			
+
 			dash.state = MovementState.none;
-		
-        }
+
+		}
 
 		bool canBreakFromGravityDash = false;
 
-		IEnumerator WaitForGravityDash()
-        {
+		IEnumerator WaitForGravityDash() {
 			yield return new WaitForSeconds(0.1f);
 			canBreakFromGravityDash = true;
-        }
-    
+		}
 
-		public IEnumerator GravityDash()
-		{
+
+		public IEnumerator GravityDash() {
 			canBreakFromGravityDash = false;
 
 			StartCoroutine(WaitForGravityDash());
 
 
-			do
-			{
+			do {
 				rb.AddForce(dash.direction * dash.gravityDashForce * Consts.Multipliers.DASH_MULTIPLIER * Time.deltaTime);
 
-		
+
 				yield return 0;
 
 				// if ((Grounded() && canBreakFromSlidePreservation) || shouldDash) break;
@@ -326,9 +313,9 @@ namespace Player {
 
 
 			if (Grounded()) StartCoroutine(DecayDash(decaySpeed: slide.decaySpeed));
-			
+
 			dash.state = MovementState.none;
-			
+
 		}
 
 		// Dash where gravity is disabled (The only dash if youre on the ground)
@@ -343,19 +330,19 @@ namespace Player {
 			rb.linearVelocity = Vector3.zero;
 			while (!timerOver && !shouldSlam) {
 
-				rb.AddForce(dash.direction*dash.force*Time.deltaTime* Consts.Multipliers.DASH_MULTIPLIER);
+				rb.AddForce(dash.direction * dash.force * Time.deltaTime * Consts.Multipliers.DASH_MULTIPLIER);
 
 				yield return 0;
 			}
 
 			dash.state = MovementState.middle;
-			
-			
+
+
 			rb.useGravity = true;
 
 			if (!Grounded()) StartCoroutine(GravityDash());
 			else StartCoroutine(DecayDash());
-        }
+		}
 
 		void SetAdminMode() {
 			// ResetForces();
@@ -373,7 +360,7 @@ namespace Player {
 		}
 
 		public new void Move() {
-			
+
 			hInp = Grounded() ? Input.GetAxisRaw("Horizontal") : Input.GetAxis("Horizontal");
 			vInp = Grounded() ? Input.GetAxisRaw("Vertical") : Input.GetAxis("Vertical");
 
@@ -388,7 +375,7 @@ namespace Player {
 			float airChange = Consts.Movement.AirSpeedChange(Grounded());
 
 			Vector3 force = (forward * vInp * (Grounded() ? fwSpeed : sdSpeed) * airChange) + (right * hInp * sdSpeed * airChange);
-			
+
 			slide.ChangeDirection(force.normalized);
 			dash.ChangeDirection(force.normalized);
 
@@ -420,7 +407,7 @@ namespace Player {
 
 
 		public bool Grounded() => Physics.Raycast(collider.transform.position, Vector3.down, transform.localScale.y * groundedRange);
-		
+
 
 
 		void HandleMouse() {
@@ -437,8 +424,7 @@ namespace Player {
 
 
 
-		void AdminMove()
-		{
+		void AdminMove() {
 			hInp = Input.GetAxisRaw("Horizontal");
 			vInp = Input.GetAxisRaw("Vertical");
 
@@ -449,16 +435,14 @@ namespace Player {
 
 			if (magic.key.gk(keys.jump)) rb.linearVelocity = new(rb.linearVelocity.x, 30, rb.linearVelocity.z);
 			if (magic.key.gk(keys.dash)) rb.linearVelocity = new(rb.linearVelocity.x, -30, rb.linearVelocity.z);
-			if (magic.key.down(keys.teleport))
-			{
-				if (Physics.Raycast(transform.position, playerCamera.transform.forward, out RaycastHit hit, 1000f))
-				{
+			if (magic.key.down(keys.teleport)) {
+				if (Physics.Raycast(transform.position, playerCamera.transform.forward, out RaycastHit hit, 1020f)) {
 					transform.position = hit.point;
 				}
 			}
 		}
 
 		public override void Die() => Destroy(gameObject);
-		
+
 	}
 }

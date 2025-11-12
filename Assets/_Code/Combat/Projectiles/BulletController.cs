@@ -28,8 +28,8 @@ public class BulletController : MonoBehaviour
     {
         if (other.isEntity(typeof(Player.PL_Controller)) && other != parent)
         {
-            ENT_Controller ec = other.GetComponent<ENT_Controller>();
-            ec ??= other.transform.parent.GetComponent<ENT_Controller>();
+            Entity.ENT_Controller ec = other.GetComponent<Entity.ENT_Controller>();
+            ec ??= other.transform.parent.GetComponent<Entity.ENT_Controller>();
             ec.TakeDamage(damage, new Element(ElementType.None));
         }
 

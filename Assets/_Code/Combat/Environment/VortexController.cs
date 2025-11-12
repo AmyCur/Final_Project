@@ -46,10 +46,10 @@ public class VortexController : MonoBehaviour {
 
             foreach (Collider col in cols) {
                 if (glob.isEntity(col.tag)) {
-                    ENT_Controller c = col.GetComponent<ENT_Controller>();
+                    Entity.ENT_Controller c = col.GetComponent<Entity.ENT_Controller>();
 
                     if (!c) {
-                        Debug.LogError($"{col.name} is an enemy thats missing a ENT_Controller!");
+                        Debug.LogError($"{col.name} is an enemy thats missing a Entity.ENT_Controller!");
                         break;
                     }
 
