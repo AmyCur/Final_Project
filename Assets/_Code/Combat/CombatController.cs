@@ -31,7 +31,11 @@ public class CombatController : MonoBehaviour {
 	void Start() {
 		pc = GetComponent<Player.PL_Controller>();
 		hc = mas.get.HC();
+
 		if (!ca) ca = attacks[0];
+		caIndex = 0;
+		hc.UpdateWeaponBackgrounds();
+		hc.UpdateWeaponScale();
 		UpdateIcons();
 	}
 
@@ -45,7 +49,7 @@ public class CombatController : MonoBehaviour {
 			pressedKey -= 49;
 			if (attacks.Count >= pressedKey + 1) {
 				ca = attacks[pressedKey];
-				caIndex=pressedKey;
+				caIndex = pressedKey;
 				UpdateIcons();
 				hc.UpdateWeapons();
 			}

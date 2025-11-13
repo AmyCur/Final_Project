@@ -24,9 +24,33 @@ public class HUDController : MonoBehaviour {
 	};
 
 	[System.Serializable]
-	public class LerpableImage{
+	public class LerpableImage {
 		public Image img;
 		public Coroutine routine;
+		bool updatingWeapons;
+
+		public IEnumerator LerpScale(float targetScale) {
+			Vector3 s = img.transform.localScale;
+			updatingWeapons = false;
+
+			while (s != new Vector3(targetScale, targetScale, targetScale)) {
+				s = new Vector3(
+					Mathf.Lerp(s.x, targetScale, Time.deltaTime * 30f),
+					Mathf.Lerp(s.y, targetScale, Time.deltaTime * 30f),
+					Mathf.Lerp(s.z, targetScale, Time.deltaTime * 30f)
+				);
+				img.transform.localScale = s;
+				if (updatingWeapons) break;
+				yield return 0;
+			}
+			updatingWeapons = false;
+		}
+
+		public void RotateWeapon() {
+			Animator weapon = img.transform.GetChild(0).GetComponent<Animator>();
+			weapon.SetBool("WeaponSelected", true);
+		}
+
 	}
 
 	[Header("Images")]
@@ -48,53 +72,41 @@ public class HUDController : MonoBehaviour {
 
 	[SerializeField] float currentWeaponScale = 1.2f;
 	[SerializeField] float inactiveWeaponScale = 1f;
-	[SerializeField] Color inactiveBackgroundColor = new Color(1f,0f,0f);
-	[SerializeField] Color currentBackgroundColor = new Color(230f/255f, 209f/255f, 165f/255f);
+	[SerializeField] Color inactiveBackgroundColor = new Color(1f, 0f, 0f);
+	[SerializeField] Color currentBackgroundColor = new Color(230f / 255f, 209f / 255f, 165f / 255f);
+
+	CombatController cc;
+
 
 	public void UpdateIcon(ElementType e) => weaponIcon.sprite = Resources.Load<Sprite>(ETypePath[e]);
 
-	public void UpdateWeaponBackgrounds(){
-		CombatController cc = pc.GetComponent<CombatController>();
+	public void UpdateWeaponBackgrounds() {
 
-		foreach(LerpableImage w in weapons){
+		foreach (LerpableImage w in weapons) {
 			w.img.color = inactiveBackgroundColor;
 		}
 
-		weapons[cc.caIndex].img.color=currentBackgroundColor;
+		weapons[cc.caIndex].img.color = currentBackgroundColor;
 	}
 
-
-	IEnumerator LerpScale(Image w, float targetScale){
-		Vector3 s = w.transform.localScale;
-		updatingWeapons=false;
-
-		while(s != new Vector3(targetScale, targetScale, targetScale)){
-			s = new Vector3(
-					Mathf.Lerp(s.x, targetScale, Time.deltaTime * 30f),
-					Mathf.Lerp(s.y, targetScale, Time.deltaTime * 30f),
-					Mathf.Lerp(s.z, targetScale, Time.deltaTime * 30f)
-			);
-			w.transform.localScale=s;
-			if(updatingWeapons) break;
-			yield return 0;
-		}
-		updatingWeapons=false;
-	}
-
-	public void UpdateWeaponScale(){
-		CombatController cc = pc.GetComponent<CombatController>();
-		for(int i = 0; i < weapons.Length; i++){
-			if(weapons[i].routine != null) StopCoroutine(weapons[i].routine);
-			if(i==cc.caIndex) weapons[i].routine = StartCoroutine(LerpScale(weapons[i].img, currentWeaponScale));
-			else weapons[i].routine = StartCoroutine(LerpScale(weapons[i].img, inactiveWeaponScale));
+	public void UpdateWeaponScale() {
+		for (int i = 0; i < weapons.Length; i++) {
+			if (weapons[i].routine != null) StopCoroutine(weapons[i].routine);
+			if (i == cc.caIndex) weapons[i].routine = StartCoroutine(weapons[i].LerpScale(currentWeaponScale));
+			else weapons[i].routine = StartCoroutine(weapons[i].LerpScale(inactiveWeaponScale));
 		}
 	}
 
-	bool updatingWeapons=false;
-	public void UpdateWeapons(){
-		updatingWeapons=true;
+	public void RotateWeapons() {
+		for (int i = 0; i < weapons.Length; i++) {
+			if (i == cc.caIndex) weapons[i].RotateWeapon();
+		}
+	}
+
+	public void UpdateWeapons() {
 		UpdateWeaponBackgrounds();
 		UpdateWeaponScale();
+		RotateWeapons();
 	}
 
 	public void UpdateStaminaBars() {
@@ -119,7 +131,6 @@ public class HUDController : MonoBehaviour {
 	}
 
 	public void UpdateAltCD() {
-		CombatController cc = pc.GetComponent<CombatController>();
 		// Maxes at 1
 		altCDBar.value = (float) cc.ca.alt.cooldownProgress / cc.ca.alt.attackCDIncrements * 100f;
 		Debug.Log(cc.ca.alt.cooldownProgress / cc.ca.alt.attackCDIncrements);
@@ -128,10 +139,21 @@ public class HUDController : MonoBehaviour {
 	public void UpdateAll(ElementType? IconType = null) {
 		if (IconType != null) UpdateIcon((ElementType) IconType);
 		UpdateStaminaBars();
+		UpdateWeapons();
 	}
+
+	public void UpdateWeaponIcons() {
+		for (int i = 0; i < weapons.Length; i++) {
+			weapons[i].img.gameObject.SetActive(cc.attacks[i] != null);
+		}
+	}
+
 
 	void Awake() {
 		pc = mas.player.GetPlayer();
+		cc = pc.GetComponent<CombatController>();
+
+		UpdateWeaponIcons();
 	}
 
 
