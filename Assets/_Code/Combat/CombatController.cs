@@ -11,6 +11,7 @@ public class CombatController : MonoBehaviour {
 
 	[Header("Weapons")]
 	[Tooltip("Current Weapon")] public Attack ca;
+	[HideInInspector] public int caIndex;
 	public List<Attack> attacks;
 	HUDController hc;
 	Player.PL_Controller pc;
@@ -44,7 +45,9 @@ public class CombatController : MonoBehaviour {
 			pressedKey -= 49;
 			if (attacks.Count >= pressedKey + 1) {
 				ca = attacks[pressedKey];
+				caIndex=pressedKey;
 				UpdateIcons();
+				hc.UpdateWeapons();
 			}
 		}
 	}

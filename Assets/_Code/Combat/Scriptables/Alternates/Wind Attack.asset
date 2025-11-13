@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 451ef631bd8ea59bd832e27b15ab24e0, type: 3}
   m_Name: Wind Attack
   m_EditorClassIdentifier: 
-  attackType: 0
+  attackType: 1
   damage: 100
   attackCD: 0.5
   range: 0
   canAttack: 1
   element:
     type: 8
-    f: 3.6878767
+    f: 3.4373274
   onClickClip: {fileID: 0}
   onReleaseClip: {fileID: 0}
   onDamageClip: {fileID: 0}

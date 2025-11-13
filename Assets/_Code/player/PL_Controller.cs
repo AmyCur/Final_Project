@@ -16,7 +16,7 @@ namespace Player {
 
 
 		bool shouldJump => canJump && Grounded() && magic.key.down(keys.jump);
-		bool shouldSlide => slide.can && Grounded() && magic.key.gk(keys.slide) && state != PlayerState.sliding;
+		bool shouldSlide => slide.can && Grounded() && magic.key.down(keys.slide) && state != PlayerState.sliding;
 		bool shouldDash => dash.can && magic.key.down(keys.dash) && stamina.s - dash.staminaPer >= 0;
 		bool shouldSlam => slam.can && magic.key.down(keys.slam) && !Grounded() && state != PlayerState.slamming;
 
