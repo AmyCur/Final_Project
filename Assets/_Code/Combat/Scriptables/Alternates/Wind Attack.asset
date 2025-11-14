@@ -19,11 +19,11 @@ MonoBehaviour:
   canAttack: 1
   element:
     type: 8
-    f: 3.4373274
+    f: 0.8613272
   onClickClip: {fileID: 0}
   onReleaseClip: {fileID: 0}
   onDamageClip: {fileID: 0}
-  cooldownProgress: 21
+  cooldownProgress: 0
   attackCDIncrements: 20
   upDamage: 5
   downDamage: 45

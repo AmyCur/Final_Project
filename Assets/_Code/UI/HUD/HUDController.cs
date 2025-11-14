@@ -126,8 +126,8 @@ public class HUDController : MonoBehaviour {
 	}
 
 	public void UpdateHeath() {
-		healthBar.value = pc.health.health;
-		healthText.text = Mathf.CeilToInt(pc.health.health).ToString() + " +";
+		healthBar.value = pc.health.h;
+		healthText.text = Mathf.CeilToInt(pc.health.h).ToString() + " +";
 	}
 
 	public void UpdateAltCD() {
@@ -144,7 +144,13 @@ public class HUDController : MonoBehaviour {
 
 	public void UpdateWeaponIcons() {
 		for (int i = 0; i < weapons.Length; i++) {
-			weapons[i].img.gameObject.SetActive(cc.attacks[i] != null);
+			//FIXME: There has to be a better way to do this
+			try{
+				Attack atk = cc.attacks[i];
+				weapons[i].img.gameObject.SetActive(true);
+			} catch {
+				weapons[i].img.gameObject.SetActive(false);
+			}
 		}
 	}
 

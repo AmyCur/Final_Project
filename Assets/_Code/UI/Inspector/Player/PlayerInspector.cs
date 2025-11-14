@@ -115,7 +115,7 @@
         
 //         if (showStats)
 //         {
-//             pc.health = EditorGUILayout.FloatField("Health", pc.health);
+//             pc.h = EditorGUILayout.FloatField("Health", pc.h);
 //             pc.defence = EditorGUILayout.FloatField("Defence", pc.defence);
 
 //             showStamina = EditorGUILayout.Foldout(showStamina, "Stamina", true);

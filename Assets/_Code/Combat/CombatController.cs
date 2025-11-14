@@ -32,11 +32,20 @@ public class CombatController : MonoBehaviour {
 		pc = GetComponent<Player.PL_Controller>();
 		hc = mas.get.HC();
 
+
 		if (!ca) ca = attacks[0];
 		caIndex = 0;
 		hc.UpdateWeaponBackgrounds();
 		hc.UpdateWeaponScale();
 		UpdateIcons();
+
+		foreach (Attack atk in attacks)
+		{
+			atk.primary.canAttack=true;
+			atk.alt.canAttack=true;
+			
+			atk.alt.cooldownProgress=0;
+		}
 	}
 
 	void UpdateIcons() {
@@ -53,6 +62,14 @@ public class CombatController : MonoBehaviour {
 				UpdateIcons();
 				hc.UpdateWeapons();
 			}
+		}
+	}
+
+	void OnValidate(){
+		if(hc!=null){
+			hc.UpdateAll();
+			UpdateIcons();
+			hc.UpdateWeaponIcons();
 		}
 	}
 

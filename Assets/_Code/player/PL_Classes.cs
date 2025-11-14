@@ -7,69 +7,69 @@ namespace Entity {
 	[Serializable]
 	public class Health {
 
-		public float health;
+		public float h;
 
 		public static Health operator +(Health h, object h2) {
 			Health h3 = new();
 
-			if (h2 is Health health) h3.health = h.health + health.health;
-			else if (h2 is float hF) h3.health = h.health + hF;
+			if (h2 is Health health) h3.h = h.h + health.h;
+			else if (h2 is float hF) h3.h = h.h + hF;
 
 			return h3;
 		}
 
 		public static bool operator <=(Health h1, object h2) {
-			if (h2 is Health health) return h1.health <= health.health;
-			else if (h2 is float hF) return h1.health <= hF;
-			else if (h2 is int hI) return h1.health <= (float) hI;
+			if (h2 is Health health) return h1.h <= health.h;
+			else if (h2 is float hF) return h1.h <= hF;
+			else if (h2 is int hI) return h1.h <= (float) hI;
 			return false;
 		}
 
 		public static bool operator <(Health h1, object h2) {
-			if (h2 is Health health) return h1.health < health.health;
-			else if (h2 is float hF) return h1.health < hF;
+			if (h2 is Health health) return h1.h < health.h;
+			else if (h2 is float hF) return h1.h < hF;
 			return false;
 		}
 
 		public static bool operator >(Health h1, object h2) {
-			if (h2 is Health health) return h1.health > health.health;
-			else if (h2 is float hF) return h1.health > hF;
+			if (h2 is Health health) return h1.h > health.h;
+			else if (h2 is float hF) return h1.h > hF;
 			return false;
 		}
 
 
 
 		public static bool operator >=(Health h1, object h2) {
-			if (h2 is Health health) return h1.health >= health.health;
-			else if (h2 is float hF) return h1.health >= hF;
-			else if (h2 is int hI) return h1.health >= (float) hI;
+			if (h2 is Health health) return h1.h >= health.h;
+			else if (h2 is float hF) return h1.h >= hF;
+			else if (h2 is int hI) return h1.h >= (float) hI;
 
 			return false;
 		}
 
 		public static bool operator ==(Health h1, object h2) {
-			if (h2 is Health health) return h1.health == health.health;
-			else if (h2 is float hF) return h1.health == hF;
+			if (h2 is Health health) return h1.h == health.h;
+			else if (h2 is float hF) return h1.h == hF;
 			return false;
 		}
 
 		public static bool operator !=(Health h1, object h2) {
-			if (h2 is Health health) return h1.health != health.health;
-			else if (h2 is float hF) return h1.health != hF;
+			if (h2 is Health health) return h1.h != health.h;
+			else if (h2 is float hF) return h1.h != hF;
 			return false;
 		}
 
 		public static Health operator -(Health h, object h2) {
 			Health h3 = new();
 
-			if (h2 is Health health) h3.health = h.health - health.health;
-			else if (h2 is float hF) h3.health = h.health - hF;
+			if (h2 is Health health) h3.h = h.h - health.h;
+			else if (h2 is float hF) h3.h = h.h - hF;
 
 			return h3;
 		}
 
-		public override bool Equals(object obj) => obj is Health health && this.health == health.health;
-		public override int GetHashCode() => HashCode.Combine(health);
+		public override bool Equals(object obj) => obj is Health health && this.h == health.h;
+		public override int GetHashCode() => HashCode.Combine(h);
 	}
 }
 
