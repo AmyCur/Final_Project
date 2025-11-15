@@ -35,7 +35,7 @@ namespace Entity {
 			return Mathf.Clamp(value, 0, Mathf.Infinity);
 		}
 
-		public virtual void OnValidate() { if (health <= 0) Debug.LogWarning($"Health Invalid on {gameObject.name}"); }
+		// public virtual void OnValidate() { if (health <= 0) Debug.LogWarning($"Health Invalid on {gameObject.name}"); }
 
 		#region Elemental Reaction Effects
 

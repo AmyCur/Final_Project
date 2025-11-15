@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: AwesomeAttack
   m_EditorClassIdentifier: 
   primary: {fileID: 11400000, guid: d2da083e38c60f7f88e6e724cfcf5fb9, type: 2}
-  alt: {fileID: 11400000, guid: d1f6bc0949be548489c0837a9556f47f, type: 2}
+  alt: {fileID: 11400000, guid: 65092bb4f26053ed385b83d57d1f7268, type: 2}
   pc: {fileID: 0}

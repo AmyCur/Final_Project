@@ -77,6 +77,13 @@ public class HUDController : MonoBehaviour {
 
 	CombatController cc;
 
+	[Header("Colors")]
+
+	[SerializeField] Color fireColor;
+	[SerializeField] Color waterColor;
+	[SerializeField] Color electricColor;
+	[SerializeField] Color windColor;
+
 
 	public void UpdateIcon(ElementType e) => weaponIcon.sprite = Resources.Load<Sprite>(ETypePath[e]);
 
@@ -107,6 +114,11 @@ public class HUDController : MonoBehaviour {
 		UpdateWeaponBackgrounds();
 		UpdateWeaponScale();
 		RotateWeapons();
+	}
+
+	public IEnumerator UpdateALtCDBarColor(Color targetColor, bool lerp = true) {
+		if (!lerp) yield return 0;
+		yield return 0;
 	}
 
 	public void UpdateStaminaBars() {
@@ -145,10 +157,11 @@ public class HUDController : MonoBehaviour {
 	public void UpdateWeaponIcons() {
 		for (int i = 0; i < weapons.Length; i++) {
 			//FIXME: There has to be a better way to do this
-			try{
+			try {
 				Attack atk = cc.attacks[i];
 				weapons[i].img.gameObject.SetActive(true);
-			} catch {
+			}
+			catch {
 				weapons[i].img.gameObject.SetActive(false);
 			}
 		}
@@ -160,6 +173,10 @@ public class HUDController : MonoBehaviour {
 		cc = pc.GetComponent<CombatController>();
 
 		UpdateWeaponIcons();
+	}
+
+	void Update() {
+		Debug.Log(altCDBar.fillRect.GetComponent<Image>().color);
 	}
 
 
