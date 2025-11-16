@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackType: 0
   damage: 10
-  attackCD: 0.5
+  attackCD: 1
   range: 0
   canAttack: 1
   element:

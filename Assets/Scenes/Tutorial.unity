@@ -3069,6 +3069,22 @@ PrefabInstance:
       propertyPath: 'attacks.Array.data[3]'
       value: 
       objectReference: {fileID: 11400000, guid: 976507b6789c4c9e38f93d0d70fe4fd2, type: 2}
+    - target: {fileID: 5154177159871973030, guid: d4211814a6a149142a4832bf221360ef, type: 3}
+      propertyPath: attacks.Array.data[0].alt
+      value: 
+      objectReference: {fileID: 11400000, guid: 65092bb4f26053ed385b83d57d1f7268, type: 2}
+    - target: {fileID: 5154177159871973030, guid: d4211814a6a149142a4832bf221360ef, type: 3}
+      propertyPath: attacks.Array.data[1].alt
+      value: 
+      objectReference: {fileID: 11400000, guid: dca53e20632b9d50aa847738986b0525, type: 2}
+    - target: {fileID: 5154177159871973030, guid: d4211814a6a149142a4832bf221360ef, type: 3}
+      propertyPath: attacks.Array.data[0].primary
+      value: 
+      objectReference: {fileID: 11400000, guid: d2da083e38c60f7f88e6e724cfcf5fb9, type: 2}
+    - target: {fileID: 5154177159871973030, guid: d4211814a6a149142a4832bf221360ef, type: 3}
+      propertyPath: attacks.Array.data[1].primary
+      value: 
+      objectReference: {fileID: 11400000, guid: 42b100b994a644883bd721cd1ec7fae8, type: 2}
     - target: {fileID: 5766768589114410277, guid: d4211814a6a149142a4832bf221360ef, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -13427,12 +13443,16 @@ MonoBehaviour:
   - {fileID: 1846336130}
   - {fileID: 1182887174}
   healthBar: {fileID: 1787658743}
-  altCDBar: {fileID: 2090621418}
+  altBar: {fileID: 2090621418}
   healthText: {fileID: 1700290535}
   currentWeaponScale: 1.2
   inactiveWeaponScale: 1
   inactiveBackgroundColor: {r: 0, g: 0, b: 0, a: 0.74509805}
   currentBackgroundColor: {r: 0.9019608, g: 0.81960785, b: 0.64705884, a: 1}
+  fireColor: {r: 1, g: 0, b: 0, a: 0}
+  waterColor: {r: 0, g: 0.17201233, b: 1, a: 0}
+  electricColor: {r: 1, g: 0.97351444, b: 0, a: 0}
+  windColor: {r: 0, g: 1, b: 0.52395105, a: 0}
 --- !u!114 &1764935390 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2260067121317365958, guid: ceb83c3d34d9652f0993d6f2f1567559, type: 3}

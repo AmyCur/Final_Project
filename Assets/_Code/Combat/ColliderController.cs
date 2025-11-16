@@ -14,7 +14,7 @@ public class ColliderController : MonoBehaviour {
     }
 
 	void Awake() {
-        CombatController cc = mas.player.GetPlayerObj().GetComponent<CombatController>();
+        Combat.CombatController cc = mas.player.GetPlayerObj().GetComponent<Combat.CombatController>();
 
         cc.attacks.ForEach((attack) => {
             if (attack.primary.GetType() == typeof(BeamAttack)) atk = attack.primary as BeamAttack;

@@ -103,7 +103,7 @@ namespace Player {
 
 		[Header("UI")]
 
-		public HUDController hc;
+		public Cur.UI.HUDController hc;
 
 		[Header("Admin")]
 

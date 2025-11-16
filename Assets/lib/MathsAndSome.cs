@@ -12,8 +12,8 @@ namespace MathsAndSome
                 return GameObject.FindGameObjectWithTag("VortexHolder").transform;
             }
 
-            public static HUDController HC() {
-                return GameObject.FindGameObjectWithTag(glob.WeaponIconTag).GetComponent<HUDController>();
+            public static Cur.UI.HUDController HC() {
+                return GameObject.FindGameObjectWithTag(glob.WeaponIconTag).GetComponent<Cur.UI.HUDController>();
             }
         }
 
@@ -196,9 +196,9 @@ namespace MathsAndSome
             public static Player.PL_Controller GetPlayer() => GetPlayerObj().GetComponent<Player.PL_Controller>();
             
 
-            // public static CombatController GetCombatController()
+            // public static Combat.CombatController GetCombat.CombatController()
             // {
-            //     return GameObject.FindGameObjectWithTag(glob.playerTag).GetComponent<CombatController>();
+            //     return GameObject.FindGameObjectWithTag(glob.playerTag).GetComponent<Combat.CombatController>();
             // }
 
             public static RaycastHit ShootPlayer(GameObject player, Vector3 origin)
