@@ -41,6 +41,9 @@ namespace Combat {
 			}
 			// 49 -> 57
 			SwitchWeapon();
+
+			Debug.Log(AltReflection.GetAttackProperties(new string[] { "grounded" }, ca.assist));
+
 		}
 
 		void Start() {
@@ -55,11 +58,12 @@ namespace Combat {
 			UpdateIcons();
 
 			foreach (SingleAttack atk in attacks) {
-				if(atk.primary!=null) atk.primary.canAttack = true;
-				if(atk.assist!=null) {
+				if (atk.primary != null) atk.primary.canAttack = true;
+				if (atk.assist != null) {
 					atk.assist.canAttack = true;
-					atk.assist.cooldownProgress = 0;}
+					atk.assist.cooldownProgress = 0;
 				}
+			}
 		}
 
 		void UpdateIcons() {
@@ -76,11 +80,10 @@ namespace Combat {
 					UpdateIcons();
 					hc.UpdateWeapons();
 
-					foreach(Cur.UI.CooldownBar bar in hc.cdBars)
-                    {
-                        if(bar.routine!=null) StopCoroutine(bar.routine);
-						bar.routine=StartCoroutine(bar.UpdateBarColor(ca.primary.element.type, true));
-                    }
+					foreach (Cur.UI.CooldownBar bar in hc.cdBars) {
+						if (bar.routine != null) StopCoroutine(bar.routine);
+						bar.routine = StartCoroutine(bar.UpdateBarColor(ca.primary.element.type, true));
+					}
 
 					// if (AltCDBarRoutine != null) StopCoroutine(AltCDBarRoutine);
 					// AltCDBarRoutine = StartCoroutine(hc.UpdateAltCDBarColor(ca.primary.element.type, true));
@@ -95,6 +98,7 @@ namespace Combat {
 				hc.UpdateWeaponIcons();
 			}
 		}
+
 
 		// void DictateShotType() {
 		// 	switch (cw.attackMode) {
