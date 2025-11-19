@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using UnityEditor;
 using System.Reflection;
 
 namespace Combat {
@@ -38,6 +39,7 @@ namespace Combat {
 
 		}
 
+		[CreateAssetMenu(fileName = "New alternate attack", menuName = "Attacks/Create/Alternate")]
 		public class AlternateAttack : SingularAttack {
 
 			CombatController cc;
@@ -49,7 +51,7 @@ namespace Combat {
 			// These are used if the alternate condition is met
 			public List<AttackAbilities> alternateAbilities;
 
-			[SerializeField] string[] alternateConditions;
+			public string[] alternateConditions;
 			bool shouldAlt => AltReflection.GetAttackProperties(alternateConditions, this);
 			public bool grounded => pc.Grounded();
 
@@ -59,28 +61,46 @@ namespace Combat {
 
 			[Header("Healing")]
 
-			[SerializeField] HealingType healingType;
-			[SerializeField] float healthPerTick = 100f;
-			[SerializeField] float timeBetweenTick = 0.3f;
+			public HealingType healingType;
+			public float healingAmount = 100f;
+
+			public float healthPerTick = 100f;
+			public float timeBetweenTick = 0.3f;
 
 			// Use either ticks or healTime
 			bool useTicks;
-			[SerializeField] int ticks = 10;
-			[SerializeField] float healTime = 5f;
+			public int ticks = 10;
+			public float healTime = 5f;
 
-			enum HealingType {
+			public enum HealingType {
 				instant,
 				overtime
 			}
 
+			[Header("Launching")]
+
+			public Vector3 launchForce;
 
 			public override bool keyDown() => magic.key.down(keys.assist);
 			public override bool keyStayDown() => magic.key.gk(keys.assist);
 			public override bool keyUp() => magic.key.up(keys.assist);
 
 			public void HandleVortex() { }
-			public void HandleHeal() { }
-			public void HandleLaunch() { }
+
+			public IEnumerator HealOverTime() {
+
+				for (int i = 0; i < ticks; i++) {
+					pc.health.h += healthPerTick;
+					yield return new WaitForSeconds(timeBetweenTick);
+				}
+			}
+
+			public void HandleHeal() {
+				if (healingType == HealingType.instant) pc.health.h += healingAmount;
+				else pc.StartCoroutine(HealOverTime());
+			}
+
+			public void HandleLaunch() { pc.rb.AddForce(launchForce); }
 			public void HandleSlam() { }
 
 
@@ -120,5 +140,48 @@ namespace Combat {
 				canAttack = true;
 			}
 		}
+
+		// [CanEditMultipleObjects]
+		// [CustomEditor(typeof(AlternateAttack))]
+		// public class AltAttackInspector : Editor {
+		//
+		// 	public void DisplayList(SerializedProperty item, ref bool Foldout, string name, string itemName = "item") {
+		// 		GUILayout.Label(name);
+		//
+		// 		item.arraySize = EditorGUILayout.IntField("Size", item.arraySize);
+		// 		Foldout = EditorGUILayout.Foldout(Foldout, "items");
+		//
+		// 		if (Foldout) {
+		//
+		// 			for (int i = 0; i < item.arraySize; i++) {
+		// 				EditorGUI.indentLevel++;
+		//
+		// 				var dialogue = item.GetArrayElementAtIndex(i);
+		// 				EditorGUILayout.PropertyField(dialogue, new GUIContent($"{itemName}  {i}"));
+		//
+		// 				EditorGUI.indentLevel--;
+		// 			}
+		// 		}
+		// 	}
+		//
+		// 	AlternateAttack at;
+		// 	SerializedProperty altCon;
+		//
+		// 	void OnEnable() {
+		// 		at = target as AlternateAttack;
+		// 	}
+		// 	bool altConditions;
+		//
+		// 	public override void OnInspectorGUI() {
+		// 		EditorGUI.BeginChangeCheck();
+		// 		if (at.alternateConditions.Length > 0) {
+		// 			EditorGUILayout.PropertyField(altCon);
+		//
+		// 			// at.alternateAbilities = (AlternateAttack)
+		// 			// 	EditorGUILayout.EnumPopup(at.alternateAbilities);
+		// 		}
+		// 		EditorGUI.EndChangeCheck();
+		// 	}
+		// }
 	}
 }
