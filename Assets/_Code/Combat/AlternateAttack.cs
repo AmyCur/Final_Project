@@ -25,7 +25,12 @@ namespace Combat {
 				List<bool> bools = new();
 				foreach (string v in checkValue) {
 					try {
-						bools.Add((bool) (altAttack.GetType().GetProperty(v).GetValue(altAttack, null)));
+						string newV = v;
+						bool negate = newV.Contains("!");
+						if (negate) newV = v.Split("!")[1];
+						bool toAdd = ((bool) (altAttack.GetType().GetProperty(newV).GetValue(altAttack, null)));
+						toAdd = negate ? !toAdd : toAdd;
+						bools.Add(toAdd);
 					}
 					catch { }
 				}
@@ -145,25 +150,6 @@ namespace Combat {
 		// [CustomEditor(typeof(AlternateAttack))]
 		// public class AltAttackInspector : Editor {
 		//
-		// 	public void DisplayList(SerializedProperty item, ref bool Foldout, string name, string itemName = "item") {
-		// 		GUILayout.Label(name);
-		//
-		// 		item.arraySize = EditorGUILayout.IntField("Size", item.arraySize);
-		// 		Foldout = EditorGUILayout.Foldout(Foldout, "items");
-		//
-		// 		if (Foldout) {
-		//
-		// 			for (int i = 0; i < item.arraySize; i++) {
-		// 				EditorGUI.indentLevel++;
-		//
-		// 				var dialogue = item.GetArrayElementAtIndex(i);
-		// 				EditorGUILayout.PropertyField(dialogue, new GUIContent($"{itemName}  {i}"));
-		//
-		// 				EditorGUI.indentLevel--;
-		// 			}
-		// 		}
-		// 	}
-		//
 		// 	AlternateAttack at;
 		// 	SerializedProperty altCon;
 		//
@@ -176,11 +162,14 @@ namespace Combat {
 		// 		EditorGUI.BeginChangeCheck();
 		// 		if (at.alternateConditions.Length > 0) {
 		// 			EditorGUILayout.PropertyField(altCon);
-		//
+		// 			// at.alternateAbilities = at.alternateAbilities;
 		// 			// at.alternateAbilities = (AlternateAttack)
 		// 			// 	EditorGUILayout.EnumPopup(at.alternateAbilities);
 		// 		}
 		// 		EditorGUI.EndChangeCheck();
+		//
+		// 		base.OnInspectorGUI();
+		// 		serializedObject.ApplyModifiedProperties();
 		// 	}
 		// }
 	}
