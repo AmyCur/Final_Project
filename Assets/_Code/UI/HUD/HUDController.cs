@@ -7,6 +7,69 @@ using UnityEngine.UI;
 using TMPro;
 
 namespace Cur.UI {
+
+	public static class BarColors
+    {
+		public static Color fireColor=new Color(1,0,0,1);
+		public static Color waterColor= new Color(0,0,1,1);
+		public static Color electricColor= new Color(1,1,0,1);
+		public static Color windColor = new Color(0,1,0,1);
+
+        public static Dictionary<ElementType, Color> ElementColor => new(){
+			{ElementType.electric, electricColor},
+			{ElementType.fire, fireColor},
+			{ElementType.water, waterColor},
+			{ElementType.wind, windColor}
+
+		};
+    }
+
+	[System.Serializable]
+	public class CooldownBar{
+		public Slider bar;
+		public Coroutine routine;
+		public float colorSpeed=20f;
+
+		[HideInInspector] public Image background => bar.transform.GetChild(0).GetComponent<Image>();
+		[HideInInspector] public Image fill => bar.fillRect.GetComponent<Image>();
+	
+		public IEnumerator UpdateBarColor(ElementType element, bool lerp = true) {
+			Color targetColor = BarColors.ElementColor[element];
+
+			if (!lerp) {
+				background.color = targetColor.Darken();
+				fill.color = targetColor;
+				yield return 0;
+			}
+			else {
+				Color darkColor = targetColor.Darken();
+				while (fill.color != targetColor) {
+					float t = Time.deltaTime * colorSpeed;
+					fill.color = new Color(
+						Mathf.Lerp(fill.color.r, targetColor.r, t),
+						Mathf.Lerp(fill.color.g, targetColor.g, t),
+						Mathf.Lerp(fill.color.b, targetColor.b, t)
+					);
+
+					background.color = new Color(
+					Mathf.Lerp(background.color.r, darkColor.r, t),
+					Mathf.Lerp(background.color.g, darkColor.g, t),
+					Mathf.Lerp(background.color.b, darkColor.b, t)
+					);
+
+					yield return 0;
+				}
+			}
+		}
+		
+		public void UpdateBarCD(float cooldownProgress, float cdIncrements) {
+			// Maxes at 1
+			bar.value = cooldownProgress / cdIncrements * 100f;
+
+		}
+
+	}
+
 	public class HUDController : MonoBehaviour {
 		// Paths
 		Player.PL_Controller pc;
@@ -18,11 +81,18 @@ namespace Cur.UI {
 		const string waterPath = baseIconPath + "Water";
 
 		readonly Dictionary<ElementType, string> ETypePath = new() {
-		{ElementType.wind, windPath},
-		{ElementType.fire, firePath},
-		{ElementType.electric, electricPath},
-		{ElementType.water, waterPath},
-	};
+			{ElementType.wind, windPath},
+			{ElementType.fire, firePath},
+			{ElementType.electric, electricPath},
+			{ElementType.water, waterPath},
+		};
+
+		
+
+		public CooldownBar assistBar;
+		public CooldownBar abilityBar;
+
+		[HideInInspector] public CooldownBar[] cdBars;
 
 		[System.Serializable]
 		public class LerpableImage {
@@ -59,8 +129,8 @@ namespace Cur.UI {
 		[SerializeField] Image weaponIcon;
 		[SerializeField] LerpableImage[] weapons;
 
-		Image altBarBG => altBar.transform.GetChild(0).GetComponent<Image>();
-		Image altBarFill => altBar.fillRect.GetComponent<Image>();
+		// Image altBarBG => altBar.transform.GetChild(0).GetComponent<Image>();
+		// Image fill => altBar.fillRect.GetComponent<Image>();
 
 		[Header("Sliders")]
 
@@ -81,24 +151,15 @@ namespace Cur.UI {
 
 		Combat.CombatController cc;
 
-		[Header("Colors")]
 
-		[SerializeField] Color fireColor;
-		[SerializeField] Color waterColor;
-		[SerializeField] Color electricColor;
-		[SerializeField] Color windColor;
+
+		
 
 		[Header("Floats")]
 
 		[SerializeField] float altCDBarColorSpeed = 20f;
 
-		Dictionary<ElementType, Color> ElementColor => new(){
-			{ElementType.electric, electricColor},
-			{ElementType.fire, fireColor},
-			{ElementType.water, waterColor},
-			{ElementType.wind, windColor}
-
-		};
+		
 
 
 		public void UpdateIcon(ElementType e) => weaponIcon.sprite = Resources.Load<Sprite>(ETypePath[e]);
@@ -132,35 +193,7 @@ namespace Cur.UI {
 			RotateWeapons();
 		}
 
-		public IEnumerator UpdateAltCDBarColor(ElementType element, bool lerp = true) {
-			Color targetColor = ElementColor[element];
-
-			if (!lerp) {
-				altBarBG.color = targetColor.Darken();
-				altBarFill.color = targetColor;
-				yield return 0;
-			}
-			else {
-				Color darkColor = targetColor.Darken();
-				while (altBarFill.color != targetColor) {
-					float t = Time.deltaTime * altCDBarColorSpeed;
-					altBarFill.color = new Color(
-						Mathf.Lerp(altBarFill.color.r, targetColor.r, t),
-						Mathf.Lerp(altBarFill.color.g, targetColor.g, t),
-						Mathf.Lerp(altBarFill.color.b, targetColor.b, t)
-					);
-
-					altBarBG.color = new Color(
-					Mathf.Lerp(altBarBG.color.r, darkColor.r, t),
-					Mathf.Lerp(altBarBG.color.g, darkColor.g, t),
-					Mathf.Lerp(altBarBG.color.b, darkColor.b, t)
-					);
-
-					yield return 0;
-				}
-			}
-		}
-
+		
 		public void UpdateStaminaBars() {
 
 			float stamina = pc.stamina.s;
@@ -182,12 +215,7 @@ namespace Cur.UI {
 			healthText.text = Mathf.CeilToInt(pc.health.h).ToString() + " +";
 		}
 
-		public void UpdateAltCD() {
-			// Maxes at 1
-			altBar.value = (float) cc.ca.alt.cooldownProgress / cc.ca.alt.attackCDIncrements * 100f;
-
-			Debug.Log(cc.ca.alt.cooldownProgress / cc.ca.alt.attackCDIncrements);
-		}
+		
 
 		public void UpdateAll(ElementType? IconType = null) {
 			if (IconType != null) UpdateIcon((ElementType) IconType);
@@ -212,16 +240,10 @@ namespace Cur.UI {
 		void Awake() {
 			pc = mas.player.GetPlayer();
 			cc = pc.GetComponent<Combat.CombatController>();
+			cdBars  = new CooldownBar[2]{assistBar, abilityBar};
 
 			UpdateWeaponIcons();
 		}
-
-		void Update() {
-			Debug.Log(altBar.fillRect.GetComponent<Image>().color);
-
-		}
-
-
 
 	}
 }

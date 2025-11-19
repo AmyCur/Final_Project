@@ -3,6 +3,7 @@ using MathsAndSome;
 using System.Collections;
 using UnityEngine;
 using Vortex;
+using Combat.Attacks;
 
 // [CreateAssetMenu(fileName = "Wind Attack", menuName = "Attacks/Create/Wind", order = 2)]
 public class WindAttack : AlternateAttack {

@@ -3,13 +3,15 @@ using Magical;
 using MathsAndSome;
 using System.Collections.Generic;
 using UnityEngine;
+using Combat.Attacks;
 
 namespace Combat {
 
 	[System.Serializable]
 	public class SingleAttack {
 		public PrimaryAttack primary;
-		public AlternateAttack alt;
+		public AlternateAttack assist;
+		public AlternateAttack ability;
 	}
 
 	public class CombatController : MonoBehaviour {
@@ -28,11 +30,14 @@ namespace Combat {
 
 		void Update() {
 			if (ca != null) {
-				if (ca.primary.keyDown() && ca.primary.canAttack) ca.primary.OnClick();
-				if (ca.primary.keyUp()) ca.primary.OnRelease();
+				if (magic.key.down(keys.attack) && ca.primary.canAttack) ca.primary.OnClick();
+				if (magic.key.up(keys.attack)) ca.primary.OnRelease();
 
-				if (ca.alt.keyDown() && ca.alt.canAttack) ca.alt.OnClick();
-				if (ca.alt.keyUp()) ca.alt.OnRelease();
+				if (magic.key.up(keys.assist) && ca.assist.canAttack) ca.assist.OnClick();
+				if (magic.key.down(keys.assist)) ca.assist.OnRelease();
+
+				if (magic.key.up(keys.ability) && ca.ability.canAttack) ca.ability.OnClick();
+				if (magic.key.down(keys.ability)) ca.ability.OnRelease();
 			}
 			// 49 -> 57
 			SwitchWeapon();
@@ -50,11 +55,11 @@ namespace Combat {
 			UpdateIcons();
 
 			foreach (SingleAttack atk in attacks) {
-				atk.primary.canAttack = true;
-				atk.alt.canAttack = true;
-
-				atk.alt.cooldownProgress = 0;
-			}
+				if(atk.primary!=null) atk.primary.canAttack = true;
+				if(atk.assist!=null) {
+					atk.assist.canAttack = true;
+					atk.assist.cooldownProgress = 0;}
+				}
 		}
 
 		void UpdateIcons() {
@@ -70,8 +75,15 @@ namespace Combat {
 					caIndex = pressedKey;
 					UpdateIcons();
 					hc.UpdateWeapons();
-					if (AltCDBarRoutine != null) StopCoroutine(AltCDBarRoutine);
-					AltCDBarRoutine = StartCoroutine(hc.UpdateAltCDBarColor(ca.primary.element.type, true));
+
+					foreach(Cur.UI.CooldownBar bar in hc.cdBars)
+                    {
+                        if(bar.routine!=null) StopCoroutine(bar.routine);
+						bar.routine=StartCoroutine(bar.UpdateBarColor(ca.primary.element.type, true));
+                    }
+
+					// if (AltCDBarRoutine != null) StopCoroutine(AltCDBarRoutine);
+					// AltCDBarRoutine = StartCoroutine(hc.UpdateAltCDBarColor(ca.primary.element.type, true));
 				}
 			}
 		}

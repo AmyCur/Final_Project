@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
+using Combat.Attacks;
 
 [CreateAssetMenu(fileName = "New double jump", menuName = "Attacks/Create/Double Jump")]
+
 public class Doublejump : AlternateAttack {
 	public float jumpForce = 30f;
 
@@ -9,3 +11,4 @@ public class Doublejump : AlternateAttack {
 		pc.StartCoroutine(AttackCooldown());
 	}
 }
+

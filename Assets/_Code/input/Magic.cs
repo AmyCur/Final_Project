@@ -24,7 +24,8 @@ namespace Magical {
 
 		//* Combat
 		public static KeyCode[] attack = { KeyCode.Mouse0 };
-		public static KeyCode[] altAttack = { KeyCode.E };
+		public static KeyCode[] assist = { KeyCode.E };
+		public static KeyCode[] ability = { KeyCode.Q };
 		public static KeyCode[] hook = { KeyCode.R };
 
 		public static KeyCode[] killAllKey = { KeyCode.LeftBracket };

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Combat.Attacks;
 
 [CreateAssetMenu(fileName = "New ProjectileAttack", menuName = "Attacks/Create/Projectile Attack")]
 public class ProjectileAttack : AlternateAttack {
