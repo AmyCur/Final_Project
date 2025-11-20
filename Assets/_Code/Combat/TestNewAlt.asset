@@ -13,17 +13,17 @@ MonoBehaviour:
   m_Name: TestNewAlt
   m_EditorClassIdentifier: 
   attackType: 0
-  damage: 0
+  damage: 10
   attackCD: 10
   range: 0
   canAttack: 1
   element:
     type: 4
-    f: 0
+    f: 2.390017
   onClickClip: {fileID: 0}
   onReleaseClip: {fileID: 0}
   onDamageClip: {fileID: 0}
-  attackAbilities: 0000000002000000
+  attackAbilities: 0000000001000000
   alternateAbilities: 0300000000000000
   alternateConditions:
   - '!grounded'
@@ -38,7 +38,7 @@ MonoBehaviour:
   timeBetweenTick: 0.3
   ticks: 10
   healTime: 5
-  launchForce: {x: 0, y: 1000, z: 0}
+  launchForce: {x: 0, y: 5000, z: 0}
   slamForce: 3000000
   cooldownProgress: 0
   attackCDIncrements: 20

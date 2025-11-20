@@ -2,10 +2,11 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System;
-using UnityEditor;
-using System.Reflection;
-using Globals;
+// using System;
+// using UnityEditor;
+// using System.Reflection;
+using EntityLib;
+
 namespace Combat {
 	namespace Attacks {
 		public enum AltAttackType {
@@ -67,7 +68,7 @@ namespace Combat {
 			public float vortexLifetime;
 			public Vortex.Pullable pullable;
 			public Vortex.Polarity polarity;
-		
+
 
 			[Header("Healing")]
 
@@ -103,52 +104,54 @@ namespace Combat {
 				Collider[] ec = Physics.OverlapSphere(pc.transform.position, vortexRadius);
 
 				foreach (Collider col in ec) {
-					Entity.ENT_Controller RB_Controller = pc.GetComponent<Entity.ENT_Controller>();
-					if (!!RB_Controller) {
+					Entity.ENT_Controller RB_Controller = col.GetComponent<Entity.ENT_Controller>();
+					if (!!RB_Controller && !RB_Controller.isEntity(typeof(Player.PL_Controller))) {
 						RB_Controller.TakeDamage(dmg, element);
 					}
 				}
 			}
 
-
-
-			IEnumerator FunctionVortex(){
+			IEnumerator FunctionVortex() {
 				CreateDamageSphere(damage);
-				for(float i = 0; i < vortexLifetime; i+=0.01f){
+				for (float i = 0; i < vortexLifetime; i += 0.01f) {
 					Collider[] cols = Physics.OverlapSphere(pc.transform.position, vortexRadius);
 
 					foreach (Collider col in cols) {
-						if (glob.isEntity(col.tag)) {
-							Entity.ENT_Controller c = col.GetComponent<Entity.ENT_Controller>();
+						if (col.isEntity(typeof(ENM_Controller))) {
+							// Entity.ENT_Controller c = col.GetComponent<Entity.ENT_Controller>();
 
-							if (!c) {
+							if (col.TryGetComponent<Entity.ENT_Controller>(out Entity.ENT_Controller c)) {
+								Vector3 dir = (col.transform.position - pc.transform.position).normalized;
+								float f = polarity == Vortex.Polarity.inwards ? -vortexForce : vortexForce;
+
+								switch (pullable) {
+									case Vortex.Pullable.enemy:
+										if (c is ENM_Controller enemC)
+											enemC.SV.Add(new(dir * f, enemC));
+										break;
+									case Vortex.Pullable.player:
+										if (c is Player.PL_Controller pc)
+											pc.SV.Add(new(dir * f, pc));
+										break;
+									case Vortex.Pullable.both:
+										(c as RB_Controller).SV.Add(new(dir * f, c as RB_Controller));
+										break;
+								}
+
+							}
+
+							else {
 								Debug.LogError($"{col.name} is an enemy thats missing a Entity.ENT_Controller!");
 								break;
 							}
 
 
-							Vector3 dir = (col.transform.position - pc.transform.position).normalized;
-							float f = polarity == Vortex.Polarity.inwards ? -vortexForce: vortexForce;
-
-							switch (pullable) {
-								case Vortex.Pullable.enemy:
-									if (c is ENM_Controller enemC)
-										enemC.SV.Add(new(dir * f, enemC));
-									break;
-								case Vortex.Pullable.player:
-									if (c is Player.PL_Controller pc)
-										pc.SV.Add(new(dir * f, pc));
-									break;
-								case Vortex.Pullable.both:
-									(c as RB_Controller).SV.Add(new(dir * f, c as RB_Controller));
-									break;
-							}
 						}
 					}
 
 					yield return new WaitForSeconds(0.01f);
 				}
-				
+
 			}
 
 			public void HandleVortex() => pc.StartCoroutine(FunctionVortex());
@@ -167,8 +170,8 @@ namespace Combat {
 			}
 
 			public void HandleLaunch() { pc.rb.AddForce(launchForce); }
-			public void HandleSlam() { 
-				pc.rb.AddForce(0,-slamForce*Time.deltaTime,0);
+			public void HandleSlam() {
+				pc.rb.AddForce(0, -slamForce * Time.deltaTime, 0);
 			}
 
 

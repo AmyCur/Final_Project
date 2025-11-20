@@ -1,23 +1,31 @@
-using UnityEngine;
+﻿using UnityEngine;
 using Elements;
 using MathsAndSome;
 
-public abstract class ProjectileController : MonoBehaviour {
+public class ProjectileController : MonoBehaviour {
 
-    [Header("Damage")]
-    protected float damage;
-    protected Element element;
+	public enum Target {
+		player,
+		enemy,
+		both
+	}
 
-    protected Vector3 GetPlayerVector() {
-        Vector3 player = mas.player.GetPlayer().transform.position;
-        Vector3 delta = (transform.position - player).normalized;
+	[Header("Damage")]
+	[SerializeField] protected float damage;
+	[SerializeField] protected Element element;
+	[SerializeField] protected Target target;
+	[SerializeField] protected bool homing;
 
-        return delta;
-    }
+	protected Vector3 GetPlayerVector() {
+		Vector3 player = mas.player.GetPlayer().transform.position;
+		Vector3 delta = (transform.position - player).normalized;
 
-    protected virtual void Start() { }
+		return delta;
+	}
 
-    protected virtual void Update() { }
-    
-    protected virtual void DestroyObject(){ Destroy(gameObject); }
+	protected virtual void Start() { }
+
+	protected virtual void Update() { }
+
+	protected virtual void DestroyObject() { Destroy(gameObject); }
 }

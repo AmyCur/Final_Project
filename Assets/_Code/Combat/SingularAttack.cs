@@ -63,7 +63,7 @@ public abstract class SingularAttack : ScriptableObject {
 	public abstract bool keyUp();
 	public abstract bool keyStayDown();
 
-	public virtual void OnClick() { }
+	public virtual void OnClick() { pc.StartCoroutine(AttackCooldown()); }
 	public virtual void OnRelease() { }
 
 	public virtual IEnumerator AttackCooldown() {

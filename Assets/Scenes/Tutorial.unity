@@ -3646,7 +3646,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
       propertyPath: dash.force
-      value: 25
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
       propertyPath: slam.force
@@ -3658,7 +3658,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
       propertyPath: dash.gravityDashForce
-      value: 30
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 8395698010380907392, guid: d4211814a6a149142a4832bf221360ef, type: 3}
       propertyPath: slide.directionChangeSpeed
