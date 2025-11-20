@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using MathsAndSome;
 using System.Collections.Generic;
 using System.Collections;
@@ -113,9 +113,6 @@ public abstract class ENM_Controller : RB_Controller
 		CheckRanges();
 		pc = mas.player.GetPlayer();
 		if(TryGetComponent<NavMeshAgent>(out NavMeshAgent ag)) agent = ag;
-        
-
-		
 	}
 
 

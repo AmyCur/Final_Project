@@ -1,4 +1,4 @@
-using Globals;
+﻿using Globals;
 using MathsAndSome;
 using System.Collections;
 using UnityEngine;
@@ -21,7 +21,6 @@ namespace Vortex {
         inwards,
         outwards
     }
-    
 }
 
 public class VortexController : MonoBehaviour {
@@ -79,4 +78,3 @@ public class VortexController : MonoBehaviour {
                 Gizmos.DrawWireSphere(transform.position, radius);
         }
     }
-

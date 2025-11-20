@@ -24,10 +24,14 @@ MonoBehaviour:
   onReleaseClip: {fileID: 0}
   onDamageClip: {fileID: 0}
   attackAbilities: 0000000002000000
-  alternateAbilities: 01000000
+  alternateAbilities: 0300000000000000
   alternateConditions:
   - '!grounded'
-  vortexRadius: 0
+  vortexRadius: 15
+  vortexForce: 5
+  vortexLifetime: 1
+  pullable: 0
+  polarity: 0
   healingType: 1
   healingAmount: 100
   healthPerTick: 10
@@ -35,5 +39,6 @@ MonoBehaviour:
   ticks: 10
   healTime: 5
   launchForce: {x: 0, y: 1000, z: 0}
+  slamForce: 3000000
   cooldownProgress: 0
   attackCDIncrements: 20

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System;
 using UnityEditor;
 using System.Reflection;
-
+using Globals;
 namespace Combat {
 	namespace Attacks {
 		public enum AltAttackType {
@@ -63,6 +63,11 @@ namespace Combat {
 			[Header("Vortex")]
 
 			public float vortexRadius;
+			public float vortexForce;
+			public float vortexLifetime;
+			public Vortex.Pullable pullable;
+			public Vortex.Polarity polarity;
+		
 
 			[Header("Healing")]
 
@@ -86,11 +91,67 @@ namespace Combat {
 
 			public Vector3 launchForce;
 
+			[Header("Slamming")]
+
+			public float slamForce = 10_000;
+
 			public override bool keyDown() => magic.key.down(keys.assist);
 			public override bool keyStayDown() => magic.key.gk(keys.assist);
 			public override bool keyUp() => magic.key.up(keys.assist);
 
-			public void HandleVortex() { }
+			void CreateDamageSphere(float dmg) {
+				Collider[] ec = Physics.OverlapSphere(pc.transform.position, vortexRadius);
+
+				foreach (Collider col in ec) {
+					Entity.ENT_Controller RB_Controller = pc.GetComponent<Entity.ENT_Controller>();
+					if (!!RB_Controller) {
+						RB_Controller.TakeDamage(dmg, element);
+					}
+				}
+			}
+
+
+
+			IEnumerator FunctionVortex(){
+				CreateDamageSphere(damage);
+				for(float i = 0; i < vortexLifetime; i+=0.01f){
+					Collider[] cols = Physics.OverlapSphere(pc.transform.position, vortexRadius);
+
+					foreach (Collider col in cols) {
+						if (glob.isEntity(col.tag)) {
+							Entity.ENT_Controller c = col.GetComponent<Entity.ENT_Controller>();
+
+							if (!c) {
+								Debug.LogError($"{col.name} is an enemy thats missing a Entity.ENT_Controller!");
+								break;
+							}
+
+
+							Vector3 dir = (col.transform.position - pc.transform.position).normalized;
+							float f = polarity == Vortex.Polarity.inwards ? -vortexForce: vortexForce;
+
+							switch (pullable) {
+								case Vortex.Pullable.enemy:
+									if (c is ENM_Controller enemC)
+										enemC.SV.Add(new(dir * f, enemC));
+									break;
+								case Vortex.Pullable.player:
+									if (c is Player.PL_Controller pc)
+										pc.SV.Add(new(dir * f, pc));
+									break;
+								case Vortex.Pullable.both:
+									(c as RB_Controller).SV.Add(new(dir * f, c as RB_Controller));
+									break;
+							}
+						}
+					}
+
+					yield return new WaitForSeconds(0.01f);
+				}
+				
+			}
+
+			public void HandleVortex() => pc.StartCoroutine(FunctionVortex());
 
 			public IEnumerator HealOverTime() {
 
@@ -106,7 +167,9 @@ namespace Combat {
 			}
 
 			public void HandleLaunch() { pc.rb.AddForce(launchForce); }
-			public void HandleSlam() { }
+			public void HandleSlam() { 
+				pc.rb.AddForce(0,-slamForce*Time.deltaTime,0);
+			}
 
 
 			public override void OnClick() {
@@ -158,11 +221,13 @@ namespace Combat {
 		// 	}
 		// 	bool altConditions;
 		//
+		// 	  public Sprite sprite;
 		// 	public override void OnInspectorGUI() {
 		// 		EditorGUI.BeginChangeCheck();
 		// 		if (at.alternateConditions.Length > 0) {
-		// 			EditorGUILayout.PropertyField(altCon);
-		// 			// at.alternateAbilities = at.alternateAbilities;
+		// 			// EditorGUILayout.PropertyField(altCon, GUIContent.none);
+		// 			// at.alternateAbilities = EditorGUILayout.ObjectField(at.alternateAbilities, typeof(List<AlternateAttack>), false, GUILayout.Height(EditorGUIUtility.singleLineHeight)) as List<AlternateAttack>;
+		// 			//   sprite = EditorGUILayout.ObjectField(sprite, typeof(Sprite), false, GUILayout.Height(EditorGUIUtility.singleLineHeight)) as Sprite;
 		// 			// at.alternateAbilities = (AlternateAttack)
 		// 			// 	EditorGUILayout.EnumPopup(at.alternateAbilities);
 		// 		}
