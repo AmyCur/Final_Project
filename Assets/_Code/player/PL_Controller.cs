@@ -152,10 +152,13 @@ namespace Player {
 
 
 			if (magic.key.down(keys.noclip)) CheckForAdmin();
+
+			if(health.h>100f)health.h=100f;
 		}
 
 		void CheckForAdmin() {
 			if (admin) adminState = adminState == AdminState.standard ? AdminState.noclip : AdminState.standard;
+			rb.useGravity = adminState==AdminState.noclip;
 		}
 
 
@@ -219,7 +222,7 @@ namespace Player {
 				yield return 0;
 
 				// if ((Grounded() && canBreakFromSlidePreservation) || shouldDash) break;
-			} while (!((Grounded() && canBreakFromSlidePreservation) || shouldDash || shouldSlam));
+			} while (!((Grounded() && canBreakFromSlidePreservation) || shouldDash || shouldSlam || adminState==AdminState.noclip));
 
 			if (Grounded()) StartCoroutine(DecaySlide(decaySpeed: slide.decaySpeed));
 		}
@@ -234,7 +237,7 @@ namespace Player {
 			do {
 				rb.AddForce(direction * slide.force * Consts.Multipliers.SLIDE_MULTIPLIER * Time.deltaTime);
 				yield return 0;
-			} while (magic.key.gk(keys.slide) && !shouldJump && Grounded() && !shouldSlam);
+			} while (magic.key.gk(keys.slide) && !shouldJump && Grounded() && !shouldSlam && adminState!=AdminState.noclip);
 
 
 			// Handle Slide End based on how the slide has ended
@@ -279,7 +282,7 @@ namespace Player {
 				rb.AddForce(forceToAdd);
 				force = Mathf.Lerp(force, 0, Time.deltaTime * decaySpeed);
 				yield return 0;
-			} while (force > 0.1f && !shouldDash && !shouldSlam);
+			} while (force > 0.1f && !shouldDash && !shouldSlam && adminState!=AdminState.noclip);
 
 			dash.state = MovementState.none;
 
@@ -307,7 +310,7 @@ namespace Player {
 
 				// if ((Grounded() && canBreakFromSlidePreservation) || shouldDash) break;
 
-			} while (!((Grounded() && canBreakFromGravityDash) || shouldDash || shouldSlam));
+			} while (!((Grounded() && canBreakFromGravityDash) || shouldDash || shouldSlam || adminState==AdminState.noclip));
 
 			dash.state = MovementState.end;
 
@@ -328,7 +331,7 @@ namespace Player {
 			dash.direction = Directions.DashDirection(this, true);
 
 			rb.linearVelocity = Vector3.zero;
-			while (!timerOver && !shouldSlam) {
+			while (!timerOver && !shouldSlam && adminState!=AdminState.noclip) {
 
 				rb.AddForce(dash.direction * dash.force * Time.deltaTime * Consts.Multipliers.DASH_MULTIPLIER);
 

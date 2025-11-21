@@ -66,6 +66,7 @@ namespace Combat {
 			public float vortexRadius;
 			public float vortexForce;
 			public float vortexLifetime;
+			public float vortexDamage;
 			public Vortex.Pullable pullable;
 			public Vortex.Polarity polarity;
 
@@ -112,7 +113,7 @@ namespace Combat {
 			}
 
 			IEnumerator FunctionVortex() {
-				CreateDamageSphere(damage);
+				CreateDamageSphere(vortexDamage);
 				for (float i = 0; i < vortexLifetime; i += 0.01f) {
 					Collider[] cols = Physics.OverlapSphere(pc.transform.position, vortexRadius);
 
@@ -176,7 +177,10 @@ namespace Combat {
 
 
 			public override void OnClick() {
-				foreach (AttackAbilities ab in shouldAlt ? alternateAbilities : attackAbilities) {
+				List<AttackAbilities> alts = new(); 
+				if(alternateConditions.Length>0) alts = shouldAlt ? alternateAbilities : attackAbilities;
+				else alts = attackAbilities;
+				foreach (AttackAbilities ab in alts) {
 					switch (ab) {
 						case (AttackAbilities.vortex):
 							HandleVortex();
@@ -192,6 +196,7 @@ namespace Combat {
 							break;
 					}
 				}
+				base.OnClick();
 			}
 
 			[HideInInspector] public int cooldownProgress;

@@ -10,23 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 114168d95106e43eda018f0ef2834b8d, type: 3}
-  m_Name: TestNewAlt
+  m_Name: TestNewAbility
   m_EditorClassIdentifier: 
   attackType: 0
   damage: 10
-  attackCD: 1
+  attackCD: 7
   range: 0
-  canAttack: 0
+  canAttack: 1
   element:
     type: 4
     f: -0.053875163
   onClickClip: {fileID: 0}
   onReleaseClip: {fileID: 0}
   onDamageClip: {fileID: 0}
-  attackAbilities: 0000000001000000
-  alternateAbilities: 0300000000000000
-  alternateConditions:
-  - '!grounded'
+  attackAbilities: 02000000
+  alternateAbilities: 
+  alternateConditions: []
   vortexRadius: 15
   vortexForce: 5
   vortexLifetime: 1
@@ -35,11 +34,11 @@ MonoBehaviour:
   polarity: 0
   healingType: 1
   healingAmount: 100
-  healthPerTick: 10
-  timeBetweenTick: 0.3
+  healthPerTick: 5
+  timeBetweenTick: 0.1
   ticks: 10
   healTime: 5
   launchForce: {x: 0, y: 5000, z: 0}
   slamForce: 3000000
-  cooldownProgress: 17
+  cooldownProgress: 21
   attackCDIncrements: 20

@@ -242,8 +242,18 @@ namespace Cur.UI {
 			cc = pc.GetComponent<Combat.CombatController>();
 			cdBars  = new CooldownBar[2]{assistBar, abilityBar};
 
+			
 			UpdateWeaponIcons();
 		}
+
+		void UpdateAllBarColors(){
+			foreach(CooldownBar bar in cdBars)
+			{
+				StartCoroutine(bar.UpdateBarColor(cc.ca.primary.element.type, false));
+			}
+		}
+
+		void Start() => UpdateAllBarColors();
 
 	}
 }

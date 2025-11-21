@@ -3575,7 +3575,7 @@ PrefabInstance:
     - target: {fileID: 5154177159871973030, guid: d4211814a6a149142a4832bf221360ef, type: 3}
       propertyPath: attacks.Array.data[0].ability
       value: 
-      objectReference: {fileID: 11400000, guid: f970c387ebb3ec42c9966267da33a3fe, type: 2}
+      objectReference: {fileID: 11400000, guid: 739dd84f60b81394687216b89fbb4e83, type: 2}
     - target: {fileID: 5154177159871973030, guid: d4211814a6a149142a4832bf221360ef, type: 3}
       propertyPath: attacks.Array.data[0].primary
       value: 
