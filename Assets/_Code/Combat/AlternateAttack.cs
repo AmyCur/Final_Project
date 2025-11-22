@@ -42,7 +42,6 @@ namespace Combat {
 
 				return true;
 			}
-
 		}
 
 		[CreateAssetMenu(fileName = "New alternate attack", menuName = "Attacks/Create/Alternate")]
@@ -92,6 +91,8 @@ namespace Combat {
 			[Header("Launching")]
 
 			public Vector3 launchForce;
+			Vector2 defaultMoveSpeed = Vector2.zero;
+			Vector2 launchMoveSpeed = Vector2.zero;
 
 			[Header("Slamming")]
 
@@ -170,15 +171,36 @@ namespace Combat {
 				else pc.StartCoroutine(HealOverTime());
 			}
 
-			public void HandleLaunch() { pc.rb.AddForce(launchForce); }
+			IEnumerator SetLaunchMoveSpeed() {
+				pc.forwardSpeed = launchMoveSpeed.y;
+				pc.sidewaysSpeed = launchMoveSpeed.x;
+
+				yield return new WaitUntil(() => pc.Grounded());
+
+				pc.forwardSpeed = defaultMoveSpeed.y;
+				pc.sidewaysSpeed = defaultMoveSpeed.x;
+			}
+
+			public void HandleLaunch() {
+				pc.rb.AddForce(launchForce);
+				pc.StartCoroutine(SetLaunchMoveSpeed());
+			}
+
 			public void HandleSlam() {
 				pc.rb.AddForce(0, -slamForce * Time.deltaTime, 0);
 			}
 
+			void Start() {
+				if (defaultMoveSpeed == Vector2.zero) defaultMoveSpeed = new Vector2(pc.sidewaysSpeed, pc.forwardSpeed);
+				if (launchMoveSpeed == Vector2.zero) launchMoveSpeed = new Vector2(defaultMoveSpeed.x / 3, defaultMoveSpeed.y / 3);
+			}
+
 
 			public override void OnClick() {
-				List<AttackAbilities> alts = new(); 
-				if(alternateConditions.Length>0) alts = shouldAlt ? alternateAbilities : attackAbilities;
+				bool attackFailed = false;
+				Start();
+				List<AttackAbilities> alts = new();
+				if (alternateConditions.Length > 0) alts = shouldAlt ? alternateAbilities : attackAbilities;
 				else alts = attackAbilities;
 				foreach (AttackAbilities ab in alts) {
 					switch (ab) {
@@ -186,7 +208,9 @@ namespace Combat {
 							HandleVortex();
 							break;
 						case (AttackAbilities.heal):
-							HandleHeal();
+							if (alts.Count > 1 || pc.health.h != 100)
+								HandleHeal();
+							else attackFailed = true;
 							break;
 						case (AttackAbilities.launch):
 							HandleLaunch();
@@ -196,7 +220,7 @@ namespace Combat {
 							break;
 					}
 				}
-				base.OnClick();
+				if (!attackFailed) base.OnClick();
 			}
 
 			[HideInInspector] public int cooldownProgress;

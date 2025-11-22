@@ -63,6 +63,11 @@ namespace Combat {
 					atk.assist.canAttack = true;
 					atk.assist.cooldownProgress = 0;
 				}
+				if (atk.ability != null) {
+					atk.ability.canAttack = true;
+					atk.ability.cooldownProgress = 0;
+				}
+
 			}
 		}
 
