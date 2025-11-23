@@ -166,13 +166,13 @@ namespace Combat {
 			public IEnumerator HealOverTime() {
 
 				for (int i = 0; i < ticks; i++) {
-					pc.health.h += healthPerTick;
+					pc.health += healthPerTick;
 					yield return new WaitForSeconds(timeBetweenTick);
 				}
 			}
 
 			public void HandleHeal() {
-				if (healingType == HealingType.instant) pc.health.h += healingAmount;
+				if (healingType == HealingType.instant) pc.health += healingAmount;
 				else pc.StartCoroutine(HealOverTime());
 			}
 
@@ -213,7 +213,7 @@ namespace Combat {
 							HandleVortex();
 							break;
 						case (AttackAbilities.heal):
-							if (alts.Count > 1 || pc.health.h != 100)
+							if (alts.Count > 1 || pc.health != pc.health.maxHealth)
 								HandleHeal();
 							else attackFailed = true;
 							break;

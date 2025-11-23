@@ -7,7 +7,6 @@ using UnityEngine.UI;
 using TMPro;
 
 namespace Cur.UI {
-
 	public static class BarColors {
 		public static Color fireColor = new Color(1, 0, 0, 1);
 		public static Color waterColor = new Color(0, 0, 1, 1);
@@ -233,9 +232,13 @@ namespace Cur.UI {
 
 			healthBar.value = pc.health.h;
 
+
 			healthBar.fillRect.GetComponent<Image>().color = ColorUtil.Lerp(Color.red, Color.green, pc.health.h / 100f);
+
 			healthBar.transform.GetChild(0).GetComponent<Image>().color = ColorUtil.Lerp(Color.red.Darken(), Color.green.Darken(), pc.health.h / 100f);
+
 			healthText.text = Mathf.CeilToInt(pc.health.h).ToString() + " +";
+
 		}
 
 

@@ -1,14 +1,7 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using Magical;
-using MathsAndSome;
-using Globals;
-using Elements;
-using UnityEngine.InputSystem;
-
 namespace Player {
 	[RequireComponent(typeof(AudioSource))]
 	public class PL_Controller : RB_Controller {
@@ -129,12 +122,21 @@ namespace Player {
 			}
 		}
 
-
+		IEnumerator IFrames() {
+			health.canTakeDamage = false;
+			yield return new WaitForSeconds(0.2f);
+			health.canTakeDamage = true;
+		}
 
 		public override void Update() {
 			base.Update();
 
 			if (hc != null) hc.UpdateHeath();
+
+			if (health.takenDamage) {
+				health.takenDamage = false;
+				StartCoroutine(IFrames());
+			}
 
 
 			HandleMouse();
@@ -153,12 +155,11 @@ namespace Player {
 
 			if (magic.key.down(keys.noclip)) CheckForAdmin();
 
-			if(health.h>100f)health.h=100f;
 		}
 
 		void CheckForAdmin() {
 			if (admin) adminState = adminState == AdminState.standard ? AdminState.noclip : AdminState.standard;
-			rb.useGravity = adminState==AdminState.noclip;
+			rb.useGravity = adminState == AdminState.noclip;
 		}
 
 
@@ -222,7 +223,7 @@ namespace Player {
 				yield return 0;
 
 				// if ((Grounded() && canBreakFromSlidePreservation) || shouldDash) break;
-			} while (!((Grounded() && canBreakFromSlidePreservation) || shouldDash || shouldSlam || adminState==AdminState.noclip));
+			} while (!((Grounded() && canBreakFromSlidePreservation) || shouldDash || shouldSlam || adminState == AdminState.noclip));
 
 			if (Grounded()) StartCoroutine(DecaySlide(decaySpeed: slide.decaySpeed));
 		}
@@ -237,7 +238,7 @@ namespace Player {
 			do {
 				rb.AddForce(direction * slide.force * Consts.Multipliers.SLIDE_MULTIPLIER * Time.deltaTime);
 				yield return 0;
-			} while (magic.key.gk(keys.slide) && !shouldJump && Grounded() && !shouldSlam && adminState!=AdminState.noclip);
+			} while (magic.key.gk(keys.slide) && !shouldJump && Grounded() && !shouldSlam && adminState != AdminState.noclip);
 
 
 			// Handle Slide End based on how the slide has ended
@@ -282,7 +283,7 @@ namespace Player {
 				rb.AddForce(forceToAdd);
 				force = Mathf.Lerp(force, 0, Time.deltaTime * decaySpeed);
 				yield return 0;
-			} while (force > 0.1f && !shouldDash && !shouldSlam && adminState!=AdminState.noclip);
+			} while (force > 0.1f && !shouldDash && !shouldSlam && adminState != AdminState.noclip);
 
 			dash.state = MovementState.none;
 
@@ -310,7 +311,7 @@ namespace Player {
 
 				// if ((Grounded() && canBreakFromSlidePreservation) || shouldDash) break;
 
-			} while (!((Grounded() && canBreakFromGravityDash) || shouldDash || shouldSlam || adminState==AdminState.noclip));
+			} while (!((Grounded() && canBreakFromGravityDash) || shouldDash || shouldSlam || adminState == AdminState.noclip));
 
 			dash.state = MovementState.end;
 
@@ -331,7 +332,7 @@ namespace Player {
 			dash.direction = Directions.DashDirection(this, true);
 
 			rb.linearVelocity = Vector3.zero;
-			while (!timerOver && !shouldSlam && adminState!=AdminState.noclip) {
+			while (!timerOver && !shouldSlam && adminState != AdminState.noclip) {
 
 				rb.AddForce(dash.direction * dash.force * Time.deltaTime * Consts.Multipliers.DASH_MULTIPLIER);
 

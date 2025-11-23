@@ -8,6 +8,9 @@ namespace Entity {
 	public class Health {
 
 		public float h;
+		public float maxHealth = 100f;
+		public bool canTakeDamage = true;
+		[HideInInspector] public bool takenDamage;
 
 		public static Health operator +(Health h, object h2) {
 			Health h3 = new();
@@ -15,6 +18,22 @@ namespace Entity {
 			if (h2 is Health health) h3.h = h.h + health.h;
 			else if (h2 is float hF) h3.h = h.h + hF;
 
+			if (h3.h > h3.maxHealth) h3.h = h3.maxHealth;
+
+			return h3;
+		}
+
+		public static Health operator /(Health h, object h2) {
+			Health h3 = new();
+			if (h2 is Health health) h3.h = h.h / health.h;
+			else if (h2 is float hF) h3.h = h.h / hF;
+			return h3;
+		}
+
+		public static Health operator *(Health h, object h2) {
+			Health h3 = new();
+			if (h2 is Health health) h3.h = h.h * health.h;
+			else if (h2 is float hF) h3.h = h.h * hF;
 			return h3;
 		}
 
@@ -36,8 +55,6 @@ namespace Entity {
 			else if (h2 is float hF) return h1.h > hF;
 			return false;
 		}
-
-
 
 		public static bool operator >=(Health h1, object h2) {
 			if (h2 is Health health) return h1.h >= health.h;
@@ -62,8 +79,13 @@ namespace Entity {
 		public static Health operator -(Health h, object h2) {
 			Health h3 = new();
 
-			if (h2 is Health health) h3.h = h.h - health.h;
-			else if (h2 is float hF) h3.h = h.h - hF;
+			if (h.canTakeDamage) {
+				if (h2 is Health health) h3.h = h.h - health.h;
+				else if (h2 is float hF) h3.h = h.h - hF;
+
+				h3.takenDamage = true;
+			}
+
 
 			return h3;
 		}
@@ -74,8 +96,6 @@ namespace Entity {
 }
 
 namespace Player {
-
-
 	[Serializable]
 	public class Stamina {
 		public float min;
