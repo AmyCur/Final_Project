@@ -55,7 +55,9 @@ namespace Combat {
 			caIndex = 0;
 			hc.UpdateWeaponBackgrounds();
 			hc.UpdateWeaponScale();
-			UpdateIcons();
+			hc.assistBar.UpdateAbilityIcon(ca.assist.icon);
+			hc.abilityBar.UpdateAbilityIcon(ca.ability.icon);
+
 
 			foreach (SingleAttack atk in attacks) {
 				if (atk.primary != null) atk.primary.canAttack = true;
@@ -71,9 +73,9 @@ namespace Combat {
 			}
 		}
 
-		void UpdateIcons() {
-			hc.UpdateIcon(ca.primary.element.type);
-		}
+		// void UpdateIcons() {
+		// 	hc.UpdateIcon(ca.primary.element.type);
+		// }
 
 		void SwitchWeapon() {
 			int pressedKey = (int) magic.key.PressedKey();
@@ -82,13 +84,15 @@ namespace Combat {
 				if (attacks.Count >= pressedKey + 1) {
 					ca = attacks[pressedKey];
 					caIndex = pressedKey;
-					UpdateIcons();
 					hc.UpdateWeapons();
 
 					foreach (Cur.UI.CooldownBar bar in hc.cdBars) {
 						if (bar.routine != null) StopCoroutine(bar.routine);
 						bar.routine = StartCoroutine(bar.UpdateBarColor(ca.primary.element.type, true));
 					}
+
+					hc.assistBar.UpdateAbilityIcon(ca.assist.icon);
+					hc.abilityBar.UpdateAbilityIcon(ca.ability.icon);
 
 					// if (AltCDBarRoutine != null) StopCoroutine(AltCDBarRoutine);
 					// AltCDBarRoutine = StartCoroutine(hc.UpdateAltCDBarColor(ca.primary.element.type, true));
@@ -99,7 +103,6 @@ namespace Combat {
 		void OnValidate() {
 			if (hc != null) {
 				hc.UpdateAll();
-				UpdateIcons();
 				hc.UpdateWeaponIcons();
 			}
 		}

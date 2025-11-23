@@ -6,6 +6,7 @@ using System.Collections.Generic;
 // using UnityEditor;
 // using System.Reflection;
 using EntityLib;
+using UnityEngine.UI;
 
 namespace Combat {
 	namespace Attacks {
@@ -59,6 +60,10 @@ namespace Combat {
 			public string[] alternateConditions;
 			bool shouldAlt => AltReflection.GetAttackProperties(alternateConditions, this);
 			public bool grounded => pc.Grounded();
+
+			[Header("UI")]
+
+			public Sprite icon;
 
 			[Header("Vortex")]
 
@@ -224,7 +229,7 @@ namespace Combat {
 			}
 
 			[HideInInspector] public int cooldownProgress;
-			[HideInInspector] public int attackCDIncrements = 20;
+			[HideInInspector] public int attackCDIncrements = 100;
 
 			public override IEnumerator AttackCooldown() {
 

@@ -8,63 +8,81 @@ using TMPro;
 
 namespace Cur.UI {
 
-	public static class BarColors
-    {
-		public static Color fireColor=new Color(1,0,0,1);
-		public static Color waterColor= new Color(0,0,1,1);
-		public static Color electricColor= new Color(1,1,0,1);
-		public static Color windColor = new Color(0,1,0,1);
+	public static class BarColors {
+		public static Color fireColor = new Color(1, 0, 0, 1);
+		public static Color waterColor = new Color(0, 0, 1, 1);
+		public static Color electricColor = new Color(1, 1, 0, 1);
+		public static Color windColor = new Color(0, 1, 0, 1);
+		public static Color noneColor = new Color(1, 1, 1, 1);
 
-        public static Dictionary<ElementType, Color> ElementColor => new(){
+		public static Dictionary<ElementType, Color> ElementColor = new(){
 			{ElementType.electric, electricColor},
 			{ElementType.fire, fireColor},
 			{ElementType.water, waterColor},
-			{ElementType.wind, windColor}
-
+			{ElementType.wind, windColor},
+			{ElementType.None, noneColor}
 		};
-    }
+	}
 
 	[System.Serializable]
-	public class CooldownBar{
-		public Slider bar;
+	public class CooldownBar {
+		public Image parentBar;
 		public Coroutine routine;
-		public float colorSpeed=20f;
+		public float colorSpeed = 20f;
 
-		[HideInInspector] public Image background => bar.transform.GetChild(0).GetComponent<Image>();
-		[HideInInspector] public Image fill => bar.fillRect.GetComponent<Image>();
-	
+		[HideInInspector] public Image background => parentBar.transform.GetChild(0).GetComponent<Image>();
+		[HideInInspector] public Image bar => parentBar.transform.GetChild(1).GetComponent<Image>();
+		[HideInInspector] public Image key => parentBar.transform.GetChild(2).GetComponent<Image>();
+		[HideInInspector] public Image icon => parentBar.transform.GetChild(3).GetComponent<Image>();
+
 		public IEnumerator UpdateBarColor(ElementType element, bool lerp = true) {
+
 			Color targetColor = BarColors.ElementColor[element];
+			Color darkColor = targetColor.Darken();
+			Color lightColor = targetColor.Lighten(0.78f);
 
 			if (!lerp) {
-				background.color = targetColor.Darken();
-				fill.color = targetColor;
+				// background.color = targetColor.Darken();
+				bar.color = targetColor;
+				icon.color = lightColor;
+
 				yield return 0;
 			}
 			else {
-				Color darkColor = targetColor.Darken();
-				while (fill.color != targetColor) {
+
+				while (bar.color != targetColor) {
 					float t = Time.deltaTime * colorSpeed;
-					fill.color = new Color(
-						Mathf.Lerp(fill.color.r, targetColor.r, t),
-						Mathf.Lerp(fill.color.g, targetColor.g, t),
-						Mathf.Lerp(fill.color.b, targetColor.b, t)
+					bar.color = new Color(
+						Mathf.Lerp(bar.color.r, targetColor.r, t),
+						Mathf.Lerp(bar.color.g, targetColor.g, t),
+						Mathf.Lerp(bar.color.b, targetColor.b, t)
 					);
 
-					background.color = new Color(
-					Mathf.Lerp(background.color.r, darkColor.r, t),
-					Mathf.Lerp(background.color.g, darkColor.g, t),
-					Mathf.Lerp(background.color.b, darkColor.b, t)
+					icon.color = new Color(
+					Mathf.Lerp(icon.color.r, lightColor.r, t),
+					Mathf.Lerp(icon.color.g, lightColor.g, t),
+					Mathf.Lerp(icon.color.b, lightColor.b, t)
 					);
+
+
+
+					// background.color = new Color(
+					// Mathf.Lerp(background.color.r, darkColor.r, t),
+					// Mathf.Lerp(background.color.g, darkColor.g, t),
+					// Mathf.Lerp(background.color.b, darkColor.b, t)
+					// );
 
 					yield return 0;
 				}
 			}
 		}
-		
+
+		public void UpdateAbilityIcon(Sprite i) => icon.sprite = i;
+
 		public void UpdateBarCD(float cooldownProgress, float cdIncrements) {
 			// Maxes at 1
-			bar.value = cooldownProgress / cdIncrements * 100f;
+			bar.fillAmount = cooldownProgress / cdIncrements;
+			Debug.Log(cooldownProgress / cdIncrements * 100f);
 
 		}
 
@@ -87,7 +105,7 @@ namespace Cur.UI {
 			{ElementType.water, waterPath},
 		};
 
-		
+
 
 		public CooldownBar assistBar;
 		public CooldownBar abilityBar;
@@ -153,16 +171,16 @@ namespace Cur.UI {
 
 
 
-		
+
 
 		[Header("Floats")]
 
 		[SerializeField] float altCDBarColorSpeed = 20f;
 
-		
 
 
-		public void UpdateIcon(ElementType e) => weaponIcon.sprite = Resources.Load<Sprite>(ETypePath[e]);
+
+		// public void UpdateIcon(ElementType e) => weaponIcon.sprite = Resources.Load<Sprite>(ETypePath[e]);
 
 		public void UpdateWeaponBackgrounds() {
 
@@ -193,7 +211,7 @@ namespace Cur.UI {
 			RotateWeapons();
 		}
 
-		
+
 		public void UpdateStaminaBars() {
 
 			float stamina = pc.stamina.s;
@@ -211,14 +229,19 @@ namespace Cur.UI {
 		}
 
 		public void UpdateHeath() {
+
+
 			healthBar.value = pc.health.h;
+
+			healthBar.fillRect.GetComponent<Image>().color = ColorUtil.Lerp(Color.red, Color.green, pc.health.h / 100f);
+			healthBar.transform.GetChild(0).GetComponent<Image>().color = ColorUtil.Lerp(Color.red.Darken(), Color.green.Darken(), pc.health.h / 100f);
 			healthText.text = Mathf.CeilToInt(pc.health.h).ToString() + " +";
 		}
 
-		
+
 
 		public void UpdateAll(ElementType? IconType = null) {
-			if (IconType != null) UpdateIcon((ElementType) IconType);
+			// if (IconType != null) UpdateIcon((ElementType) IconType);
 			UpdateStaminaBars();
 			UpdateWeapons();
 		}
@@ -237,18 +260,23 @@ namespace Cur.UI {
 		}
 
 
+		public void WeaponSwitch() {
+			// UpdateAbilityIcons();
+			UpdateWeapons();
+		}
+
+
 		void Awake() {
 			pc = mas.player.GetPlayer();
 			cc = pc.GetComponent<Combat.CombatController>();
-			cdBars  = new CooldownBar[2]{assistBar, abilityBar};
+			cdBars = new CooldownBar[2] { assistBar, abilityBar };
 
-			
+
 			UpdateWeaponIcons();
 		}
 
-		void UpdateAllBarColors(){
-			foreach(CooldownBar bar in cdBars)
-			{
+		void UpdateAllBarColors() {
+			foreach (CooldownBar bar in cdBars) {
 				StartCoroutine(bar.UpdateBarColor(cc.ca.primary.element.type, false));
 			}
 		}

@@ -23,6 +23,24 @@ MonoBehaviour:
   onClickClip: {fileID: 0}
   onReleaseClip: {fileID: 0}
   onDamageClip: {fileID: 0}
+  attackAbilities: 
+  alternateAbilities: 
+  alternateConditions: []
+  icon: {fileID: 21300000, guid: e40bbd83dd90c492ba95fcfbe98c248a, type: 3}
+  vortexRadius: 0
+  vortexForce: 0
+  vortexLifetime: 0
+  vortexDamage: 0
+  pullable: 0
+  polarity: 0
+  healingType: 0
+  healingAmount: 100
+  healthPerTick: 100
+  timeBetweenTick: 0.3
+  ticks: 10
+  healTime: 5
+  launchForce: {x: 0, y: 0, z: 0}
+  slamForce: 10000
   cooldownProgress: 0
   attackCDIncrements: 20
   upDamage: 5

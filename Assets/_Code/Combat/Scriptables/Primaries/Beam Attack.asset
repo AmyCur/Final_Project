@@ -18,8 +18,8 @@ MonoBehaviour:
   range: 100
   canAttack: 1
   element:
-    type: 1
-    f: -0.04232903
+    type: 8
+    f: 2.9469595
   onClickClip: {fileID: 8300000, guid: 7d23ea507de769f20a02ad6ca52d5a6e, type: 3}
   onReleaseClip: {fileID: 0}
   onDamageClip: {fileID: 8300000, guid: 2cd0f5befe7b542ad908e15bfc258a79, type: 3}

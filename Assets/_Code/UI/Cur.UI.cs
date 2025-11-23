@@ -11,5 +11,21 @@ namespace Cur.UI {
 			);
 		}
 
+		public static Color Lighten(this Color color, float intesity = 0.2f) {
+			return new Color(
+				Mathf.Lerp(color.r, 1, intesity),
+				Mathf.Lerp(color.g, 1, intesity),
+				Mathf.Lerp(color.b, 1, intesity)
+			);
+		}
+
+		public static Color Lerp(Color color, Color targetColor, float intesity) {
+			return new Color(
+				Mathf.Lerp(color.r, targetColor.r, intesity),
+				Mathf.Lerp(color.g, targetColor.g, intesity),
+				Mathf.Lerp(color.b, targetColor.b, intesity)
+			);
+		}
+
 	}
 }

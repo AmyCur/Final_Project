@@ -18,7 +18,7 @@ MonoBehaviour:
   range: 0
   canAttack: 1
   element:
-    type: 4
+    type: 8
     f: -0.053875163
   onClickClip: {fileID: 0}
   onReleaseClip: {fileID: 0}
@@ -26,6 +26,7 @@ MonoBehaviour:
   attackAbilities: 02000000
   alternateAbilities: 
   alternateConditions: []
+  icon: {fileID: 21300000, guid: db7957998d3029f17b54f67bbbabf29b, type: 3}
   vortexRadius: 15
   vortexForce: 5
   vortexLifetime: 1
