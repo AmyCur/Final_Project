@@ -59,6 +59,11 @@ namespace Combat {
 			hc.abilityBar.UpdateAbilityIcon(ca.ability.icon);
 
 
+
+			Invoke("LateStart", 0.1f);
+		}
+
+		void LateStart() {
 			foreach (SingleAttack atk in attacks) {
 				if (atk.primary != null) atk.primary.canAttack = true;
 				if (atk.assist != null) {

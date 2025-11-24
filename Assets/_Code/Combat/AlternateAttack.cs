@@ -53,7 +53,7 @@ namespace Combat {
 
 			[Header("Abilities")]
 
-			public bool useOnFullHealth=true;
+			public bool useOnFullHealth = true;
 			public List<AttackAbilities> attackAbilities;
 
 			// These are used if the alternate condition is met
@@ -189,7 +189,7 @@ namespace Combat {
 
 				pc.forwardSpeed = defaultMoveSpeed.y;
 				pc.sidewaysSpeed = defaultMoveSpeed.x;
-			}                                                                            70bca3
+			}
 
 			public void HandleLaunch() {
 				pc.rb.AddForce(launchForce);
@@ -218,7 +218,7 @@ namespace Combat {
 							HandleVortex();
 							break;
 						case (AttackAbilities.heal):
-							if(pc.health != 100f || useOnFullHealth)
+							if (pc.health != 100f || useOnFullHealth)
 								HandleHeal();
 							else attackFailed = true;
 							break;
@@ -247,7 +247,7 @@ namespace Combat {
 				canAttack = false;
 				for (cooldownProgress = 0; cooldownProgress < attackCDIncrements + 1; cooldownProgress++) {
 					yield return new WaitForSeconds(attackCD / (float) attackCDIncrements);
-					
+
 					if (cc.attacks[cc.caIndex].assist == this) pc.hc.assistBar.UpdateBarCD((float) cooldownProgress, attackCDIncrements);
 					else if (cc.attacks[cc.caIndex].ability == this) pc.hc.abilityBar.UpdateBarCD((float) cooldownProgress, attackCDIncrements);
 				}
