@@ -116,6 +116,7 @@ namespace Player {
 
 		public override void FixedUpdate() {
 			base.FixedUpdate();
+			
 			if (state != PlayerState.sliding && state != PlayerState.slamming && canMove) {
 				if (adminState == AdminState.standard) this.Move();
 				else this.AdminMove();

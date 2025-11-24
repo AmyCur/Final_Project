@@ -19,7 +19,8 @@ namespace Combat {
 			vortex,
 			launch,
 			heal,
-			slam
+			slam,
+			damage_sphere
 		}
 
 		public static class AltReflection {
@@ -52,6 +53,7 @@ namespace Combat {
 
 			[Header("Abilities")]
 
+			public bool useOnFullHealth=true;
 			public List<AttackAbilities> attackAbilities;
 
 			// These are used if the alternate condition is met
@@ -102,6 +104,9 @@ namespace Combat {
 			[Header("Slamming")]
 
 			public float slamForce = 10_000;
+
+			[Header("Damage Sphere")]
+			public float sphereDamage = 10f;
 
 			public override bool keyDown() => magic.key.down(keys.assist);
 			public override bool keyStayDown() => magic.key.gk(keys.assist);
@@ -184,7 +189,7 @@ namespace Combat {
 
 				pc.forwardSpeed = defaultMoveSpeed.y;
 				pc.sidewaysSpeed = defaultMoveSpeed.x;
-			}
+			}                                                                            70bca3
 
 			public void HandleLaunch() {
 				pc.rb.AddForce(launchForce);
@@ -213,7 +218,7 @@ namespace Combat {
 							HandleVortex();
 							break;
 						case (AttackAbilities.heal):
-							if (alts.Count > 1 || pc.health != pc.health.maxHealth)
+							if(pc.health != 100f || useOnFullHealth)
 								HandleHeal();
 							else attackFailed = true;
 							break;
@@ -223,6 +228,10 @@ namespace Combat {
 						case (AttackAbilities.slam):
 							HandleSlam();
 							break;
+						case (AttackAbilities.damage_sphere):
+							CreateDamageSphere(sphereDamage);
+							break;
+
 					}
 				}
 				if (!attackFailed) base.OnClick();
@@ -238,9 +247,9 @@ namespace Combat {
 				canAttack = false;
 				for (cooldownProgress = 0; cooldownProgress < attackCDIncrements + 1; cooldownProgress++) {
 					yield return new WaitForSeconds(attackCD / (float) attackCDIncrements);
-
+					
 					if (cc.attacks[cc.caIndex].assist == this) pc.hc.assistBar.UpdateBarCD((float) cooldownProgress, attackCDIncrements);
-					if (cc.attacks[cc.caIndex].ability == this) pc.hc.abilityBar.UpdateBarCD((float) cooldownProgress, attackCDIncrements);
+					else if (cc.attacks[cc.caIndex].ability == this) pc.hc.abilityBar.UpdateBarCD((float) cooldownProgress, attackCDIncrements);
 				}
 				canAttack = true;
 			}

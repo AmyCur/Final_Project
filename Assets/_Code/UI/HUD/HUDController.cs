@@ -8,7 +8,7 @@ using TMPro;
 
 namespace Cur.UI {
 	public static class BarColors {
-		public static Color fireColor = new Color(1, 0, 0, 1);
+		public static Color fireColor = new Color(0.780f, 0.19f, 0.27f, 1);
 		public static Color waterColor = new Color(0, 0, 1, 1);
 		public static Color electricColor = new Color(1, 1, 0, 1);
 		public static Color windColor = new Color(0, 1, 0, 1);
@@ -81,7 +81,7 @@ namespace Cur.UI {
 		public void UpdateBarCD(float cooldownProgress, float cdIncrements) {
 			// Maxes at 1
 			bar.fillAmount = cooldownProgress / cdIncrements;
-			Debug.Log(cooldownProgress / cdIncrements * 100f);
+			// Debug.Log(cooldownProgress / cdIncrements * 100f);
 
 		}
 
@@ -280,7 +280,7 @@ namespace Cur.UI {
 
 		void UpdateAllBarColors() {
 			foreach (CooldownBar bar in cdBars) {
-				StartCoroutine(bar.UpdateBarColor(cc.ca.primary.element.type, false));
+				if(bar!=null) StartCoroutine(bar.UpdateBarColor(cc.ca.primary.element.type, false));
 			}
 		}
 

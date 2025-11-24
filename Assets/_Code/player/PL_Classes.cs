@@ -77,15 +77,14 @@ namespace Entity {
 		}
 
 		public static Health operator -(Health h, object h2) {
-			Health h3 = new();
+			Health h3 = h;
 
 			if (h.canTakeDamage) {
-				if (h2 is Health health) h3.h = h.h - health.h;
-				else if (h2 is float hF) h3.h = h.h - hF;
+				if (h2 is Health health) h3.h -= health.h;
+				else if (h2 is float hF) h3.h -= hF;
 
 				h3.takenDamage = true;
 			}
-
 
 			return h3;
 		}

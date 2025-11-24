@@ -10,37 +10,38 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 114168d95106e43eda018f0ef2834b8d, type: 3}
-  m_Name: TestNewAlt
+  m_Name: LightningCloud
   m_EditorClassIdentifier: 
   attackType: 0
   damage: 10
-  attackCD: 1
-  range: 0
-  canAttack: 1
+  attackCD: 5
+  range: 10
+  canAttack: 0
   element:
-    type: 8
-    f: 2.762035
+    type: 0
+    f: 0
   onClickClip: {fileID: 0}
   onReleaseClip: {fileID: 0}
   onDamageClip: {fileID: 0}
-  attackAbilities: 0000000001000000
-  alternateAbilities: 0300000000000000
-  alternateConditions:
-  - '!grounded'
-  icon: {fileID: 21300000, guid: e40bbd83dd90c492ba95fcfbe98c248a, type: 3}
-  vortexRadius: 15
-  vortexForce: 5
-  vortexLifetime: 1
-  vortexDamage: 10
+  useOnFullHealth: 1
+  attackAbilities: 04000000
+  alternateAbilities: 
+  alternateConditions: []
+  icon: {fileID: 21300000, guid: 6f46b613a16d42441a474fd8a560071a, type: 3}
+  vortexRadius: 10
+  vortexForce: 0
+  vortexLifetime: 0
+  vortexDamage: 0
   pullable: 0
   polarity: 0
-  healingType: 1
+  healingType: 0
   healingAmount: 100
-  healthPerTick: 10
+  healthPerTick: 100
   timeBetweenTick: 0.3
   ticks: 10
   healTime: 5
-  launchForce: {x: 0, y: 5000, z: 0}
-  slamForce: 3000000
-  cooldownProgress: 21
-  attackCDIncrements: 20
+  launchForce: {x: 0, y: 0, z: 0}
+  slamForce: 10000
+  sphereDamage: 1000
+  cooldownProgress: 61
+  attackCDIncrements: 100
