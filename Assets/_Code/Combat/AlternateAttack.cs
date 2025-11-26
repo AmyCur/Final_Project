@@ -20,7 +20,8 @@ namespace Combat {
 			launch,
 			heal,
 			slam,
-			damage_sphere
+			damage_sphere,
+			rain_cloud
 		}
 
 		public static class AltReflection {
@@ -181,6 +182,11 @@ namespace Combat {
 				else pc.StartCoroutine(HealOverTime());
 			}
 
+			public void HandleRainCloud(){
+				GameObject cloud = Instantiate(Resources.Load<GameObject>("Prefabs/Combat/Projectiles/Raincloud"),pc.transform.position+new Vector3(0,10,0),Quaternion.identity);
+				cloud.transform.parent=GameObject.FindGameObjectWithTag("Raincloud").transform;
+			}
+
 			IEnumerator SetLaunchMoveSpeed() {
 				pc.forwardSpeed = launchMoveSpeed.y;
 				pc.sidewaysSpeed = launchMoveSpeed.x;
@@ -231,7 +237,9 @@ namespace Combat {
 						case (AttackAbilities.damage_sphere):
 							CreateDamageSphere(sphereDamage);
 							break;
-
+						case (AttackAbilities.rain_cloud):
+							HandleRainCloud();
+							break;
 					}
 				}
 				if (!attackFailed) base.OnClick();
