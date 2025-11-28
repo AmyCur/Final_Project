@@ -4,7 +4,7 @@ using UnityEngine;
 using Entity;
 
 
-[CreateAssetMenu(fileName = "Beam Attack", menuName = "Attacks/Primary/Beam", order = 0)]
+// [CreateAssetMenu(fileName = "Beam Attack", menuName = "Attacks/Primary/Beam", order = 0)]
 public class BeamAttack : PrimaryAttack {
 
 	[SerializeField] List<Entity.ENT_Controller> hitEnems = new();

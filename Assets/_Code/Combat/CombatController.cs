@@ -42,8 +42,6 @@ namespace Combat {
 			// 49 -> 57
 			SwitchWeapon();
 
-			Debug.Log(AltReflection.GetAttackProperties(new string[] { "grounded" }, ca.assist));
-
 		}
 
 		void Start() {
