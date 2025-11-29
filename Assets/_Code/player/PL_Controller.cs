@@ -91,6 +91,9 @@ namespace Player {
 		float hInp;
 		float vInp;
 
+		[HideInInspector] public Vector3 fw => (transform.forward + Camera.main.transform.forward).normalized;
+		[HideInInspector] public Vector3 cameraPos => playerCamera.transform.position;
+
 		public GameObject forwardObject;
 
 		[Header("UI")]

@@ -59,9 +59,9 @@ public abstract class SingularAttack : ScriptableObject {
 
 	protected void PlayClip(AudioClip clip) { if (!!clip) source.PlayOneShot(clip); }
 
-	public abstract bool keyDown();
-	public abstract bool keyUp();
-	public abstract bool keyStayDown();
+	public virtual bool keyDown() => false;
+	public virtual bool keyUp() => false;
+	public virtual bool keyStayDown() => false;
 
 	public virtual void OnClick() { pc.StartCoroutine(AttackCooldown()); }
 	public virtual void OnRelease() { }
