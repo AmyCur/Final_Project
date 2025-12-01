@@ -230,19 +230,48 @@ namespace Player {
 
 			if (Grounded()) StartCoroutine(DecaySlide(decaySpeed: slide.decaySpeed));
 		}
+		
+		public GameObject slideCameraObject;
+		public GameObject defaultCameraObject;
+		Coroutine cameraSlideRoutine;
+
+		public IEnumerator LerpCameraSlide(bool down){
+			
+			while(playerCamera.transform.position != (down ? slideCameraObject.transform.position : defaultCameraObject.transform.position)){
+				Vector3 pos = playerCamera.transform.position;
+				playerCamera.transform.position = new Vector3(
+					pos.x,
+					Mathf.Lerp(pos.y, down ? slideCameraObject.transform.position.y : defaultCameraObject.transform.position.y, Time.deltaTime*20f),
+					pos.z
+				);
+				yield return 0;
+			}
+
+
+
+		}
+
 
 		public IEnumerator Slide() {
+
+			collider.height=1;
 
 			slide.direction = Directions.SlideDirection(this);
 			Vector3 direction = slide.direction;
 
 			state = PlayerState.sliding;
 
+			if(cameraSlideRoutine!=null) StopCoroutine(cameraSlideRoutine);
+			cameraSlideRoutine = StartCoroutine(LerpCameraSlide(true));
+
 			do {
 				rb.AddForce(direction * slide.force * Consts.Multipliers.SLIDE_MULTIPLIER * Time.deltaTime);
 				yield return 0;
 			} while (magic.key.gk(keys.slide) && !shouldJump && Grounded() && !shouldSlam && adminState != AdminState.noclip);
 
+
+			if(cameraSlideRoutine!=null) StopCoroutine(cameraSlideRoutine);
+			cameraSlideRoutine = StartCoroutine(LerpCameraSlide(false));
 
 			// Handle Slide End based on how the slide has ended
 
@@ -256,6 +285,7 @@ namespace Player {
 			else if (!magic.key.gk(keys.slide)) StartCoroutine(DecaySlide(decaySpeed: slide.decaySpeed));
 
 			state = PlayerState.walking;
+			collider.height=2;
 		}
 
 
@@ -371,8 +401,6 @@ namespace Player {
 			hInp = Grounded() ? Input.GetAxisRaw("Horizontal") : Input.GetAxis("Horizontal");
 			vInp = Grounded() ? Input.GetAxisRaw("Vertical") : Input.GetAxis("Vertical");
 
-
-
 			Vector3 forward = forwardObject.transform.forward;
 			Vector3 right = forwardObject.transform.right;
 
@@ -387,8 +415,11 @@ namespace Player {
 			dash.ChangeDirection(force.normalized);
 
 			rb.AddForce(force);
-			// moveDirection = force.normalized;
 
+			if(force!=Vector3.zero){
+
+			}
+			// moveDirection = force.normalized;
 		}
 
 		public IEnumerator ManageSlidePlayerHeight() {
