@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using Magical;
+using EntityLib;
 namespace Player {
 	[RequireComponent(typeof(AudioSource))]
 	public class PL_Controller : RB_Controller {
@@ -39,28 +40,10 @@ namespace Player {
 		[Header("Sliding")]
 
 		public Force slide;
-		// public bool canSlide = true;
-		// public float slideSpeed = 45f;
-		// [Range(500, 2000)] public int slideDecayIncrements = 30;
-		// public float slideDecaySpeed = 10f;
 
 		[Header("Dashing")]
 
 		public Dash dash;
-
-		// [Header("Mutual")]
-		// public bool canDash = true;
-		// public float dashHardCDTime = 0.1f;
-		// [Range(0, 100)] public float staminaPerDash = 30f;
-
-		// [Header("No Gravity")]
-		// public float dashForce = 12f;
-		// public float noGravDashTime = 0.3f;
-
-		// [Header("Gravity")]
-
-		// public float dashDecaySpeed = 10f;
-
 
 		[Header("Mouse")]
 
@@ -144,7 +127,7 @@ namespace Player {
 
 			HandleMouse();
 
-			if (Grounded() && state == PlayerState.slamming) state = PlayerState.walking;
+			if (BoxGrounded() && state == PlayerState.slamming) state = PlayerState.walking;
 
 			// Movement
 
@@ -153,6 +136,10 @@ namespace Player {
 				if (shouldSlide) StartCoroutine(Slide());
 				if (shouldDash) Dash();
 				if (shouldSlam) Slam();
+			}
+
+			if(Input.GetKeyDown(KeyCode.LeftBracket)){
+				EntityLib.Entity.KillAll(typeof(ENM_Controller));
 			}
 
 
@@ -191,7 +178,6 @@ namespace Player {
 			state = PlayerState.slamming;
 			rb.linearVelocity = Vector3.zero;
 			rb.AddForce(0, -slam.force * Consts.Multipliers.SLAM_MULTIPLIER * Time.deltaTime, 0);
-
 		}
 
 		public IEnumerator DecaySlide(float decaySpeed = -1f) {
@@ -445,6 +431,14 @@ namespace Player {
 
 
 		public bool Grounded() => Physics.Raycast(collider.transform.position, Vector3.down, transform.localScale.y * groundedRange);
+		public bool BoxGrounded(){
+			Vector3 startPos = transform.position-new Vector3(0,transform.localScale.y/2f,0);
+			Collider[] colliders = Physics.OverlapBox(startPos, new Vector3(transform.localScale.x,0.3f,transform.localScale.z));
+			foreach(Collider col in colliders){
+				if(!col.isEntity(typeof(PL_Controller))) return true;
+			}
+			return false;
+		}
 
 
 

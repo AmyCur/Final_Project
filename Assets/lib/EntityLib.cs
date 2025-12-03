@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Entity;
 using System.Linq;
+using MathsAndSome;
+using Globals;
 
 namespace EntityLib {
 	public static class Entity {
@@ -13,6 +15,29 @@ namespace EntityLib {
 			{typeof(ENT_Controller), "entity"},
 		};
 
+		static void KillPlayer(){ 
+			Player.PL_Controller pc = mas.player.GetPlayer();
+			pc.health.h-=pc.health.h;
+		}
+
+		static void KillEnemies(){
+			GameObject[] enemies = GameObject.FindGameObjectsWithTag(glob.enemyTag);
+			foreach(GameObject obj in enemies){
+				ENM_Controller e = obj.GetComponent<ENM_Controller>();
+				e.health.h-=e.health.h;
+			}
+		}
+
+		public static void KillAll(Type targetType=null){
+			if(targetType==null){
+				KillEnemies();
+				KillPlayer();
+			}
+			else if(targetType == typeof(Player.PL_Controller)) KillPlayer();
+			else if(targetType == typeof(ENM_Controller)) KillEnemies();
+
+
+		}
 		// This is so ugly and i hate it but i actually cant figure out another way because i am stupid
 		public static bool isEntity(this object m, Type targetType = null) {
 			targetType ??= typeof(ENT_Controller);
