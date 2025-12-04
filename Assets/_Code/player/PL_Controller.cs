@@ -9,7 +9,7 @@ namespace Player {
 
 
 		bool shouldJump => canJump && Grounded() && magic.key.down(keys.jump);
-		bool shouldSlide => slide.can && Grounded() && magic.key.down(keys.slide) && state != PlayerState.sliding;
+		bool shouldSlide => slide.can && BoxGrounded() && magic.key.down(keys.slide) && state != PlayerState.sliding;
 		bool shouldDash => dash.can && magic.key.down(keys.dash) && stamina.s - dash.staminaPer >= 0;
 		bool shouldSlam => slam.can && magic.key.down(keys.slam) && !Grounded() && state != PlayerState.slamming;
 
@@ -149,7 +149,8 @@ namespace Player {
 
 		void CheckForAdmin() {
 			if (admin) adminState = adminState == AdminState.standard ? AdminState.noclip : AdminState.standard;
-			rb.useGravity = adminState == AdminState.noclip;
+			rb.useGravity = adminState != AdminState.noclip;
+			collider.isTrigger = adminState == AdminState.noclip;
 		}
 
 
@@ -317,6 +318,7 @@ namespace Player {
 
 
 		public IEnumerator GravityDash() {
+			rb.linearVelocity=new Vector3(0,rb.linearVelocity.y,0);
 			canBreakFromGravityDash = false;
 
 			StartCoroutine(WaitForGravityDash());
