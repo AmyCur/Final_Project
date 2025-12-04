@@ -9,7 +9,7 @@ namespace Player {
 
 
 		bool shouldJump => canJump && Grounded() && magic.key.down(keys.jump);
-		bool shouldSlide => slide.can && BoxGrounded() && magic.key.down(keys.slide) && state != PlayerState.sliding;
+		bool shouldSlide => slide.can && Grounded(1.3f) && magic.key.down(keys.slide) && state != PlayerState.sliding;
 		bool shouldDash => dash.can && magic.key.down(keys.dash) && stamina.s - dash.staminaPer >= 0;
 		bool shouldSlam => slam.can && magic.key.down(keys.slam) && !Grounded() && state != PlayerState.slamming;
 
@@ -124,6 +124,13 @@ namespace Player {
 				StartCoroutine(IFrames());
 			}
 
+			rb.linearVelocity = MathsAndSome.mas.vector.ClampVector(rb.linearVelocity, new Vector3[]
+				{
+					new Vector3(-1_000,-1_000,-1_000),
+					new Vector3(1000, jumpState==MovementState.none ? 5 : 15, 1000)
+				}
+			);
+
 
 			HandleMouse();
 
@@ -134,8 +141,8 @@ namespace Player {
 			if (adminState != AdminState.noclip) {
 				if (shouldJump) Jump();
 				if (shouldSlide) StartCoroutine(Slide());
+				else if (shouldSlam) Slam();
 				if (shouldDash) Dash();
-				if (shouldSlam) Slam();
 			}
 
 			if(Input.GetKeyDown(KeyCode.LeftBracket)){
@@ -192,7 +199,7 @@ namespace Player {
 				// Debug.LogWarning(force);
 				// ???? Couldve just used yield return 0
 				yield return new WaitForSeconds(decaySpeed / (float) slide.decayIncrements);
-			} while (force > 0.1f && !shouldSlide && !shouldSlam);
+			} while (force > 0.1f && !shouldSlam);
 		}
 
 		IEnumerator WaitForSlideJumpPreservation() {
@@ -254,7 +261,7 @@ namespace Player {
 			do {
 				rb.AddForce(direction * slide.force * Consts.Multipliers.SLIDE_MULTIPLIER * Time.deltaTime);
 				yield return 0;
-			} while (magic.key.gk(keys.slide) && !shouldJump && Grounded() && !shouldSlam && adminState != AdminState.noclip);
+			} while (magic.key.gk(keys.slide) && !shouldJump  && !shouldSlam && adminState != AdminState.noclip);
 
 
 			if(cameraSlideRoutine!=null) StopCoroutine(cameraSlideRoutine);
@@ -276,8 +283,17 @@ namespace Player {
 		}
 
 
+		IEnumerator WaitForJumpEnd(){
+			yield return new WaitForSeconds(0.1f);
+			yield return new WaitUntil(() => Grounded());
+			jumpState=MovementState.none;
+		}
+
 		public void Jump() {
+			jumpState=MovementState.middle;
 			rb.AddForce(0, jumpForce * Consts.Multipliers.JUMP_MULTIPLIER, 0);
+			StartCoroutine(WaitForJumpEnd());
+
 
 		}
 
@@ -432,7 +448,7 @@ namespace Player {
 
 
 
-		public bool Grounded() => Physics.Raycast(collider.transform.position, Vector3.down, transform.localScale.y * groundedRange);
+		public bool Grounded(float m = 1f) => Physics.Raycast(collider.transform.position, Vector3.down, transform.localScale.y * groundedRange*m);
 		public bool BoxGrounded(){
 			Vector3 startPos = transform.position-new Vector3(0,transform.localScale.y/2f,0);
 			Collider[] colliders = Physics.OverlapBox(startPos, new Vector3(transform.localScale.x,0.3f,transform.localScale.z));
