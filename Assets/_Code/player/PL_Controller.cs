@@ -8,7 +8,7 @@ namespace Player {
 
 
 
-		bool shouldJump => canJump && Grounded() && magic.key.down(keys.jump);
+		bool shouldJump => canJump && Grounded(justSlid ? 2f : 1.3f) && magic.key.down(keys.jump);
 		bool shouldSlide => slide.can && Grounded(1.3f) && magic.key.down(keys.slide) && state != PlayerState.sliding;
 		bool shouldDash => dash.can && magic.key.down(keys.dash) && stamina.s - dash.staminaPer >= 0;
 		bool shouldSlam => slam.can && magic.key.down(keys.slam) && !Grounded() && state != PlayerState.slamming;
@@ -155,9 +155,12 @@ namespace Player {
 		}
 
 		void CheckForAdmin() {
-			if (admin) adminState = adminState == AdminState.standard ? AdminState.noclip : AdminState.standard;
-			rb.useGravity = adminState != AdminState.noclip;
-			collider.isTrigger = adminState == AdminState.noclip;
+			if (admin){
+				adminState = adminState == AdminState.standard ? AdminState.noclip : AdminState.standard;
+				rb.useGravity = adminState != AdminState.noclip;
+				collider.isTrigger = adminState == AdminState.noclip;
+				stamina.s=stamina.max;
+			}
 		}
 
 
@@ -248,6 +251,8 @@ namespace Player {
 
 		public IEnumerator Slide() {
 
+			justSlid=false;
+
 			collider.height=1;
 
 			slide.direction = Directions.SlideDirection(this);
@@ -279,8 +284,14 @@ namespace Player {
 			else if (!magic.key.gk(keys.slide)) StartCoroutine(DecaySlide(decaySpeed: slide.decaySpeed));
 
 			state = PlayerState.walking;
+			justSlid=true;
 			collider.height=2;
+			yield return new WaitForSeconds(0.2f);
+			justSlid=false;
+
 		}
+
+		bool justSlid=false;
 
 
 		IEnumerator WaitForJumpEnd(){
