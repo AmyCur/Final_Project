@@ -44,7 +44,7 @@ public class VortexController : MonoBehaviour {
             Collider[] cols = Physics.OverlapSphere(transform.position, radius);
 
             foreach (Collider col in cols) {
-                if (glob.isEntity(col.tag)) {
+                // if (glob.isEntity(col.tag)) {
                     Entity.ENT_Controller c = col.GetComponent<Entity.ENT_Controller>();
 
                     if (!c) {
@@ -70,7 +70,7 @@ public class VortexController : MonoBehaviour {
                             break;
                     }
                 }
-            }
+            // }
         }
 
         void OnDrawGizmos() {

@@ -10,6 +10,9 @@ TagManager:
   - WeaponIcon
   - PlayerChild
   - Thought
+  - Raincloud
+  - Bullets
+  - Enemies
   layers:
   - Default
   - TransparentFX

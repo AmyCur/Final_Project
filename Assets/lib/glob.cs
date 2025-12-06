@@ -1,6 +1,7 @@
-// This is where I store all of the awesome constants that are used over a load of scripts and other important things
+﻿// This is where I store all of the awesome constants that are used over a load of scripts and other important things
 
 using UnityEngine;
+using Magical;
 
 namespace Globals
 {
@@ -21,8 +22,19 @@ namespace Globals
 
         public static readonly LayerMask enemyMask = 64;
 
-        public static bool isEntity(string tag) {
-            return tag == enemyTag || tag == playerTag;
-        }
+        // public static bool isEntity(string tag) {
+            // return tag == enemyTag || tag == playerTag;
+        // }
+		//
+	
+		public static void Update(){
+			if(magic.key.down(KeyCode.C)){
+				Debug.ClearDeveloperConsole();
+			}
+		}
     }
+
+
+
+
 }

@@ -2,6 +2,8 @@
 using UnityEngine;
 using Magical;
 using EntityLib;
+
+
 namespace Player {
 	[RequireComponent(typeof(AudioSource))]
 	public class PL_Controller : RB_Controller {
@@ -116,6 +118,8 @@ namespace Player {
 
 		public override void Update() {
 			base.Update();
+
+			Globals.glob.Update();
 
 			if (hc != null) hc.UpdateHeath();
 
@@ -466,7 +470,7 @@ namespace Player {
 			Collider[] colliders = Physics.OverlapBox(startPos, new Vector3(transform.localScale.x*.2f,0.5f*m,transform.localScale.z*.2f));
 			foreach(Collider col in colliders){
 				if(!col.isEntity(typeof(PL_Controller))) {
-					Debug.Log(col.name);
+					// Debug.Log(col.name);
 					return true;}
 			}
 			return false;

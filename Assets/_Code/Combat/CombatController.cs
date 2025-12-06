@@ -27,6 +27,7 @@ namespace Combat {
 		Cur.UI.HUDController hc;
 		Player.PL_Controller pc;
 		Coroutine AltCDBarRoutine;
+		[SerializeField] SingleAttack spawner;
 
 		void Update() {
 			if (ca != null) {
@@ -45,8 +46,8 @@ namespace Combat {
 		}
 
 		void Start() {
-			pc = GetComponent<Player.PL_Controller>();
 			hc = mas.get.HC();
+			(spawner.primary as SpawnerController).Start();
 
 
 			if (ca.primary == null) ca = attacks[0];
@@ -55,7 +56,6 @@ namespace Combat {
 			hc.UpdateWeaponScale();
 			hc.assistBar.UpdateAbilityIcon(ca.assist.icon);
 			hc.abilityBar.UpdateAbilityIcon(ca.ability.icon);
-
 
 
 			Invoke("LateStart", 0.1f);
@@ -84,7 +84,10 @@ namespace Combat {
 			int pressedKey = (int) magic.key.PressedKey();
 			if (pressedKey >= 49 && pressedKey <= 57) {
 				pressedKey -= 49;
-				if (attacks.Count >= pressedKey + 1) {
+				if(pressedKey==4){
+					ca=spawner;
+				}
+				else if (attacks.Count >= pressedKey + 1) {
 					ca = attacks[pressedKey];
 					caIndex = pressedKey;
 					hc.UpdateWeapons();

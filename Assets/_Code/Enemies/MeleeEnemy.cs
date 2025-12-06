@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using static EntityLib.Entity;
 using static GameDebug.Combat;
 using MathsAndSome;
@@ -6,8 +6,6 @@ using MathsAndSome;
 
 public sealed class MeleeEnemy : ENM_Controller
 {
-
-
     public override bool shouldHunt()
     {
         if (drawHuntRay)
@@ -16,6 +14,8 @@ public sealed class MeleeEnemy : ENM_Controller
             Debug.DrawLine(pos, pos+(direction * minHuntRange), Color.yellow);
         }
         if (Physics.Raycast(pos, direction, out RaycastHit hit, maxHuntRange)) return hit.isEntity() && hit.distance.inRange(minHuntRange, maxHuntRange) && canHunt;
+
+
         return false;
     }
     public override bool shouldSeek()
@@ -66,13 +66,11 @@ public sealed class MeleeEnemy : ENM_Controller
 
     public override void Attack()
     {
-
         if (canAttack)
         {
             if (Physics.Raycast(pos, direction, attackData.attackRange))
             {
                 if (attackSuccessful()) pc.TakeDamage(attackData.damage, attackElement);
-                
                 StartCoroutine(CooldownAttack());
             }
         }

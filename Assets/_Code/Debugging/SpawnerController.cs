@@ -8,7 +8,6 @@ namespace Combat
 		ranged
 	}
 
-
 	[System.Serializable]
 	public struct EnemyPathPair{
 		public Enemy enemy;
@@ -16,14 +15,20 @@ namespace Combat
 	}
 
 	public static class EnemyObjs{
-		public static Dictionary<Enemy, GameObject> enemyObjects;
+		public static Dictionary<Enemy, GameObject> enemyObjects = new Dictionary<Enemy, GameObject>();
+		public static void Print(){
+			if(enemyObjects!=null){
+				foreach(KeyValuePair<Enemy, GameObject> kvp in enemyObjects){
+					Debug.Log($"{kvp.Key} : {kvp.Value}");
+				}
+			}
+		}
 	}
-
-
 
 	namespace Enemies{
 		public static class Spawning{
 			public static GameObject SpawnEnemy(Enemy eType, Vector3 pos){
+				EnemyObjs.Print();
 				GameObject obj=EnemyObjs.enemyObjects[eType] ;
 
 				if(obj!=null){
@@ -38,32 +43,35 @@ namespace Combat
 	}
 
 	[CreateAssetMenu(fileName = "Spawner Controller", menuName = "Attacks/Create/Spawner")]
-	public class SpawnerController : SingularAttack{
+	public class SpawnerController : PrimaryAttack{
 		
 		[Header("Spawner")]
 		
 		[SerializeField] Enemy enemy;
 
 		public List<EnemyPathPair> enemyPaths;
-		const string basePath="Combat/Enemies/";
+		const string basePath="Prefabs/Combat/Enemies/";
 
 		void OnValidate(){
 			
 		}
 
 		void InitialiseEnemyObjects(){
+			EnemyObjs.enemyObjects = new();
 			foreach(EnemyPathPair e in enemyPaths){
-				EnemyObjs.enemyObjects.Add(e.enemy, Resources.Load<GameObject>(basePath+e.path));
+				GameObject toSpawn = Resources.Load<GameObject>(basePath+e.path);
+				Debug.Log($"Added {e.enemy}, {toSpawn?.name}");
+				EnemyObjs.enemyObjects.Add(e.enemy, toSpawn);
 			}
 		}
 
-		void Start(){
+		public void Start(){
 			InitialiseEnemyObjects();
 		}
 	
 		public override void OnClick(){
 			if(Physics.Raycast(pc.cameraPos, pc.fw, out RaycastHit hit, range)){
-				Enemies.Spawning.SpawnEnemy(enemy, hit.point);
+				Combat.Enemies.Spawning.SpawnEnemy(enemy, hit.point);
 			}
 		}
 

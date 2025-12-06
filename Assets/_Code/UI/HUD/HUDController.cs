@@ -171,10 +171,10 @@ namespace Cur.UI {
 
 
 
-
-		[Header("Floats")]
-
-		[SerializeField] float altCDBarColorSpeed = 20f;
+		//
+		// [Header("Floats")]
+		//
+		// [SerializeField] float altCDBarColorSpeed = 20f;
 
 
 

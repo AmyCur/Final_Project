@@ -11,7 +11,7 @@ namespace Combat.Attack {
 
 	public class Attack : ScriptableObject {
 		public float damage = 10f;
-		AttackMode attackMode = AttackMode.Single;
+		// AttackMode attackMode = AttackMode.Single;
 		public float attackCD = 0.5f;
 	}
 
