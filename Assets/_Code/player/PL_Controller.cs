@@ -8,7 +8,7 @@ namespace Player {
 
 
 
-		bool shouldJump => canJump && Grounded(justSlid ? 2f : 1.3f) && magic.key.down(keys.jump);
+		bool shouldJump => canJump && BoxGrounded(justSlid ? 2f : 1.3f) && magic.key.down(keys.jump);
 		bool shouldSlide => slide.can && Grounded(1.3f) && magic.key.down(keys.slide) && state != PlayerState.sliding;
 		bool shouldDash => dash.can && magic.key.down(keys.dash) && stamina.s - dash.staminaPer >= 0;
 		bool shouldSlam => slam.can && magic.key.down(keys.slam) && !Grounded() && state != PlayerState.slamming;
@@ -31,7 +31,7 @@ namespace Player {
 		public bool canJump;
 		public float jumpForce;
 		[SerializeField] float groundedRange = 1.08f;
-
+		public float trueGroundedRange (float m = 1f) => transform.localScale.y * groundedRange * m;
 
 		[Header("Slam")]
 
@@ -279,6 +279,7 @@ namespace Player {
 
 			// Jumped -> No decay
 			if (shouldJump) { StartCoroutine(PreserveSlideJump(direction)); }
+			else if (!Grounded(1.3f)) StartCoroutine(PreserveSlideJump(direction));
 
 			// No longer pressing slide -> Fast decay
 			else if (!magic.key.gk(keys.slide)) StartCoroutine(DecaySlide(decaySpeed: slide.decaySpeed));
@@ -460,11 +461,13 @@ namespace Player {
 
 
 		public bool Grounded(float m = 1f) => Physics.Raycast(collider.transform.position, Vector3.down, transform.localScale.y * groundedRange*m);
-		public bool BoxGrounded(){
+		public bool BoxGrounded(float m = 1f){
 			Vector3 startPos = transform.position-new Vector3(0,transform.localScale.y/2f,0);
-			Collider[] colliders = Physics.OverlapBox(startPos, new Vector3(transform.localScale.x,0.3f,transform.localScale.z));
+			Collider[] colliders = Physics.OverlapBox(startPos, new Vector3(transform.localScale.x*.2f,0.5f*m,transform.localScale.z*.2f));
 			foreach(Collider col in colliders){
-				if(!col.isEntity(typeof(PL_Controller))) return true;
+				if(!col.isEntity(typeof(PL_Controller))) {
+					Debug.Log(col.name);
+					return true;}
 			}
 			return false;
 		}

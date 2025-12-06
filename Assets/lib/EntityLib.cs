@@ -35,9 +35,22 @@ namespace EntityLib {
 			}
 			else if(targetType == typeof(Player.PL_Controller)) KillPlayer();
 			else if(targetType == typeof(ENM_Controller)) KillEnemies();
-
-
 		}
+
+		public static bool isGrounded(this object obj, float range){
+			if(obj is Collider col){
+				return Physics.Raycast(col.transform.position, Vector3.down, range);
+			}
+			else if(obj is GameObject go){
+				return Physics.Raycast(go.transform.position, Vector3.down, range);
+			}
+			else if(obj is MonoBehaviour mo){
+				return Physics.Raycast(mo.gameObject.transform.position, Vector3.down, range);
+			}
+			return false;
+		}
+
+
 		// This is so ugly and i hate it but i actually cant figure out another way because i am stupid
 		public static bool isEntity(this object m, Type targetType = null) {
 			targetType ??= typeof(ENT_Controller);
@@ -46,7 +59,12 @@ namespace EntityLib {
 				if (m is RaycastHit h) {
 					return h.collider.CompareTag(Globals.glob.playerChildTag) || !!h.collider.GetComponent<Player.PL_Controller>() || h.collider.CompareTag(Globals.glob.playerTag);
 				}
-				else if (m is Collider c) return (c.GetComponent<Player.PL_Controller>()) != null || c.CompareTag(Globals.glob.playerChildTag);
+				else if (m is Collider c){
+					bool isPlayer = c.GetComponent<Player.PL_Controller>() != null;
+					bool isPlayerTag = c.CompareTag(Globals.glob.playerChildTag);
+					bool isPlayerChild = c.transform.parent != null ? c.transform.parent.GetComponent<Player.PL_Controller>()!=null : false;
+					return (isPlayer || isPlayerTag || isPlayerChild);
+				}
 				else if (m is MonoBehaviour mono) return mono is Player.PL_Controller;
 				return false;
 			}
