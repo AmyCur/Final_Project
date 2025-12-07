@@ -169,6 +169,7 @@ namespace Cur.UI {
 		Combat.CombatController cc;
 
 
+		[SerializeField] TMP_Text dash;
 
 
 		//
@@ -177,7 +178,9 @@ namespace Cur.UI {
 		// [SerializeField] float altCDBarColorSpeed = 20f;
 
 
-
+		public void UpdateDash(string text){
+			dash.text=text;
+		}
 
 		// public void UpdateIcon(ElementType e) => weaponIcon.sprite = Resources.Load<Sprite>(ETypePath[e]);
 

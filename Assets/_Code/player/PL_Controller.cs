@@ -79,6 +79,11 @@ namespace Player {
 		[HideInInspector] public Vector3 fw => (transform.forward + Camera.main.transform.forward).normalized;
 		[HideInInspector] public Vector3 cameraPos => playerCamera.transform.position;
 
+		[Header("Slope")]
+
+		public float maxSlopeAngle=30f;
+		RaycastHit slopeHit;
+
 		public GameObject forwardObject;
 
 		[Header("UI")]
@@ -120,38 +125,63 @@ namespace Player {
 			health.canTakeDamage = true;
 		}
 
-		public override void Update() {
-			base.Update();
+		void HandleSlope(){
+			if(OnSlope() && jumpState!=MovementState.middle){
+				if(state != PlayerState.sliding){
+					transform.position=new Vector3(slopeHit.point.x,slopeHit.point.y+transform.localScale.y,slopeHit.point.z);
+					if(adminState != AdminState.noclip) rb.useGravity=false;
+				}
+			}
+			else{
+				if(adminState != AdminState.noclip) rb.useGravity=true;
+			}
 
-			Globals.glob.Update();
+
+		}
+
+		public override void Update() {
+
+			base.Update();
+			HandleMouse();
+			HandleSlope();
+
+			if (adminState != AdminState.noclip) {
+				if (shouldJump) Jump();
+				if (shouldDash) Dash();
+				if (shouldSlide) StartCoroutine(Slide());
+				else if (shouldSlam) Slam();
+
+			}
+
+			if (BoxGrounded() && state == PlayerState.slamming) state = PlayerState.walking;
+
+
+			// Globals.glob.Update();
+			if(hc!=null) hc.UpdateDash($"{dash.can} && {magic.key.down(keys.dash)} && {stamina.s} - {dash.staminaPer}");
 
 			if (hc != null) hc.UpdateHeath();
+			if(hc!=null && shouldDash){
+				hc.UpdateDash($"{shouldDash}");
+			}
 
 			if (health.takenDamage) {
 				health.takenDamage = false;
 				StartCoroutine(IFrames());
 			}
 
-			rb.linearVelocity = MathsAndSome.mas.vector.ClampVector(rb.linearVelocity, new Vector3[]
-				{
-					new Vector3(-1_000,-1_000,-1_000),
-					new Vector3(1000, jumpState==MovementState.none ? 5 : 15, 1000)
-				}
-			);
+			if(rb!=null){
+				rb.linearVelocity = MathsAndSome.mas.vector.ClampVector(rb.linearVelocity, new Vector3[]
+					{
+						new Vector3(-1_000,-1_000,-1_000),
+						new Vector3(1000, jumpState==MovementState.none ? 5 : 15, 1000)
+					}
+				);
+			}
 
 
-			HandleMouse();
-
-			if (BoxGrounded() && state == PlayerState.slamming) state = PlayerState.walking;
 
 			// Movement
 
-			if (adminState != AdminState.noclip) {
-				if (shouldJump) Jump();
-				if (shouldSlide) StartCoroutine(Slide());
-				else if (shouldSlam) Slam();
-				if (shouldDash) Dash();
-			}
 
 			if(Input.GetKeyDown(KeyCode.LeftBracket)){
 				EntityLib.Entity.KillAll(typeof(ENM_Controller));
@@ -196,7 +226,7 @@ namespace Player {
 		public void Slam() {
 			state = PlayerState.slamming;
 			rb.linearVelocity = Vector3.zero;
-			rb.AddForce(0, -slam.force * Consts.Multipliers.SLAM_MULTIPLIER * Time.deltaTime, 0);
+			rb.AddForce(new Vector3(0, -slam.force *100f * Time.deltaTime, 0), ForceMode.Impulse);
 		}
 
 		public IEnumerator DecaySlide(float decaySpeed = -1f) {
@@ -378,10 +408,16 @@ namespace Player {
 			dash.state = MovementState.none;
 
 		}
+		bool noGravTimerOver = false;
+
+		IEnumerator SetNoGravTimerOver(){
+			noGravTimerOver=false;
+			yield return new WaitForSeconds(dash.noGravDashTime);
+			noGravTimerOver=true;
+		}
 
 		// Dash where gravity is disabled (The only dash if youre on the ground)
 		public IEnumerator NoGravityDash() {
-			timerOver = false;
 			rb.useGravity = false;
 
 			Invoke(nameof(Set0G), dash.noGravDashTime);
@@ -389,7 +425,7 @@ namespace Player {
 			dash.direction = Directions.DashDirection(this, true);
 
 			rb.linearVelocity = Vector3.zero;
-			while (!timerOver && !shouldSlam && adminState != AdminState.noclip) {
+			while (!noGravTimerOver && !shouldSlam && adminState != AdminState.noclip) {
 
 				rb.AddForce(dash.direction * dash.force * Time.deltaTime * Consts.Multipliers.DASH_MULTIPLIER);
 
@@ -420,6 +456,8 @@ namespace Player {
 			rb.useGravity = true;
 		}
 
+		Vector3 moveDirection;
+
 		public new void Move() {
 
 			hInp = Grounded() ? Input.GetAxisRaw("Horizontal") : Input.GetAxis("Horizontal");
@@ -434,6 +472,7 @@ namespace Player {
 			float airChange = Consts.Movement.AirSpeedChange(Grounded());
 
 			Vector3 force = (forward * vInp * (Grounded() ? fwSpeed : sdSpeed) * airChange) + (right * hInp * sdSpeed * airChange);
+			moveDirection=force;
 
 			slide.ChangeDirection(force.normalized);
 			dash.ChangeDirection(force.normalized);
@@ -480,6 +519,18 @@ namespace Player {
 			return false;
 		}
 
+		public bool OnSlope(){
+			if(Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + .3f)){
+				float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
+				return angle < maxSlopeAngle && angle!=0;
+			}
+			return false;
+		}
+
+		Vector3 GetSlopeMoveDirection(){
+			return Vector3.ProjectOnPlane(moveDirection.normalized, slopeHit.normal).normalized;
+		}
+
 
 
 		void HandleMouse() {
@@ -491,6 +542,7 @@ namespace Player {
 			currentXRotation -= mouseY;
 			currentXRotation = Mathf.Clamp(currentXRotation, minY, maxY);
 
+			if(playerCamera==null) playerCamera=Camera.main;
 			playerCamera.transform.localRotation = Quaternion.Euler(currentXRotation, 0f, 0f);
 		}
 
