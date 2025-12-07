@@ -193,7 +193,8 @@ namespace MathsAndSome
 
             public static GameObject GetPlayerObj() => GameObject.FindGameObjectWithTag(glob.playerTag);
             
-            public static Player.PL_Controller GetPlayer() => GetPlayerObj().GetComponent<Player.PL_Controller>();
+            public static Player.PL_Controller Player;
+            
             
 
             // public static Combat.CombatController GetCombat.CombatController()
@@ -214,13 +215,13 @@ namespace MathsAndSome
 
             public static List<Collider> RemovePlayerFromList(List<Collider> list)
             {
-                list.Remove(GetPlayer().GetComponent<CapsuleCollider>());
+                list.Remove(Player.GetComponent<CapsuleCollider>());
                 return list;
             }
 
             // public static Vector3 PlayerForward()
             // {
-            //     return GetPlayer().forwardObject.transform.forward;
+            //     return Player.forwardObject.transform.forward;
             // }
 
             // public static Mon GetMono()

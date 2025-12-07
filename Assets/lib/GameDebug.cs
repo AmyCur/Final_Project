@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace GameDebug
+namespace Cur.Settings
 {
     public static class Combat
     {
@@ -15,45 +15,4 @@ namespace GameDebug
     {
         public static bool drawJumpCollider = false;
     }
-
-    
-
-    // Im not smart enough :(
-    public static class JSON
-    {
-        // DO NOT USE FILE EXTENSIONS
-        const string filePath = "JSON/Settings";
-
-        static TextAsset LoadFile() => Resources.Load<TextAsset>(filePath);
-
-
-
-        public static void ReadSettings()
-        {
-            TextAsset file = LoadFile();
-
-
-            // DebugBool[] objs = JsonUtility.FromJson<DebugBool[]>(file.text);
-            // Bools bools = JsonUtility.FromJson<Bools>(file.text);
-
-            // foreach (B b in bools.booleans)
-            // {
-            //     Debug.Log(b._bool);
-            // }
-
-
-
-        }
-
-        public static void WriteSettings()
-        {
-
-        }
-    }
 }
-
-// class SettingsManager
-// {
-//     // [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-//     // static void Start() => GameDebug.JSON.ReadSettings();
-// }

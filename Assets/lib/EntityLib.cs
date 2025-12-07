@@ -16,7 +16,7 @@ namespace EntityLib {
 		};
 
 		static void KillPlayer(){ 
-			Player.PL_Controller pc = mas.player.GetPlayer();
+			Player.PL_Controller pc = mas.player.Player;
 			pc.health.h-=pc.health.h;
 		}
 

@@ -18,7 +18,7 @@ public class ThoughtBubble : MonoBehaviour {
 
     public void SetText(Dictionary<string, object> vars) => variablesText.text = SetVariablesText(vars);
 
-    Transform player => mas.player.GetPlayer().transform;
+    Transform player => mas.player.Player.transform;
 
     void Awake() {
         variablesText = GetComponent<TMP_Text>();

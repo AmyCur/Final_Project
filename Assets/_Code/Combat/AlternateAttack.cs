@@ -83,8 +83,22 @@ namespace Combat{
             public float vortexForce;
             public float vortexLifetime;
             public float vortexDamage;
-            public Vortex.Pullable pullable;
-            public Vortex.Polarity polarity;
+
+            public enum Pullable
+            {
+                enemy,
+                player,
+                both
+            }
+
+            public enum Polarity
+            {
+                inwards,
+                outwards
+            }
+
+            public Pullable pullable;
+            public Polarity polarity;
 
 
             [Header("Healing")]
@@ -153,19 +167,19 @@ namespace Combat{
                             if (col.TryGetComponent<Entity.ENT_Controller>(out Entity.ENT_Controller c))
                             {
                                 Vector3 dir = (col.transform.position - pc.transform.position).normalized;
-                                float f = polarity == Vortex.Polarity.inwards ? -vortexForce : vortexForce;
+                                float f = polarity == Polarity.inwards ? -vortexForce : vortexForce;
 
                                 switch (pullable)
                                 {
-                                    case Vortex.Pullable.enemy:
+                                    case Pullable.enemy:
                                         if (c is ENM_Controller enemC)
                                             enemC.SV.Add(new(dir * f, enemC));
                                         break;
-                                    case Vortex.Pullable.player:
+                                    case Pullable.player:
                                         if (c is Player.PL_Controller pc)
                                             pc.SV.Add(new(dir * f, pc));
                                         break;
-                                    case Vortex.Pullable.both:
+                                    case Pullable.both:
                                         (c as RB_Controller).SV.Add(new(dir * f, c as RB_Controller));
                                         break;
                                 }

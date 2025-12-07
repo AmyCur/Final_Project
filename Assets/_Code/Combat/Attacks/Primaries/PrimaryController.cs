@@ -34,7 +34,7 @@ public class PrimaryController : MonoBehaviour
 
 
 	void Start(){
-		player = mas.player.GetPlayer().gameObject;
+		player = mas.player.Player.gameObject;
 		rb=GetComponent<Rigidbody>();
 		direction = (player.transform.forward + Camera.main.transform.forward).normalized; 
 	}

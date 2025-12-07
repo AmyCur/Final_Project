@@ -270,7 +270,7 @@ namespace Cur.UI {
 
 
 		void Awake() {
-			pc = mas.player.GetPlayer();
+			pc = mas.player.Player;
 			cc = pc.GetComponent<Combat.CombatController>();
 			cdBars = new CooldownBar[2] { assistBar, abilityBar };
 

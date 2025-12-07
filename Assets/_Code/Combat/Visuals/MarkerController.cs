@@ -16,7 +16,7 @@ public class MarkerController : MonoBehaviour {
 
     void Awake() {
         sprite = GetComponent<SpriteRenderer>();
-        player = mas.player.GetPlayer().gameObject.transform;
+        player = mas.player.Player.gameObject.transform;
     }
 
 

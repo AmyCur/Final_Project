@@ -1,11 +1,11 @@
 using UnityEngine;
 using UnityEngine.UI;
-using GameDebug;
+using Cur.Settings;
 using Magical;
 
 public class ManageDropdown : MonoBehaviour
 {
-    public void EnableThoughts(bool status) => GameDebug.Combat.showThoughts = status;
+    public void EnableThoughts(bool status) => Cur.Settings.Combat.showThoughts = status;
     [SerializeField] GameObject dropdown;
 
 

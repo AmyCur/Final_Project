@@ -1,5 +1,5 @@
 ﻿using Elements;
-using GameDebug;
+using Cur.Settings;
 using MathsAndSome;
 using Newtonsoft.Json;
 using System.Collections;
@@ -182,7 +182,7 @@ namespace Entity {
 
 		void OnDrawGizmos() {
 			Gizmos.color = Color.red;
-			if (GameDebug.Combat.drawLightningArcRadius) Gizmos.DrawWireSphere(transform.position, Consts.lightningArcRange);
+			if (Cur.Settings.Combat.drawLightningArcRadius) Gizmos.DrawWireSphere(transform.position, Consts.lightningArcRange);
 		}
 	}
 }

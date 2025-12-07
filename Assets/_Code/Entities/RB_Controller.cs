@@ -48,7 +48,7 @@ public class RB_Controller : Entity.ENT_Controller {
 		public Impulse(Vector3 force, RB_Controller c) {
 			this.c = c;
 			this.force = force;
-			mas.player.GetPlayer().StartCoroutine(ReduceForce());
+			mas.player.Player.StartCoroutine(ReduceForce());
 		}
 	}
 

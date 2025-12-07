@@ -90,6 +90,10 @@ namespace Player {
 		[SerializeField] bool admin = true;
 
 
+		void Awake(){
+			MathsAndSome.mas.player.Player=this;
+		}
+
 		public override void SetStartDefaults() {
 			base.SetStartDefaults();
 

@@ -18,14 +18,14 @@ public class ThoughtBubbleCreator : MonoBehaviour {
     void Start()
     {
         UpdateRadius();
-        player = mas.player.GetPlayer().gameObject;
+        player = mas.player.Player.gameObject;
         textMenu = Resources.Load<GameObject>("Prefabs/Debugging/TextMenu");
     }
 
     void OnTriggerEnter(Collider other) {
         List<GameObject> currentBubbles = GameObject.FindGameObjectsWithTag("Thought").ToList();
 
-        if(Settings.Settings.Development.displayThoughts){
+        if(Cur.Settings.Settings.Development.displayThoughts){
             if (other.isEntity(typeof(ENM_Controller))) {
                 bool contains = false;
                 for (int i = 0; i < other.transform.childCount - 1; i++) {

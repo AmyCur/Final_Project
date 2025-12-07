@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using static EntityLib.Entity;
-using static GameDebug.Combat;
+using static Cur.Settings.Combat;
 using MathsAndSome;
 using System.Collections;
 using System.Collections.Generic;

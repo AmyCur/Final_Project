@@ -17,7 +17,7 @@ public class ProjectileController : MonoBehaviour {
 	[SerializeField] protected bool homing;
 
 	protected Vector3 GetPlayerVector() {
-		Vector3 player = mas.player.GetPlayer().transform.position;
+		Vector3 player = mas.player.Player.transform.position;
 		Vector3 delta = (transform.position - player).normalized;
 
 		return delta;

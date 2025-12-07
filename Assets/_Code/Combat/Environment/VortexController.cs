@@ -74,7 +74,7 @@ public class VortexController : MonoBehaviour {
         }
 
         void OnDrawGizmos() {
-            if (GameDebug.Combat.drawVortexRadius)
+            if (Cur.Settings.Combat.drawVortexRadius)
                 Gizmos.DrawWireSphere(transform.position, radius);
         }
     }

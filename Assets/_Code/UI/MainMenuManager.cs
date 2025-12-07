@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
 using TMPro;
-using UIManager;
+using Cur.UI;
 
 public class MainMenuManager : MonoBehaviour {
 	// True when buttons are in the centre, false when they have been slid to the left

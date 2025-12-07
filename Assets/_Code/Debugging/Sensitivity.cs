@@ -1,7 +1,6 @@
 using MathsAndSome;
 using UnityEngine;
 
-
 public class Sensitivity {
     public static RefreshRate refreshRate;
 
@@ -13,7 +12,7 @@ public class Sensitivity {
         if (shouldChange) {
             try
             {
-                Player.PL_Controller pc = mas.player.GetPlayer();
+                Player.PL_Controller pc = mas.player.Player;
                 if (pc != null) if (refreshRate.value > 60) { pc.mouseSensitivityX /= 2f; pc.mouseSensitivityY /= 2f; }
             }
             catch

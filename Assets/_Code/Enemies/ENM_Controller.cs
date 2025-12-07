@@ -23,7 +23,7 @@ public abstract class ENM_Controller : RB_Controller
 	[Header("State")]
 	public EnemyState eState;
 	protected Player.PL_Controller pc; 
-	protected Vector3 playerPosition=>mas.player.GetPlayer().transform.position;
+	protected Vector3 playerPosition=>mas.player.Player.transform.position;
 
 	[Header("Seeking")]
 
@@ -111,7 +111,7 @@ public abstract class ENM_Controller : RB_Controller
 	public override void Start() {
 		base.Start();
 		CheckRanges();
-		pc = mas.player.GetPlayer();
+		pc = mas.player.Player;
 		if(TryGetComponent<NavMeshAgent>(out NavMeshAgent ag)) agent = ag;
 	}
 

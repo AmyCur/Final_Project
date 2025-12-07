@@ -33,7 +33,7 @@ public class Player.PL_Controller : RB_Controller {
 	readonly Vector2 checkScale = new(.3f, 0.06f);
 
 	void OnDrawGizmos() {
-		if (GameDebug.Player.drawJumpCollider) {
+		if (Cur.Settings.Player.drawJumpCollider) {
 			Vector3 scale = gameObject.transform.localScale;
 			Vector3 pos = gameObject.transform.position;
 

@@ -12,6 +12,6 @@ public class CollisionChecker : MonoBehaviour {
     }
 
 	void Start() {
-        pc = mas.player.GetPlayer();
+        pc = mas.player.Player;
 	}
 }

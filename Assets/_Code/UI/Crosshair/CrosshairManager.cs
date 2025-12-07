@@ -13,15 +13,16 @@ public class CrosshairManager : MonoBehaviour
     [SerializeField] Sprite defaultImage;
     [SerializeField] Sprite enemyImage;
 
-
     void Start() {
-        pc = mas.player.GetPlayer();
+        //TODO: Add global player reference, so it doesnt need to be manually found every time
+        pc = mas.player.Player;
         image = GetComponent<Image>();
     }
 
     void Update() {
         if (Physics.Raycast(pc.playerCamera.transform.position, pc.playerCamera.transform.forward, out RaycastHit hit, 20f)) {
             switch (hit.collider.tag) {
+                //TODO: Fix this naming like what?
                 case glob.enemyTag:
                     image.sprite = Resources.Load<Sprite>("EnemyCursor");
                     break;
@@ -34,10 +35,5 @@ public class CrosshairManager : MonoBehaviour
         else {
             image.sprite = Resources.Load<Sprite>("default_cursor");
         }
-
-
-        
-
-        
     }
 }
