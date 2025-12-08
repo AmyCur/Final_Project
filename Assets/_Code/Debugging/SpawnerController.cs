@@ -47,7 +47,7 @@ namespace Combat
 		
 		[Header("Spawner")]
 		
-		[SerializeField] Enemy enemy;
+		public Enemy enemy;
 
 		public List<EnemyPathPair> enemyPaths;
 		const string basePath="Prefabs/Combat/Enemies/";
@@ -68,10 +68,14 @@ namespace Combat
 		public void Start(){
 			InitialiseEnemyObjects();
 		}
+
+		CombatController cc;
 	
 		public override void OnClick(){
 			if(Physics.Raycast(pc.cameraPos, pc.fw, out RaycastHit hit, range)){
-				Combat.Enemies.Spawning.SpawnEnemy(enemy, hit.point);
+				cc ??= MathsAndSome.mas.player.Player.GetComponent<CombatController>();
+				if(!(cc.spawner.assist as SpawnerMenuController).menuActivated)
+					Combat.Enemies.Spawning.SpawnEnemy(enemy, hit.point);
 			}
 		}
 

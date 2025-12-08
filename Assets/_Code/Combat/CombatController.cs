@@ -27,7 +27,7 @@ namespace Combat {
 		Cur.UI.HUDController hc;
 		Player.PL_Controller pc;
 		Coroutine AltCDBarRoutine;
-		[SerializeField] SingleAttack spawner;
+		public SingleAttack spawner;
 
 		void Update() {
 			if (ca != null) {

@@ -185,7 +185,7 @@ namespace MathsAndSome
         }
 
         public static class player
-        {
+        {	
             public static Vector3 PlayerDistance(GameObject player, GameObject gameObject)
             {
                 return vector.AbsVector(player.transform.position - gameObject.transform.position);
@@ -270,4 +270,3 @@ namespace MathsAndSome
     }
 
 }
-

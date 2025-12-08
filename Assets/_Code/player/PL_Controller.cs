@@ -94,6 +94,8 @@ namespace Player {
 
 		[SerializeField] bool admin = true;
 
+		public GameObject EnemySpawnScreen;
+
 
 		void Awake(){
 			MathsAndSome.mas.player.Player=this;
@@ -420,7 +422,7 @@ namespace Player {
 		public IEnumerator NoGravityDash() {
 			rb.useGravity = false;
 
-			Invoke(nameof(Set0G), dash.noGravDashTime);
+			StartCoroutine(SetNoGravTimerOver());
 
 			dash.direction = Directions.DashDirection(this, true);
 
