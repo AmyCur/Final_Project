@@ -140,7 +140,7 @@ namespace Combat {
 		// 	for (int i = 0; i < bps; i++) {
 
 		// 		Vector3 startPosition = pc.playerCamera.transform.position;
-		// 		//TODO: Implement random offset
+		// 		//Done: Implement random offset
 		// 		Vector3 direction = pc.playerCamera.transform.forward;
 		// 		float range = currentWeapon.maxRange;
 		// 		Debug.DrawLine(startPosition, startPosition + (direction * range), Color.green, 2);
@@ -175,5 +175,6 @@ namespace Combat {
 		// void OnDrawGizmos() {
 
 		// }
+		
 	}
 }

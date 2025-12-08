@@ -3,6 +3,11 @@ using UnityEngine.UI;
 using System.Collections;
 
 namespace Cur.UI {
+	public static class Props{
+		public static bool inMenu;
+	}
+
+
 	public static class ColorUtil {
 		// intesity should be between 0 and 1
 		public static Color Darken(this Color color, float intesity = 0.2f) {

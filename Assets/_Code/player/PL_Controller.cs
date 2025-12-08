@@ -2,7 +2,7 @@
 using UnityEngine;
 using Magical;
 using EntityLib;
-
+using Cur.UI;
 
 namespace Player {
 	[RequireComponent(typeof(AudioSource))]
@@ -393,7 +393,7 @@ namespace Player {
 
 
 			do {
-				rb.AddForce(dash.direction * dash.gravityDashForce * Consts.Multipliers.DASH_MULTIPLIER * Time.deltaTime);
+				rb.AddForce(dash.direction * dash.gravityDashForce * Consts.Multipliers.DASH_MULTIPLIER * Time.deltaTime, ForceMode.Acceleration);
 
 
 				yield return 0;
@@ -418,9 +418,17 @@ namespace Player {
 			noGravTimerOver=true;
 		}
 
+		IEnumerator DashCD(){
+			dash.can = false;
+			yield return new WaitForSeconds(0.2f);
+			dash.can = true;
+		}
+
 		// Dash where gravity is disabled (The only dash if youre on the ground)
 		public IEnumerator NoGravityDash() {
 			rb.useGravity = false;
+			yield return 0;
+			rb.linearVelocity=Vector3.zero;
 
 			StartCoroutine(SetNoGravTimerOver());
 
@@ -429,7 +437,7 @@ namespace Player {
 			rb.linearVelocity = Vector3.zero;
 			while (!noGravTimerOver && !shouldSlam && adminState != AdminState.noclip) {
 
-				rb.AddForce(dash.direction * dash.force * Time.deltaTime * Consts.Multipliers.DASH_MULTIPLIER);
+				rb.AddForce(dash.direction * dash.force * Time.deltaTime * Consts.Multipliers.DASH_MULTIPLIER, ForceMode.Acceleration);
 
 				yield return 0;
 			}
@@ -536,16 +544,19 @@ namespace Player {
 
 
 		void HandleMouse() {
-			float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensitivityX;
-			float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensitivityY;
+			if(!Props.inMenu){
+				float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensitivityX;
+				float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensitivityY;
 
-			transform.Rotate(Vector3.up * mouseX);
+				transform.Rotate(Vector3.up * mouseX);
 
-			currentXRotation -= mouseY;
-			currentXRotation = Mathf.Clamp(currentXRotation, minY, maxY);
+				currentXRotation -= mouseY;
+				currentXRotation = Mathf.Clamp(currentXRotation, minY, maxY);
 
-			if(playerCamera==null) playerCamera=Camera.main;
-			playerCamera.transform.localRotation = Quaternion.Euler(currentXRotation, 0f, 0f);
+				if(playerCamera==null) playerCamera=Camera.main;
+				playerCamera.transform.localRotation = Quaternion.Euler(currentXRotation, 0f, 0f);
+
+			}
 		}
 
 
