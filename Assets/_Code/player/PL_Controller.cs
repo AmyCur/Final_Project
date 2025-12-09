@@ -143,9 +143,9 @@ namespace Player {
 
 		public override void Update() {
 
-			base.Update();
-			HandleMouse();
-			HandleSlope();
+			base.Update(); //! works
+			HandleMouse(); //! works
+			HandleSlope(); //! works
 
 			if (adminState != AdminState.noclip) {
 				if (shouldJump) Jump();
@@ -155,15 +155,14 @@ namespace Player {
 
 			}
 
-			if (BoxGrounded() && state == PlayerState.slamming) state = PlayerState.walking;
-
+			if (BoxGrounded() && state == PlayerState.slamming) state = PlayerState.walking; //! works	
+			
 
 			// Globals.glob.Update();
-			if(hc!=null) hc.UpdateDash($"{dash.can} && {magic.key.down(keys.dash)} && {stamina.s} - {dash.staminaPer}");
-
-			if (hc != null) hc.UpdateHeath();
-			if(hc!=null && shouldDash){
-				hc.UpdateDash($"{shouldDash}");
+			hc?.UpdateDash($"{dash.can} && {magic.key.down(keys.dash)} && {stamina.s} - {dash.staminaPer}");
+			hc?.UpdateHeath();
+			if(shouldDash){
+				hc?.UpdateDash($"{shouldDash}");
 			}
 
 			if (health.takenDamage) {
@@ -429,7 +428,8 @@ namespace Player {
 			rb.useGravity = false;
 			yield return 0;
 			rb.linearVelocity=Vector3.zero;
-
+			
+			noGravTimerOver = false;
 			StartCoroutine(SetNoGravTimerOver());
 
 			dash.direction = Directions.DashDirection(this, true);
