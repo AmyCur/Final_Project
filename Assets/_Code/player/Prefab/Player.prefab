@@ -408,10 +408,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8234333527592107431}
-  serializedVersion: 5
+  serializedVersion: 4
   m_Mass: 5
-  m_LinearDamping: 1
-  m_AngularDamping: 0.05
+  m_Drag: 0
+  m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -440,7 +440,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90e2e910219492f4387f003fbfdf2ada, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 0.1
+  health:
+    h: 0
+    maxHealth: 100
+    canTakeDamage: 1
+    takenDamage: 0
   defence: 11
   currentElements: []
   burnDamage: 1e+12
@@ -451,39 +455,12 @@ MonoBehaviour:
   movementVector: {x: 0, y: 0, z: 0}
   rb: {fileID: 0}
   SV: []
+  canSlam: 1
   forwardSpeed: 35
   sidewaysSpeed: 28
-  canJump: 1
-  jumpForce: 30
-  groundedRange: 1.01
-  canSlam: 1
-  slide:
-    can: 1
-    speed: 45
-    decayIncrements: 1000
-    decaySpeed: 12
-    direction: {x: 0, y: 0, z: 0}
-    directionChangeSpeed: 0.03
-  dash:
-    can: 1
-    speed: 300
-    decayIncrements: 1000
-    decaySpeed: 10
-    direction: {x: 0, y: 0, z: 0}
-    directionChangeSpeed: 0.05
-    hardCDTime: 0.1
-    staminaPer: 30
-    gravityDashForce: 50
-    noGravDashTime: 0.3
-  dashDecaySpeed: 10
-  mouseSensitivityX: 2
-  mouseSensitivityY: 2
-  maxY: 90
-  minY: -90
-  state: 0
-  jumpState: 3
-  slideState: 3
-  slamState: 3
+  hc: {fileID: 0}
+  EnemySpawnScreen: {fileID: 0}
+  cameraPos: {x: 0, y: 0, z: 0}
   stamina:
     min: 0
     max: 100
@@ -492,10 +469,21 @@ MonoBehaviour:
     regenTime: 0.08
     staminaPerTick: 1
     pc: {fileID: 0}
-  playerCamera: {fileID: 0}
-  collider: {fileID: 2370751716845391844}
   forwardObject: {fileID: 9003766077271217922}
-  hc: {fileID: 0}
+  fw: {x: 0, y: 0, z: 0}
+  mouseSensitivityX: 2
+  mouseSensitivityY: 2
+  eyes: {fileID: 0}
+  movementLerpVector:
+    current: {x: 0, y: 0, z: 0}
+    target: {x: 0, y: 0, z: 0}
+    currentVelocity: {x: 0, y: 0, z: 0}
+    smoothTime: 0
+  globalLerpVector:
+    current: {x: 0, y: 0, z: 0}
+    target: {x: 0, y: 0, z: 0}
+    currentVelocity: {x: 0, y: 0, z: 0}
+    smoothTime: 0
 --- !u!82 &4819737068671345320
 AudioSource:
   m_ObjectHideFlags: 0
@@ -605,9 +593,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 136d6ca7bd6592c4090e0daeab8d83f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ca: {fileID: 0}
+  ca:
+    primary: {fileID: 0}
+    assist: {fileID: 0}
+    ability: {fileID: 0}
+  caIndex: 0
   attacks:
-  - {fileID: 11400000, guid: 976507b6789c4c9e38f93d0d70fe4fd2, type: 2}
+  - primary: {fileID: 0}
+    assist: {fileID: 0}
+    ability: {fileID: 0}
+  spawner:
+    primary: {fileID: 0}
+    assist: {fileID: 0}
+    ability: {fileID: 0}
 --- !u!23 &2585626425837964548
 MeshRenderer:
   m_ObjectHideFlags: 0
