@@ -34,6 +34,8 @@ namespace Player {
 
 		[Header("Movement")]
 
+		public float maxSpeed=32f;
+
 		Vector3 forwards => transform.forward;
 		Vector3 right => transform.right;
 
@@ -69,6 +71,11 @@ namespace Player {
 				current = Vector3.SmoothDamp(current,target,ref currentVelocity, smoothTime);
 				return current;
 			}
+			public void Reset(){
+				this.target = Vector3.zero;
+				this.current= Vector3.zero;
+				this.currentVelocity= Vector3.zero;
+			}
 		}
 
 		public LerpVector movementLerpVector;
@@ -101,30 +108,48 @@ namespace Player {
 			movementLerpVector.finalVector();
 		}
 
+		bool justJumped;
+
+		IEnumerator WaitAfterJump(){
+			justJumped=true;
+			yield return new WaitForSeconds(0.1f);
+			justJumped=false;
+		}
+
 		public IEnumerator HandleJump(){
-			Debug.Log("Jump");
-			
-			jumpLerpVector.target = Vector3.zero;
+			canJump=false;
+			StartCoroutine(WaitAfterJump());
+			jumpLerpVector.Reset();
+
 			jumpLerpVector.current=new Vector3(0,jumpForce*Time.deltaTime*80f,0);
-			jumpLerpVector.smoothTime=1f;
-			do{
+			while(!(!justJumped && Grounded())){
+				Debug.Log("Doing");
 				jumpLerpVector.finalVector();
 				yield return 0;
-			}while(!shouldJump);
+			}
+
+			jumpLerpVector.Reset();
+			canJump=true;
 		}
+
+		public override void FixedUpdate(){}
 
 		public override void Update()
         {
             HandleMouse();
 			HandleMovement();
 
-			Debug.Log($"{magic.key.down(keys.jump)} && {canJump} && {Grounded()}");
+			if(rb.linearVelocity.magnitude > maxSpeed){
+				rb.linearVelocity = rb.linearVelocity.normalized * maxSpeed;
+			}
 			
-			if(shouldJump) StartCoroutine(HandleJump());
+			if(shouldJump) {
+				StartCoroutine(HandleJump());
+			}
 
 
-			globalLerpVector.target=movementLerpVector.finalVector();
-			rb.AddForce(globalLerpVector.finalVector()+jumpLerpVector.finalVector()*Time.deltaTime*80f);
+			globalLerpVector.target=movementLerpVector.finalVector()+jumpLerpVector.finalVector();
+			rb.AddForce(globalLerpVector.finalVector()*Time.deltaTime*80f);
 		}
 
 		public override void Start(){

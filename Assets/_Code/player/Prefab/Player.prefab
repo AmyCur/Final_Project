@@ -367,7 +367,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5766768589114410277}
   - component: {fileID: 3994985137764270263}
-  - component: {fileID: 8395698010380907392}
   - component: {fileID: 4819737068671345320}
   - component: {fileID: 5154177159871973030}
   - component: {fileID: 2585626425837964548}
@@ -428,62 +427,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 1
---- !u!114 &8395698010380907392
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8234333527592107431}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90e2e910219492f4387f003fbfdf2ada, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  health:
-    h: 0
-    maxHealth: 100
-    canTakeDamage: 1
-    takenDamage: 0
-  defence: 11
-  currentElements: []
-  burnDamage: 1e+12
-  burnDuration: 5
-  currentBurnTime: 5
-  burning: 0
-  canMove: 1
-  movementVector: {x: 0, y: 0, z: 0}
-  rb: {fileID: 0}
-  SV: []
-  canSlam: 1
-  forwardSpeed: 35
-  sidewaysSpeed: 28
-  hc: {fileID: 0}
-  EnemySpawnScreen: {fileID: 0}
-  cameraPos: {x: 0, y: 0, z: 0}
-  stamina:
-    min: 0
-    max: 100
-    s: 100
-    regenerating: 0
-    regenTime: 0.08
-    staminaPerTick: 1
-    pc: {fileID: 0}
-  forwardObject: {fileID: 9003766077271217922}
-  fw: {x: 0, y: 0, z: 0}
-  mouseSensitivityX: 2
-  mouseSensitivityY: 2
-  eyes: {fileID: 0}
-  movementLerpVector:
-    current: {x: 0, y: 0, z: 0}
-    target: {x: 0, y: 0, z: 0}
-    currentVelocity: {x: 0, y: 0, z: 0}
-    smoothTime: 0
-  globalLerpVector:
-    current: {x: 0, y: 0, z: 0}
-    target: {x: 0, y: 0, z: 0}
-    currentVelocity: {x: 0, y: 0, z: 0}
-    smoothTime: 0
 --- !u!82 &4819737068671345320
 AudioSource:
   m_ObjectHideFlags: 0
