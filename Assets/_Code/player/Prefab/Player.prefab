@@ -371,6 +371,7 @@ GameObject:
   - component: {fileID: 5154177159871973030}
   - component: {fileID: 2585626425837964548}
   - component: {fileID: 8912256188255317000}
+  - component: {fileID: 9067841097976484239}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -602,6 +603,93 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8234333527592107431}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &9067841097976484239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8234333527592107431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90e2e910219492f4387f003fbfdf2ada, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health:
+    h: 100
+    maxHealth: 100
+    canTakeDamage: 1
+    takenDamage: 0
+  defence: 0
+  currentElements: []
+  burnDamage: 10
+  burnDuration: 5
+  currentBurnTime: 5
+  burning: 0
+  canMove: 1
+  movementVector: {x: 0, y: 0, z: 0}
+  rb: {fileID: 0}
+  SV: []
+  state: 0
+  jumpState: 3
+  slideState: 3
+  slamState: 3
+  adminState: 0
+  forwardSpeed: 35
+  sidewaysSpeed: 28
+  canJump: 1
+  jumpForce: 45
+  groundedRange: 1.08
+  canSlam: 0
+  slide:
+    can: 1
+    force: 45
+    decayIncrements: 1000
+    decaySpeed: 10
+    direction: {x: 0, y: 0, z: 0}
+    directionChangeSpeed: 0.03
+    state: 3
+  dash:
+    can: 1
+    force: 45
+    decayIncrements: 1000
+    decaySpeed: 10
+    direction: {x: 0, y: 0, z: 0}
+    directionChangeSpeed: 0.03
+    state: 3
+    hardCDTime: 0.1
+    staminaPer: 30
+    gravityDashForce: 50
+    noGravDashTime: 0.3
+  mouseSensitivityX: 1
+  mouseSensitivityY: 1
+  maxY: 90
+  minY: -90
+  stamina:
+    min: 0
+    max: 100
+    s: 0
+    regenerating: 0
+    regenTime: 0
+    staminaPerTick: 1
+    pc: {fileID: 0}
+  slam:
+    can: 1
+    force: 100
+    decayIncrements: 1000
+    decaySpeed: 10
+    direction: {x: 0, y: 0, z: 0}
+    directionChangeSpeed: 0.03
+    state: 3
+  playerCamera: {fileID: 0}
+  collider: {fileID: 2370751716845391844}
+  maxSlopeAngle: 30
+  forwardObject: {fileID: 9003766077271217922}
+  hc: {fileID: 0}
+  admin: 1
+  EnemySpawnScreen: {fileID: 0}
+  slideCameraObject: {fileID: 0}
+  defaultCameraObject: {fileID: 0}
 --- !u!1 &8584592726464020769
 GameObject:
   m_ObjectHideFlags: 0
