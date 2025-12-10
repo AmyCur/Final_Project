@@ -41,6 +41,8 @@ namespace Player {
 		[Header("Slam")]
 
 		public bool canSlam;
+		[SerializeField] float finalSlamVelocity;
+		[SerializeField] float slamCheckRange=2f;
 
 		[Header("Sliding")]
 
@@ -150,24 +152,30 @@ namespace Player {
 
 		}
 
+		public void HandleMove(){
+			if (shouldJump) Jump();
+			if (shouldDash) Dash();
+			if (shouldSlide) StartCoroutine(Slide());
+			else if (shouldSlam) Slam();
+		}
+
+		IEnumerator HandleSlamMomentumPreservation(){
+			finalSlamVelocity=rb.linearVelocity.y;
+			yield return new WaitForSeconds(0.3f);
+			finalSlamVelocity=0f;
+		}
+
 		public override void Update() {
 
 			base.Update();
 			HandleMouse();
 			HandleSlope();
 			ClampIfRampTooSteep();
+			if (adminState != AdminState.noclip) HandleMove();
 
-
-			if (adminState != AdminState.noclip) {
-				if (shouldJump) Jump();
-				if (shouldDash) Dash();
-				if (shouldSlide) StartCoroutine(Slide());
-				else if (shouldSlam) Slam();
-
-			}
 
 			if (BoxGrounded(1.3f) && state == PlayerState.slamming) state = PlayerState.walking;
-
+			if (BoxGrounded(slamCheckRange) && state == PlayerState.slamming) StartCoroutine(HandleSlamMomentumPreservation());
 
 			// Globals.glob.Update();
 			if(hc!=null) hc.UpdateDash($"{dash.can} && {magic.key.down(keys.dash)} && {stamina.s} - {dash.staminaPer}");
@@ -176,7 +184,8 @@ namespace Player {
 			if(hc!=null && shouldDash){
 				hc.UpdateDash($"{shouldDash}");
 			}
-
+			
+			//TODO: Clean COde
 			if (health.takenDamage) {
 				health.takenDamage = false;
 				StartCoroutine(IFrames());
@@ -253,7 +262,7 @@ namespace Player {
 		public void Slam() {
 			state = PlayerState.slamming;
 			rb.linearVelocity = Vector3.zero;
-			rb.AddForce(new Vector3(0, -slam.force *100f * Time.deltaTime, 0), ForceMode.Impulse);
+			rb.AddForce(new Vector3(0, -slam.force *100f * Time.deltaTime, 0));
 		}
 
 		public IEnumerator DecaySlide(float decaySpeed = -1f) {
@@ -329,7 +338,7 @@ namespace Player {
 			cameraSlideRoutine = StartCoroutine(LerpCameraSlide(true));
 
 			do {
-				rb.AddForce(direction * slide.force * Consts.Multipliers.SLIDE_MULTIPLIER * Time.deltaTime);
+				rb.AddForce(direction * (slide.force+finalSlamVelocity) * Consts.Multipliers.SLIDE_MULTIPLIER * Time.deltaTime);
 				yield return 0;
 			} while (magic.key.gk(keys.slide) && !shouldJump  && state != PlayerState.slamming && adminState != AdminState.noclip);
 

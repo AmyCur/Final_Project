@@ -90,7 +90,7 @@ namespace Cur.UI {
 
 	public class HUDController : MonoBehaviour {
 		// Paths
-		Player.PL_Controller pc;
+		Player.PL_Controller pc=>mas.player.Player;
 
 		const string baseIconPath = "UI/Icons/Elements/";
 		const string windPath = baseIconPath + "Wind";
@@ -167,7 +167,10 @@ namespace Cur.UI {
 		[SerializeField] Color inactiveBackgroundColor = new Color(1f, 0f, 0f);
 		[SerializeField] Color currentBackgroundColor = new Color(230f / 255f, 209f / 255f, 165f / 255f);
 
-		Combat.CombatController cc;
+		Combat.CombatController cc => mas.player.Combat;
+
+
+
 
 
 		[SerializeField] TMP_Text dash;
@@ -277,8 +280,6 @@ namespace Cur.UI {
 		}
 
 		void Start() {
-			cc=mas.player.Combat;
-			pc=mas.player.Player;
 			// cdBars = new CooldownBar[2] { assistBar, abilityBar };
 
 			UpdateWeaponIcons();
