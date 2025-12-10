@@ -4,6 +4,7 @@ using MathsAndSome;
 using System.Collections.Generic;
 using UnityEngine;
 using Combat.Attacks;
+using System.Threading.Tasks;
 
 namespace Combat {
 
@@ -29,6 +30,13 @@ namespace Combat {
 		Coroutine AltCDBarRoutine;
 		public SingleAttack spawner;
 
+		void Awake(){
+			mas.player.Combat=this;
+			if (ca.primary == null) ca = attacks[0];
+			caIndex = 0;
+
+		}
+
 		void Update() {
 			if (ca != null) {
 				if (magic.key.down(keys.attack) && ca.primary.canAttack) ca.primary.OnClick();
@@ -50,8 +58,6 @@ namespace Combat {
 			(spawner.primary as SpawnerController).Start();
 
 
-			if (ca.primary == null) ca = attacks[0];
-			caIndex = 0;
 			hc.UpdateWeaponBackgrounds();
 			hc.UpdateWeaponScale();
 			hc.assistBar.UpdateAbilityIcon(ca.assist.icon);

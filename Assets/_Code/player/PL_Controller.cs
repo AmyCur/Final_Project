@@ -4,14 +4,6 @@ using Magical;
 using EntityLib;
 using Cur.UI;
 
-// Note: Weird jittering doesnt happen in build!?
-
-using System.Collections;
-using UnityEngine;
-using Magical;
-using EntityLib;
-using Cur.UI;
-
 namespace Player {
 	[RequireComponent(typeof(AudioSource))]
 	public class PL_Controller : RB_Controller {
@@ -35,6 +27,9 @@ namespace Player {
 		[Header("Movement")]
 		public float forwardSpeed = 12f;
 		public float sidewaysSpeed = 12f;
+		public float maxSpeed = 35f;
+		public float maxVerticalSpeed = 35f;
+		public LayerMask playerMask;
 
 
 		[Header("Jumping")]
@@ -121,12 +116,18 @@ namespace Player {
 		}
 
 		public override void FixedUpdate() {
-			base.FixedUpdate();
+			// base.FixedUpdate();
 
 			if (state != PlayerState.sliding && state != PlayerState.slamming && canMove) {
 				if (adminState == AdminState.standard) this.Move();
 				else this.AdminMove();
 			}
+			
+			Vector2 hVel = new Vector2(rb.linearVelocity.x, rb.linearVelocity.z);
+			if(hVel.magnitude>maxSpeed) hVel=hVel.normalized*maxSpeed;
+			
+			rb.linearVelocity = new Vector3(hVel.x, rb.linearVelocity.y, hVel.y);
+			// rb.linearVelocity = new Vector3(Mathf.Clamp(rb.linearVelocity.x, 0, maxSpeed), rb.linearVelocity.y, Mathf.Clamp(rb.linearVelocity.z,0,maxSpeed));
 		}
 
 		IEnumerator IFrames() {
@@ -165,7 +166,7 @@ namespace Player {
 
 			}
 
-			if (BoxGrounded() && state == PlayerState.slamming) state = PlayerState.walking;
+			if (BoxGrounded(1.3f) && state == PlayerState.slamming) state = PlayerState.walking;
 
 
 			// Globals.glob.Update();
@@ -219,7 +220,10 @@ namespace Player {
 			if (admin){
 				adminState = adminState == AdminState.standard ? AdminState.noclip : AdminState.standard;
 				rb.useGravity = adminState != AdminState.noclip;
-				collider.isTrigger = adminState == AdminState.noclip;
+
+				foreach(CapsuleCollider col in GetComponentsInChildren(typeof(CapsuleCollider))){
+					col.isTrigger = adminState == AdminState.noclip;
+				}
 				stamina.s=stamina.max;
 			}
 		}
@@ -538,7 +542,7 @@ namespace Player {
 
 
 
-		public bool Grounded(float m = 1f) => Physics.Raycast(collider.transform.position, Vector3.down, transform.localScale.y * groundedRange*m);
+		public bool Grounded(float m = 1f) => Physics.Raycast(collider.transform.position, Vector3.down, transform.localScale.y * groundedRange*m, ~playerMask);
 		public bool BoxGrounded(float m = 1f){
 			Vector3 startPos = transform.position-new Vector3(0,transform.localScale.y/2f,0);
 			Collider[] colliders = Physics.OverlapBox(startPos, new Vector3(transform.localScale.x*.2f,0.5f*m,transform.localScale.z*.2f));

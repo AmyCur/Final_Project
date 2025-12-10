@@ -5,6 +5,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Threading.Tasks;
 
 namespace Cur.UI {
 	public static class BarColors {
@@ -109,7 +110,7 @@ namespace Cur.UI {
 		public CooldownBar assistBar;
 		public CooldownBar abilityBar;
 
-		[HideInInspector] public CooldownBar[] cdBars;
+		public CooldownBar[] cdBars;
 
 		[System.Serializable]
 		public class LerpableImage {
@@ -231,17 +232,13 @@ namespace Cur.UI {
 		}
 
 		public void UpdateHeath() {
-
-
 			healthBar.value = pc.health.h;
-
 
 			healthBar.fillRect.GetComponent<Image>().color = ColorUtil.Lerp(Color.red, Color.green, pc.health.h / 100f);
 
 			healthBar.transform.GetChild(0).GetComponent<Image>().color = ColorUtil.Lerp(Color.red.Darken(), Color.green.Darken(), pc.health.h / 100f);
 
 			healthText.text = Mathf.CeilToInt(pc.health.h).ToString() + " +";
-
 		}
 
 
@@ -272,14 +269,6 @@ namespace Cur.UI {
 		}
 
 
-		void Awake() {
-			pc = mas.player.Player;
-			cc = pc.GetComponent<Combat.CombatController>();
-			cdBars = new CooldownBar[2] { assistBar, abilityBar };
-
-
-			UpdateWeaponIcons();
-		}
 
 		void UpdateAllBarColors() {
 			foreach (CooldownBar bar in cdBars) {
@@ -287,7 +276,15 @@ namespace Cur.UI {
 			}
 		}
 
-		void Start() => UpdateAllBarColors();
+		void Start() {
+			cc=mas.player.Combat;
+			pc=mas.player.Player;
+			// cdBars = new CooldownBar[2] { assistBar, abilityBar };
+
+			UpdateWeaponIcons();
+
+			UpdateAllBarColors();
+		}
 
 	}
 }

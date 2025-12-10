@@ -101,7 +101,7 @@ namespace Player {
 		public float max;
 		public float s;
 		public bool regenerating;
-		public float regenTime;
+		public float regenTime=0.03f;
 		public float staminaPerTick = 1f;
 
 		[HideInInspector] public PL_Controller pc;
