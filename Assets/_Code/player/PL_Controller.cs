@@ -60,8 +60,6 @@ namespace Player {
 
 		float currentXRotation;
 
-
-
 		[Header("Stamina")]
 
 		public Stamina stamina;
@@ -72,6 +70,7 @@ namespace Player {
 
 		[HideInInspector] public Camera playerCamera;
 		[SerializeField] new CapsuleCollider collider;
+		[SerializeField] CapsuleCollider footCollider;
 		float playerHeight => collider.height;
 		//
 
@@ -170,6 +169,8 @@ namespace Player {
 			//* Combat
 			HandleIFrames();
 			if (hc != null) hc.UpdateHeath();			
+
+			OnAnySlope();
 		}
 
 		public override void FixedUpdate() {
@@ -246,8 +247,6 @@ namespace Player {
 				stamina.s=stamina.max;
 			}
 		}
-
-
 		//* Stamina
 
 		public IEnumerator RegenerateStamina() {
@@ -573,8 +572,22 @@ namespace Player {
 			return false;
 		}
 
+		public bool OnAnySlope(){
+			if(Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 1f)){
+				float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
+				if(angle!=0f) footCollider.material.dynamicFriction=0f;
+				else footCollider.material.dynamicFriction=8f;
+				Debug.Log(angle);
+
+				return angle!=0;
+			}
+
+			footCollider.material.dynamicFriction=8f;
+			return false;
+		}
+
 		public bool OnSlope(){
-			if(Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + .3f)){
+			if(Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + .5f)){
 				float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
 				return angle < maxSlopeAngle && angle!=0;
 			}

@@ -541,10 +541,11 @@ GameObject:
   - component: {fileID: 5766768589114410277}
   - component: {fileID: 3994985137764270263}
   - component: {fileID: 4819737068671345320}
-  - component: {fileID: 5154177159871973030}
   - component: {fileID: 2585626425837964548}
   - component: {fileID: 8912256188255317000}
   - component: {fileID: 9067841097976484239}
+  - component: {fileID: 5154177159871973030}
+  - component: {fileID: 4566860650058365262}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -700,34 +701,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &5154177159871973030
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8234333527592107431}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 136d6ca7bd6592c4090e0daeab8d83f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ca:
-    primary: {fileID: 0}
-    assist: {fileID: 0}
-    ability: {fileID: 0}
-  caIndex: 0
-  attacks:
-  - primary: {fileID: 11400000, guid: bf07fa17147c12d41975f4dadfa1e38d, type: 2}
-    assist: {fileID: 11400000, guid: e31e9a871ba9fb4a0a3b47f7e4c84197, type: 2}
-    ability: {fileID: 11400000, guid: 739dd84f60b81394687216b89fbb4e83, type: 2}
-  - primary: {fileID: 11400000, guid: bf07fa17147c12d41975f4dadfa1e38d, type: 2}
-    assist: {fileID: 11400000, guid: 96f2cc3f10d6a8a4bbb0e52e2e00957c, type: 2}
-    ability: {fileID: 11400000, guid: f83a12c272f1f764cb5962dd77f1df24, type: 2}
-  spawner:
-    primary: {fileID: 11400000, guid: 01451b0a408e01de8960f2820491f40f, type: 2}
-    assist: {fileID: 11400000, guid: 2936212ccb55e792a85926c9d81a087e, type: 2}
-    ability: {fileID: 0}
 --- !u!23 &2585626425837964548
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -824,6 +797,8 @@ MonoBehaviour:
   jumpForce: 15
   groundedRange: 1.08
   canSlam: 0
+  finalSlamVelocity: 0
+  slamCheckRange: 2
   slide:
     can: 1
     force: 17
@@ -873,6 +848,47 @@ MonoBehaviour:
   EnemySpawnScreen: {fileID: 0}
   slideCameraObject: {fileID: 5841656605122212576}
   defaultCameraObject: {fileID: 7538235255167714517}
+--- !u!114 &5154177159871973030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8234333527592107431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 136d6ca7bd6592c4090e0daeab8d83f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ca:
+    primary: {fileID: 0}
+    assist: {fileID: 0}
+    ability: {fileID: 0}
+  caIndex: 0
+  attacks:
+  - primary: {fileID: 11400000, guid: bf07fa17147c12d41975f4dadfa1e38d, type: 2}
+    assist: {fileID: 11400000, guid: e31e9a871ba9fb4a0a3b47f7e4c84197, type: 2}
+    ability: {fileID: 11400000, guid: 739dd84f60b81394687216b89fbb4e83, type: 2}
+  - primary: {fileID: 11400000, guid: bf07fa17147c12d41975f4dadfa1e38d, type: 2}
+    assist: {fileID: 11400000, guid: 96f2cc3f10d6a8a4bbb0e52e2e00957c, type: 2}
+    ability: {fileID: 11400000, guid: f83a12c272f1f764cb5962dd77f1df24, type: 2}
+  spawner:
+    primary: {fileID: 11400000, guid: 01451b0a408e01de8960f2820491f40f, type: 2}
+    assist: {fileID: 11400000, guid: 2936212ccb55e792a85926c9d81a087e, type: 2}
+    ability: {fileID: 0}
+--- !u!114 &4566860650058365262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8234333527592107431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3636744f61d209cd5910bd85f5240667, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnPoint: {fileID: 0}
 --- !u!1 &8584592726464020769
 GameObject:
   m_ObjectHideFlags: 0

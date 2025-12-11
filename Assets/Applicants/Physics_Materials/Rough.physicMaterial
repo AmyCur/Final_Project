@@ -9,7 +9,7 @@ PhysicsMaterial:
   m_Name: Rough
   serializedVersion: 2
   m_DynamicFriction: 8
-  m_StaticFriction: 8
+  m_StaticFriction: 0
   m_Bounciness: 0
   m_FrictionCombine: 0
   m_BounceCombine: 0
