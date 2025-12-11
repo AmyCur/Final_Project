@@ -8,8 +8,6 @@ namespace Player {
 	[RequireComponent(typeof(AudioSource))]
 	public class PL_Controller : RB_Controller {
 
-
-
 		bool shouldJump => canJump && BoxGrounded(justSlid ? 2f : 1.3f) && magic.key.down(keys.jump);
 		bool shouldSlide => slide.can && Grounded(1.3f) && magic.key.down(keys.slide) && state != PlayerState.sliding;
 		bool shouldDash => dash.can && magic.key.down(keys.dash) && stamina.s - dash.staminaPer >= 0;
@@ -101,7 +99,7 @@ namespace Player {
 
 		public GameObject EnemySpawnScreen;
 
-
+		#region Start
 		void Awake(){
 			MathsAndSome.mas.player.Player=this;
 		}
@@ -115,6 +113,63 @@ namespace Player {
 			playerCamera = Camera.main;
 			Cursor.lockState = CursorLockMode.Locked;
 			Cursor.visible = false;
+		}
+		#endregion
+
+		#region Update
+
+		void AdminFunctionality()
+        {
+            if(Input.GetKeyDown(KeyCode.LeftBracket)) EntityLib.Entity.KillAll(typeof(ENM_Controller));
+			if (magic.key.down(keys.noclip)) CheckForAdmin();
+        }
+
+		void HandleIFrames()
+        {
+            if (health.takenDamage) {
+				health.takenDamage = false;
+				StartCoroutine(IFrames());
+			}
+        }
+
+		void HandleSlamEnding()
+        {
+            if (BoxGrounded(1.3f) && state == PlayerState.slamming) state = PlayerState.walking;
+			if (BoxGrounded(slamCheckRange) && state == PlayerState.slamming) StartCoroutine(HandleSlamMomentumPreservation());
+        }
+
+		void HardClampVelocity()
+        {
+            if(rb!=null){
+				rb.linearVelocity = MathsAndSome.mas.vector.ClampVector(rb.linearVelocity, new Vector3[]
+					{
+						new Vector3(-1_000,-1_000,-1_000),
+						new Vector3(1000, jumpState==MovementState.none ? 5 : 15, 1000)
+					}
+				);
+			}
+        }
+
+		public override void Update() {
+
+			base.Update();
+
+			//* Movement
+			HandleMove();
+			HandleMouse();
+			HardClampVelocity();
+			HandleSlamEnding();
+
+			//* Slope Movement
+			HandleSlope();
+			ClampIfRampTooSteep();
+
+			//* Admin Movement
+			AdminFunctionality();
+
+			//* Combat
+			HandleIFrames();
+			if (hc != null) hc.UpdateHeath();			
 		}
 
 		public override void FixedUpdate() {
@@ -131,6 +186,7 @@ namespace Player {
 			rb.linearVelocity = new Vector3(hVel.x, rb.linearVelocity.y, hVel.y);
 			// rb.linearVelocity = new Vector3(Mathf.Clamp(rb.linearVelocity.x, 0, maxSpeed), rb.linearVelocity.y, Mathf.Clamp(rb.linearVelocity.z,0,maxSpeed));
 		}
+		#endregion
 
 		IEnumerator IFrames() {
 			health.canTakeDamage = false;
@@ -148,15 +204,16 @@ namespace Player {
 			else{
 				if(adminState != AdminState.noclip) rb.useGravity=true;
 			}
-
-
 		}
 
 		public void HandleMove(){
-			if (shouldJump) Jump();
-			if (shouldDash) Dash();
-			if (shouldSlide) StartCoroutine(Slide());
-			else if (shouldSlam) Slam();
+            if (adminState != AdminState.noclip)
+            {
+                if (shouldJump) Jump();
+				if (shouldDash) Dash();
+				if (shouldSlide) StartCoroutine(Slide());
+				else if (shouldSlam) Slam();
+            }
 		}
 
 		IEnumerator HandleSlamMomentumPreservation(){
@@ -165,58 +222,11 @@ namespace Player {
 			finalSlamVelocity=0f;
 		}
 
-		public override void Update() {
-
-			base.Update();
-			HandleMouse();
-			HandleSlope();
-			ClampIfRampTooSteep();
-			if (adminState != AdminState.noclip) HandleMove();
-
-
-			if (BoxGrounded(1.3f) && state == PlayerState.slamming) state = PlayerState.walking;
-			if (BoxGrounded(slamCheckRange) && state == PlayerState.slamming) StartCoroutine(HandleSlamMomentumPreservation());
-
-			// Globals.glob.Update();
-			if(hc!=null) hc.UpdateDash($"{dash.can} && {magic.key.down(keys.dash)} && {stamina.s} - {dash.staminaPer}");
-
-			if (hc != null) hc.UpdateHeath();
-			if(hc!=null && shouldDash){
-				hc.UpdateDash($"{shouldDash}");
-			}
-			
-			//TODO: Clean COde
-			if (health.takenDamage) {
-				health.takenDamage = false;
-				StartCoroutine(IFrames());
-			}
-
-			if(rb!=null){
-				rb.linearVelocity = MathsAndSome.mas.vector.ClampVector(rb.linearVelocity, new Vector3[]
-					{
-						new Vector3(-1_000,-1_000,-1_000),
-						new Vector3(1000, jumpState==MovementState.none ? 5 : 15, 1000)
-					}
-				);
-			}
-
-
-
-			// Movement
-
-
-			if(Input.GetKeyDown(KeyCode.LeftBracket)){
-				EntityLib.Entity.KillAll(typeof(ENM_Controller));
-			}
-
-
-			if (magic.key.down(keys.noclip)) CheckForAdmin();
-
-		}
+		
 
 		public void ClampIfRampTooSteep(){
 			if(Physics.Raycast(transform.position-new Vector3(0f,transform.localScale.y/2f,0f), transform.forward, out RaycastHit hit, 1f)){
-				Debug.Log(hit.collider.name);
+				Debug.Log(hit.normal);
 				float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
 				if(angle>maxSlopeAngle && angle < 90f){
 					Debug.Log("Thats high");
