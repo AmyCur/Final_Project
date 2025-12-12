@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Magical;
 using EntityLib;
@@ -573,15 +574,17 @@ namespace Player {
 		}
 
 		public bool OnAnySlope(){
-			if(Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 1f)){
+			
+			if(Physics.Raycast(footCollider.transform.position, Vector3.down, out slopeHit, 0.6f, ~playerMask) || Physics.Raycast(footCollider.transform.position, MathsAndSome.mas.vector.MultiplyVectors(new List<Vector3>(){Vector3.forward,moveDirection.normalized}), out slopeHit, .5f, ~playerMask)){
 				float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
 				if(angle!=0f) footCollider.material.dynamicFriction=0f;
 				else footCollider.material.dynamicFriction=8f;
 				Debug.Log(angle);
 
 				return angle!=0;
-			}
 
+			}
+			
 			footCollider.material.dynamicFriction=8f;
 			return false;
 		}
