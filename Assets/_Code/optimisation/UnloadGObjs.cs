@@ -8,13 +8,12 @@ public class UnloadOjbs : MonoBehaviour{
 	void UnloadObjects(){
 		if(objsToUnload.Length == 0) return;
 
-		foreach(GameObject obj in objsToUnload){
-			obj.SetActive(false);
+		foreach(GameObject ob in objsToUnload){
+			ob.SetActive(false);
 		}
 	}
 
-
 	void OnTriggerEnter(Collider other){
-		if(other.isEntity(typeof(Player.PL_Controller))) UnloadObjects();
+		if(other.CompareTag("PlayerChild")) UnloadObjects();
 	}
 }

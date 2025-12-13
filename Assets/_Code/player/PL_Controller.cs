@@ -85,6 +85,8 @@ namespace Player {
 		[Header("Slope")]
 
 		public float maxSlopeAngle=30f;
+		[SerializeField] float defaultFriction;
+		[SerializeField] float slopeFriction=0.5f;
 		RaycastHit slopeHit;
 
 		public GameObject forwardObject;
@@ -106,6 +108,9 @@ namespace Player {
 
 		public override void SetStartDefaults() {
 			base.SetStartDefaults();
+
+			//FIXME: The player CANNOT start on a slope!!!!
+			defaultFriction=footCollider.material.dynamicFriction;
 
 			stamina.pc = this;
 
@@ -171,7 +176,7 @@ namespace Player {
 			HandleIFrames();
 			if (hc != null) hc.UpdateHeath();			
 
-			OnAnySlope();
+			SetSlopeFriction();
 		}
 
 		public override void FixedUpdate() {
@@ -241,6 +246,7 @@ namespace Player {
 			if (admin){
 				adminState = adminState == AdminState.standard ? AdminState.noclip : AdminState.standard;
 				rb.useGravity = adminState != AdminState.noclip;
+				if(adminState==AdminState.noclip) state=PlayerState.walking;
 
 				foreach(CapsuleCollider col in GetComponentsInChildren(typeof(CapsuleCollider))){
 					col.isTrigger = adminState == AdminState.noclip;
@@ -272,7 +278,8 @@ namespace Player {
 		public void Slam() {
 			state = PlayerState.slamming;
 			rb.linearVelocity = Vector3.zero;
-			rb.AddForce(new Vector3(0, -slam.force *100f * Time.deltaTime, 0));
+			rb.AddForce(new Vector3(0, -slam.force * 100f * Time.deltaTime, 0));
+			
 		}
 
 		public IEnumerator DecaySlide(float decaySpeed = -1f) {
@@ -573,20 +580,17 @@ namespace Player {
 			return false;
 		}
 
-		public bool OnAnySlope(){
+		public void SetSlopeFriction(){
 			
 			if(Physics.Raycast(footCollider.transform.position, Vector3.down, out slopeHit, 0.6f, ~playerMask) || Physics.Raycast(footCollider.transform.position, MathsAndSome.mas.vector.MultiplyVectors(new List<Vector3>(){Vector3.forward,moveDirection.normalized}), out slopeHit, .5f, ~playerMask)){
 				float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
-				if(angle!=0f) footCollider.material.dynamicFriction=0f;
-				else footCollider.material.dynamicFriction=8f;
+				if(angle!=0f) footCollider.material.dynamicFriction=slopeFriction;
+				else footCollider.material.dynamicFriction=defaultFriction;
 				Debug.Log(angle);
-
-				return angle!=0;
-
+				return;
 			}
 			
-			footCollider.material.dynamicFriction=8f;
-			return false;
+			footCollider.material.dynamicFriction=defaultFriction;
 		}
 
 		public bool OnSlope(){
