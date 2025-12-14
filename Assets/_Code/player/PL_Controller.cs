@@ -16,6 +16,7 @@ namespace Player {
 
 		[Header("Player")]
 		[Header("States")]
+		
 
 		public PlayerState state;
 		public MovementState jumpState = MovementState.none;
@@ -174,7 +175,7 @@ namespace Player {
 
 			//* Combat
 			HandleIFrames();
-			if (hc != null) hc.UpdateHeath();			
+			if (hc != null) hc.UpdateHeath();
 
 			SetSlopeFriction();
 		}
@@ -355,7 +356,7 @@ namespace Player {
 			cameraSlideRoutine = StartCoroutine(LerpCameraSlide(true));
 
 			do {
-				rb.AddForce(direction * (slide.force+finalSlamVelocity) * Consts.Multipliers.SLIDE_MULTIPLIER * Time.deltaTime);
+				rb.AddForce(direction * (slide.force/*+finalSlamVelocity*/) * Consts.Multipliers.SLIDE_MULTIPLIER * Time.deltaTime);
 				yield return 0;
 			} while (magic.key.gk(keys.slide) && !shouldJump  && state != PlayerState.slamming && adminState != AdminState.noclip);
 
