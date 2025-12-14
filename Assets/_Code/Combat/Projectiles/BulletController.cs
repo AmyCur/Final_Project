@@ -30,10 +30,11 @@ public class BulletController : MonoBehaviour {
 
 
 		if (
-				other.isEntity(typeof(Player.PL_Controller)) ||
-				(other.isEntity() && canHitEntity) ||
-				(!other.isEntity() && other.tag != "Thought")
-		) Destroy(gameObject);
+			other.isEntity(typeof(Player.PL_Controller)) ||
+			(other.isEntity() && canHitEntity) ||
+			(!other.isEntity() && other.tag != "Thought")
+		) _="";
+		//Destroy(gameObject);
 
 	}
 

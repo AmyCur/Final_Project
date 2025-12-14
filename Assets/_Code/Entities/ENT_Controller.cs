@@ -10,7 +10,6 @@ namespace Entity {
 	// [RequireComponent(typeof(Rigidbody))]           // For movement
 	public abstract class ENT_Controller : MonoBehaviour {
 
-		public Dictionary<string, object> thoughts;
 
 
 		[Header("Entity")]

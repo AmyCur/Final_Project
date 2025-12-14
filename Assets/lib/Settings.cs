@@ -18,7 +18,7 @@ namespace Cur.Settings
             public static class Development
         {
             public static bool devMode = true;
-            public static bool displayThoughts = true;
+            public static bool displayThoughts = false;
         }
     }
 }

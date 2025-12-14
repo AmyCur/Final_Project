@@ -90,7 +90,7 @@ namespace Cur.UI {
 
 	public class HUDController : MonoBehaviour {
 		// Paths
-		Player.PL_Controller pc=>mas.player.Player;
+		Player.PL_Controller pc => mas.player.Player;
 
 		const string baseIconPath = "UI/Icons/Elements/";
 		const string windPath = baseIconPath + "Wind";
@@ -182,8 +182,8 @@ namespace Cur.UI {
 		// [SerializeField] float altCDBarColorSpeed = 20f;
 
 
-		public void UpdateDash(string text){
-			dash.text=text;
+		public void UpdateDash(string text) {
+			dash.text = text;
 		}
 
 		// public void UpdateIcon(ElementType e) => weaponIcon.sprite = Resources.Load<Sprite>(ETypePath[e]);
@@ -275,7 +275,7 @@ namespace Cur.UI {
 
 		void UpdateAllBarColors() {
 			foreach (CooldownBar bar in cdBars) {
-				if(bar!=null) StartCoroutine(bar.UpdateBarColor(cc.ca.primary.element.type, false));
+				if (bar != null) StartCoroutine(bar.UpdateBarColor(cc.ca.primary.element.type, false));
 			}
 		}
 

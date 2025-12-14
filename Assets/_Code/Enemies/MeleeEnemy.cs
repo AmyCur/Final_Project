@@ -8,32 +8,22 @@ public sealed class MeleeEnemy : ENM_Controller
 {
     public override bool shouldHunt()
     {
-        if (drawHuntRay)
-        {
-            Debug.DrawLine(pos, pos+(direction * minHuntRange)+(direction * (maxHuntRange-minHuntRange)), Color.red);
-            Debug.DrawLine(pos, pos+(direction * minHuntRange), Color.yellow);
-        }
-        if (Physics.Raycast(pos, direction, out RaycastHit hit, maxHuntRange)) return hit.isEntity() && hit.distance.inRange(minHuntRange, maxHuntRange) && canHunt;
+        if (Physics.Raycast(pos, direction, out RaycastHit hit, maxHuntRange)) return hit.isEntity() && hit.distance < maxHuntRange && canHunt;
 
 
         return false;
     }
     public override bool shouldSeek()
     {
-        if (drawSeekRay)
-        {
-            Debug.DrawLine(pos, pos + (direction * minSeekRange) + (direction * (maxSeekRange - minSeekRange)), Color.green);
-            Debug.DrawLine(pos, pos + (direction * minSeekRange), Color.blue);
-        }
+       
 
-
-        if (Physics.Raycast(pos, direction, out RaycastHit hit, maxSeekRange)) return hit.isEntity() && hit.distance.inRange(minSeekRange, maxSeekRange) && canSeek;
+        if (Physics.Raycast(pos, direction, out RaycastHit hit, maxSeekRange)) return hit.isEntity() && hit.distance < maxSeekRange && canSeek;
         return false;
     }
     
     public override bool shouldAttack()
     {
-        if (Physics.Raycast(pos, direction, out RaycastHit hit, maxSeekRange)) return hit.isEntity() && hit.distance.inRange(minAttackRange, maxAttackRange) && canAttack;
+        if (Physics.Raycast(pos, direction, out RaycastHit hit, maxSeekRange)) return hit.isEntity() && hit.distance < maxAttackRange && canAttack;
         return false;
     }
 

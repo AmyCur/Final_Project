@@ -2,6 +2,7 @@
 using MathsAndSome;
 using EntityLib;
 using System.Collections;
+using Player;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PrimaryController : MonoBehaviour
@@ -23,12 +24,13 @@ public class PrimaryController : MonoBehaviour
 
 	void Update() => rb.linearVelocity = Direction()*speed;
 
-	void OnCollisionEnter(Collision other){
-		if(other.collider.isEntity(typeof(ENM_Controller))){
-			ENM_Controller enm = other.collider.GetComponent<ENM_Controller>();
+	void OnTriggerEnter(Collider other){
+		if(other.isEntity(typeof(ENM_Controller))){
+			ENM_Controller enm = other.GetComponent<ENM_Controller>();
 			enm.health-=player.GetComponent<Combat.CombatController>().ca.primary.damage;
 		}
-		Destroy(gameObject);
+		
+		if(!other.isEntity(typeof(PL_Controller))) Destroy(gameObject);
 
 	}
 

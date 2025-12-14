@@ -16,7 +16,7 @@ namespace Combat {
 		}
 
 
-		MovementChoice[] MovementChoices = { MovementChoice.to_player, MovementChoice.walk_random, MovementChoice.retreat };
+		readonly MovementChoice[] MovementChoices = { MovementChoice.to_player, MovementChoice.walk_random, MovementChoice.retreat };
 		MovementChoice choice = MovementChoice.to_player;
 		System.Random rand = new System.Random();
 
@@ -33,7 +33,7 @@ namespace Combat {
 		protected GameObject pipe;
 		[SerializeField] protected string pipePath = "Prefabs/Combat/Projectiles/Pipe";
 
-		Dictionary<MovementChoice, float> MovementChoiceMultiplier = new() {
+		readonly Dictionary<MovementChoice, float> MovementChoiceMultiplier = new() {
 		{MovementChoice.to_player, 1f},
 		{MovementChoice.retreat, .8f},
 		{MovementChoice.walk_random, .35f}
@@ -113,7 +113,7 @@ namespace Combat {
 		public override bool shouldHunt() {
 			foreach (RaycastHit hit in Physics.RaycastAll(pos, direction, maxHuntRange)) {
 				// Debug.Log(hit.collider.name);
-				if (hit.collider.isEntity(typeof(Player.PL_Controller))) return hit.distance.inRange(minHuntRange, maxHuntRange) && canHunt && !attackOnCD;
+				if (hit.collider.isEntity(typeof(Player.PL_Controller))) return hit.distance < maxHuntRange && canHunt && !attackOnCD;
 			}
 
 			return false;
@@ -121,7 +121,7 @@ namespace Combat {
 
 		public override bool shouldSeek() {
 			foreach (RaycastHit hit in Physics.RaycastAll(pos, direction, maxSeekRange)) {
-				if (hit.isEntity(typeof(Player.PL_Controller))) return hit.distance.inRange(minSeekRange, maxSeekRange) && canSeek;
+				if (hit.isEntity(typeof(Player.PL_Controller))) return hit.distance < maxSeekRange && canSeek;
 			}
 
 			return false;
@@ -129,7 +129,7 @@ namespace Combat {
 
 		public override bool shouldAttack() {
 			// To attack it should have line of sight
-			if (Physics.Raycast(pos, direction, out RaycastHit hit, maxSeekRange)) return hit.isEntity() && hit.distance.inRange(minAttackRange, maxAttackRange) && canAttack;
+			if (Physics.Raycast(pos, direction, out RaycastHit hit, maxSeekRange)) return hit.isEntity() && hit.distance < maxAttackRange && canAttack;
 			return false;
 		}
 

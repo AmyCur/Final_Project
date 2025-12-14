@@ -335,9 +335,6 @@ namespace Player {
 				);
 				yield return 0;
 			}
-
-
-
 		}
 
 
@@ -520,10 +517,14 @@ namespace Player {
 
 		Vector3 moveDirection;
 
+		bool moving;
+
 		public new void Move() {
 
 			hInp = Grounded() ? Input.GetAxisRaw("Horizontal") : Input.GetAxis("Horizontal");
 			vInp = Grounded() ? Input.GetAxisRaw("Vertical") : Input.GetAxis("Vertical");
+
+			moving = hInp!=0f || vInp!=0f;
 
 			Vector3 forward = forwardObject.transform.forward;
 			Vector3 right = forwardObject.transform.right;
@@ -583,10 +584,14 @@ namespace Player {
 
 		public void SetSlopeFriction(){
 			
-			if(Physics.Raycast(footCollider.transform.position, Vector3.down, out slopeHit, 0.6f, ~playerMask) || Physics.Raycast(footCollider.transform.position, MathsAndSome.mas.vector.MultiplyVectors(new List<Vector3>(){Vector3.forward,moveDirection.normalized}), out slopeHit, .5f, ~playerMask)){
+			if(Physics.Raycast(footCollider.transform.position, Vector3.down, out slopeHit, 0.6f, ~playerMask) || Physics.Raycast(footCollider.transform.position, MathsAndSome.mas.vector.MultiplyVectors(new List<Vector3>(){Vector3.forward,moveDirection.normalized}), out slopeHit, 1f, ~playerMask)){
 				float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
-				if(angle!=0f) footCollider.material.dynamicFriction=slopeFriction;
+				if(moving || state!=PlayerState.walking){
+					if(angle!=0f) footCollider.material.dynamicFriction=slopeFriction;
+					else footCollider.material.dynamicFriction=defaultFriction;
+				}
 				else footCollider.material.dynamicFriction=defaultFriction;
+				
 				Debug.Log(angle);
 				return;
 			}
