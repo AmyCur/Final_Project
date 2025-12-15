@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class A : StateMachineBehaviour
 {
@@ -19,6 +19,8 @@ public class A : StateMachineBehaviour
     //{
     //    
     //}
+
+	
 
     // OnStateMove is called before OnStateMove is called on any state inside this state machine
     //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

@@ -643,7 +643,7 @@ namespace Player {
 			if (magic.key.gk(keys.jump)) rb.linearVelocity = new(rb.linearVelocity.x, 30, rb.linearVelocity.z);
 			if (magic.key.gk(keys.dash)) rb.linearVelocity = new(rb.linearVelocity.x, -30, rb.linearVelocity.z);
 			if (magic.key.down(keys.teleport)) {
-				if (Physics.Raycast(transform.position, playerCamera.transform.forward, out RaycastHit hit, 1020f)) {
+				if (Physics.Raycast(transform.position, forward, out RaycastHit hit, 1020f, ~playerMask)) {
 					transform.position = hit.point;
 				}
 			}
