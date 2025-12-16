@@ -3,7 +3,37 @@ guid: a7f4d86c76cb05046a77aebfe3837291
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Asphalt
+    second: {fileID: 2100000, guid: 6dddb95a6344e0ec9a49ba5ba6d4e01c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Concrete
+    second: {fileID: 2100000, guid: 6dc243b8d8b1c591da00ec4d95ddac8a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: IntroFloor
+    second: {fileID: 2100000, guid: dadb0df1bc9d334fdaed0888271af587, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ReceptionFloor
+    second: {fileID: 2100000, guid: 52e9a66daf2341443a8bcd40b727083e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ReceptionWall
+    second: {fileID: 2100000, guid: 7a34cbec39afd7e329627215b43b37c6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Yellow Strip
+    second: {fileID: 2100000, guid: 4cc69ea8d1e67dd47a0729393e7fd88f, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -33,7 +63,7 @@ ModelImporter:
     isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: 450
+    globalScale: 4.5
     meshCompression: 0
     addColliders: 1
     useSRGBMaterialColor: 1
@@ -88,7 +118,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 450
+    globalScale: 4.5
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0

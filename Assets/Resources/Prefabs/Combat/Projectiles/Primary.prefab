@@ -150,4 +150,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   homeRange: 3
-  speed: 20
+  speed: 40
