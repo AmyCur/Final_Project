@@ -18,7 +18,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: IntroFloor
-    second: {fileID: 2100000, guid: dadb0df1bc9d334fdaed0888271af587, type: 2}
+    second: {fileID: 2100000, guid: 790c5ee4146fe7d29ab40b326b24cf90, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -27,8 +27,18 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: ReceptionWall
-    second: {fileID: 2100000, guid: 7a34cbec39afd7e329627215b43b37c6, type: 2}
+      name: SurgeryCeiling
+    second: {fileID: 2100000, guid: 8419075ddf13eb96abcb0e39fa45b67f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: SurgeryFloor
+    second: {fileID: 2100000, guid: 52e9a66daf2341443a8bcd40b727083e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: SurgeryWalls
+    second: {fileID: 2100000, guid: 7bd71b8cde47bf955afc9e0f15db127f, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
