@@ -1,3 +1,3 @@
 # Final_Project
 
-A 3D Movement shooter that involves using elemental magic inorder to defeat enemies and bosses
+A 3D Movement shooter set in the dystopian future, where the MC must coup the tryannical government in order to save the world
