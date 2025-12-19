@@ -33,12 +33,6 @@ namespace Cur.UI {
 				Mathf.Lerp(color.b, targetColor.b, intesity)
 			);
 		}
-
-
-		
-		
-
-
 	}
 
 	[System.Serializable]

@@ -11,9 +11,7 @@ namespace Cur.Audio{
 		public Sound(GameObject player){
 			this.player=player;
 			this.audioSource=player.GetComponent<AudioSource>();
-		}
-
-		
+		}		
 	}
 
 	public static class AudioManager{

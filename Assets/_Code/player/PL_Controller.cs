@@ -105,6 +105,7 @@ namespace Player {
 		#region Start
 		void Awake(){
 			MathsAndSome.mas.player.Player=this;
+			NotificationManager.mb=this;
 		}
 
 		public override void SetStartDefaults() {
@@ -178,6 +179,12 @@ namespace Player {
 			if (hc != null) hc.UpdateHeath();
 
 			SetSlopeFriction();
+
+			if(Input.GetKeyDown(KeyCode.J)){ 
+				
+				NotificationManager.AddNotification("test");
+				Debug.Log("Added notification");
+			}
 		}
 
 		public override void FixedUpdate() {
