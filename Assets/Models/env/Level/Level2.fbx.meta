@@ -17,13 +17,33 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Door
+    second: {fileID: 2100000, guid: 7bd71b8cde47bf955afc9e0f15db127f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Glass.001
+    second: {fileID: 2100000, guid: cc24b3e9abc014a40a424bd243039997, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: IntroFloor
     second: {fileID: 2100000, guid: 790c5ee4146fe7d29ab40b326b24cf90, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: OutDoorsWall
+    second: {fileID: 2100000, guid: 7bd71b8cde47bf955afc9e0f15db127f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: ReceptionFloor
     second: {fileID: 2100000, guid: 52e9a66daf2341443a8bcd40b727083e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ReceptionWall
+    second: {fileID: 2100000, guid: 20431760c84b3b4eea6db0b54f482cba, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -38,7 +58,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: SurgeryWalls
-    second: {fileID: 2100000, guid: 7bd71b8cde47bf955afc9e0f15db127f, type: 2}
+    second: {fileID: 2100000, guid: 20431760c84b3b4eea6db0b54f482cba, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule

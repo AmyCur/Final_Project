@@ -89,16 +89,20 @@ namespace Magical {
 				}
 				return false;
 			}
-			public static bool gk(KeyCode[] key) {
-				if (key.Length > 0) {
-					foreach (KeyCode k in key) {
-						if (Input.GetKey(k)) {
-							//* Roxies incredible debug message wow isnt she so cool
-							// Debug.Log("hiiiii poookieeeeeeee roxy here, future king over here, ohhh gurdian and you suck");
-							return true;
+			public static bool gk(object obj) {
+				if(obj is KeyCode[] key){
+					if (key.Length > 0) {
+						foreach (KeyCode k in key) {
+							if (Input.GetKey(k)) {
+								//* Roxies incredible debug message wow isnt she so cool
+								// Debug.Log("hiiiii poookieeeeeeee roxy here, future king over here, ohhh gurdian and you suck");
+								return true;
+							}
 						}
 					}
 				}
+				else if(obj is KeyCode keycode) return Input.GetKeyDown(keycode);
+				
 				return false;
 			}
 

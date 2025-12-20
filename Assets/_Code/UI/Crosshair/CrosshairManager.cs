@@ -14,7 +14,6 @@ public class CrosshairManager : MonoBehaviour
     [SerializeField] Sprite enemyImage;
 
     void Start() {
-        //TODO: Add global player reference, so it doesnt need to be manually found every time
         pc = mas.player.Player;
         image = GetComponent<Image>();
     }

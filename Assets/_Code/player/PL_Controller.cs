@@ -4,6 +4,7 @@ using UnityEngine;
 using Magical;
 using EntityLib;
 using Cur.UI;
+using System.Linq;
 
 namespace Player {
 	[RequireComponent(typeof(AudioSource))]
@@ -98,7 +99,7 @@ namespace Player {
 
 		[Header("Admin")]
 
-		[SerializeField] bool admin = true;
+		public bool admin = true;
 
 		public GameObject EnemySpawnScreen;
 
@@ -185,6 +186,8 @@ namespace Player {
 				NotificationManager.AddNotification("test");
 				Debug.Log("Added notification");
 			}
+
+			Debug.Log(Enumerable.Repeat("5", 10).ToString());
 		}
 
 		public override void FixedUpdate() {
@@ -260,6 +263,7 @@ namespace Player {
 					col.isTrigger = adminState == AdminState.noclip;
 				}
 				stamina.s=stamina.max;
+				NotificationManager.AddNotification($"Noclip: {adminState==AdminState.noclip}");
 			}
 		}
 		//* Stamina
