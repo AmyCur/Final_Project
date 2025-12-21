@@ -53,7 +53,7 @@ Material:
     m_Floats:
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Thickness: 1.01
+    - _Thickness: 10
     m_Colors:
     - _OutlineColour: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

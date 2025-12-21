@@ -108,8 +108,6 @@ public abstract class ENM_Controller : RB_Controller {
 		if (TryGetComponent<NavMeshAgent>(out NavMeshAgent ag)) agent = ag;
 	}
 
-
-
 	public override void Die() { base.Die(); Destroy(gameObject); }
 
 	void OnDrawGizmos() {
