@@ -7,8 +7,18 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Leg
+    second: {fileID: 2100000, guid: 6c297e50a747db0ca8c7d6a7344255f3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: Light
     second: {fileID: 2100000, guid: a8b5521ea9d415b4d9b2fa99a3bf0088, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material
+    second: {fileID: 2100000, guid: 6c297e50a747db0ca8c7d6a7344255f3, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
