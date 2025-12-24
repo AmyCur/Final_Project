@@ -5,35 +5,35 @@ using System.Collections;
 namespace Player{
 	public class CameraController : MonoBehaviour
 	{
-		Camera camera => Camera.main;
-		public float baseFOV=90f;
-		public float maxFOV=120f;
-		[SerializeField] float lerpSpeed=10f;
-		float speed => mas.player.Player.rb.linearVelocity.magnitude;
 
-		IEnumerator SetFOV(){
+		[SerializeField] float baseFOV=90f;
+		[Header("Breathing")]
+		[SerializeField] Vector2 breathingRange=new Vector2(-10,10);
+		[SerializeField] float breathingSpeed = 3f;
+		[SerializeField] bool breathingIn;
+		Camera camera=>mas.player.Player.playerCamera;
+
+
+		IEnumerator Breathe(){
 			while(true){
-				float targetFOV=Mathf.Clamp(baseFOV+(Mathf.Clamp(speed/5f, 0f, 50f)), baseFOV, maxFOV);
-				camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, targetFOV, Time.deltaTime * lerpSpeed * (Mathf.FloorToInt(speed) > 8 ? 1f : 5f));
+				float targetFOV=baseFOV+(breathingIn ? breathingRange[0] : breathingRange[1]);
+				
+				while(breathingIn ? camera.fieldOfView-0.1f>=targetFOV : camera.fieldOfView+0.1f<=targetFOV){
+						camera.fieldOfView=Mathf.Lerp(camera.fieldOfView, targetFOV, Time.deltaTime*breathingSpeed);
+						yield return 0;
+				}
+				
+				breathingIn=!breathingIn;
 				yield return 0;
-			}	
+			}
 		}
 
-		void SetFOVBasedOnSpeed(){
-		
+		void Start() {
+			StartCoroutine(Breathe());
 		}
 
-		void Update(){
-			Debug.Log(speed);
-		}
 
-		IEnumerator WaitForReady(){
-			yield return new WaitUntil(() => mas.player.Player.rb !=null);
-			StartCoroutine(SetFOV());
-		}
 
-		void Start(){
-			StartCoroutine(WaitForReady());
-		}
+
 	}
 }
