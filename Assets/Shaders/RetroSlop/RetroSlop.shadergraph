@@ -2349,7 +2349,7 @@
     "m_ObjectId": "4794827d5cf84d0f9930b27e4f4b8423",
     "m_Title": "Palette",
     "m_Position": {
-        "x": 3793.0,
+        "x": 3792.0,
         "y": -569.0
     }
 }
@@ -3926,8 +3926,8 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 3818.0,
-            "y": 107.0,
+            "x": 3817.000244140625,
+            "y": 177.99996948242188,
             "width": 210.0,
             "height": 314.0
         }
@@ -4909,8 +4909,8 @@
     "m_ObjectId": "bfe994f1f5c84e0cb6700f0d5cb01cc2",
     "m_Title": "Quantization",
     "m_Position": {
-        "x": 2414.999755859375,
-        "y": -153.00006103515626
+        "x": 2415.0,
+        "y": -153.0
     }
 }
 

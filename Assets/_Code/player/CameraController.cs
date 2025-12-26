@@ -19,8 +19,8 @@ namespace Player{
 				float targetFOV=baseFOV+(breathingIn ? breathingRange[0] : breathingRange[1]);
 				
 				while(breathingIn ? camera.fieldOfView-0.1f>=targetFOV : camera.fieldOfView+0.1f<=targetFOV){
-						camera.fieldOfView=Mathf.Lerp(camera.fieldOfView, targetFOV, Time.deltaTime*breathingSpeed);
-						yield return 0;
+					camera.fieldOfView=Mathf.Lerp(camera.fieldOfView, targetFOV, Time.deltaTime*breathingSpeed);
+					yield return 0;
 				}
 				
 				breathingIn=!breathingIn;
