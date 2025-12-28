@@ -116,9 +116,9 @@ public class MainMenuManager : MonoBehaviour {
 		SettingsPage.Slide(this);
 	}
 
-	public void QuitGamePopup() {
-		Create.CreatePopup(this, quitPopup);
-	}
+	// public void QuitGamePopup() {
+	// 	Create.CreatePopup(this, quitPopup);
+	// }
 
 	public void QuitGame() => Application.Quit();
 

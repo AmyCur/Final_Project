@@ -11,5 +11,9 @@
 			public const float SLIDE_MULTIPLIER = 10_000f;
 			public const float DASH_MULTIPLIER = 2_000f;
 		}
+
+		public static class Player{
+			public static PL_Controller pc;
+		}
 	}
 }

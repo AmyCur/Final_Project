@@ -10,6 +10,7 @@ namespace Player {
 	[RequireComponent(typeof(AudioSource))]
 	public class PL_Controller : RB_Controller {
 
+
 		bool shouldJump => canJump && BoxGrounded(justSlid ? 2f : 1.3f) && magic.key.down(keys.jump);
 		bool shouldSlide => slide.can && Grounded(1.3f) && magic.key.down(keys.slide) && state != PlayerState.sliding;
 		bool shouldDash => dash.can && magic.key.down(keys.dash) && stamina.s - dash.staminaPer >= 0;
@@ -660,7 +661,8 @@ namespace Player {
 			}
 		}
 
-		public override void Die() => Destroy(gameObject);
-
+		public override void Die() { 
+			state=PlayerState.dead;
+		}
 	}
 }
