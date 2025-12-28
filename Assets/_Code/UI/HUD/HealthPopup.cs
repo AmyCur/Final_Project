@@ -37,7 +37,8 @@ namespace Cur.UI{
 		void Update() {
 			if(pc.health.h <= pc.health.maxHealth/2f){
 				if(!active){
-					StartCoroutine(ChangeSize());
+					if(sizeRoutine!=null) StopCoroutine(sizeRoutine);
+					sizeRoutine = StartCoroutine(ChangeSize());
 					active=true;
 				}
 
@@ -52,7 +53,8 @@ namespace Cur.UI{
 			}
 			else{
 				if(active) {
-					StartCoroutine(ChangeSize(false));
+					if(sizeRoutine!=null) StopCoroutine(sizeRoutine);
+					sizeRoutine = StartCoroutine(ChangeSize(false));
 					active=false;
 				}
 			}

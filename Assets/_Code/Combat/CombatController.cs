@@ -7,7 +7,6 @@ using Combat.Attacks;
 using System.Threading.Tasks;
 
 namespace Combat {
-
 	[System.Serializable]
 	public class SingleAttack {
 		public PrimaryAttack primary;

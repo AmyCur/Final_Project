@@ -165,7 +165,7 @@ namespace Cur.UI {
 		[SerializeField] float currentWeaponScale = 1.2f;
 		[SerializeField] float inactiveWeaponScale = 1f;
 		[SerializeField] Color inactiveBackgroundColor = new Color(1f, 0f, 0f);
-		[SerializeField] Color currentBackgroundColor = new Color(230f / 255f, 209f / 255f, 165f / 255f);
+		[SerializeField] Color currentBackgroundColor = new Color(255f, 255f, 255f);
 
 		Combat.CombatController cc => mas.player.Combat;
 
