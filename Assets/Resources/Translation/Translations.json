@@ -1,1 +1,16 @@
-
+{
+  "texts": [
+    {
+      "english": "hello",
+      "spanish": "hola",
+      "german": "hallo",
+      "french": "salut"
+    },
+    {
+      "english": "what",
+      "spanish": "que",
+      "german": "was",
+      "french": "idk"
+    }
+  ]
+}

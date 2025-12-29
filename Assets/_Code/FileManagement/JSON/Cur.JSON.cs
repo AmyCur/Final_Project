@@ -10,8 +10,8 @@ namespace Cur.JSON{
 	}
 	
 	public static class Deserialization{
-		public static List<T> Deserialize<T>(string fileContents){
-			return JsonUtility.FromJson<List<T>>(fileContents);
+		public static T Deserialize<T>(string fileContents){
+			return JsonUtility.FromJson<T>(fileContents);
 		}
 
 	}
