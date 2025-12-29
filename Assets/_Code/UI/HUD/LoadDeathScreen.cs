@@ -10,8 +10,6 @@ namespace Cur.UI{
 		[SerializeField] float targetScale = 1f;
 		[SerializeField] float lerpSpeed = 5f;
 
-		float initScale=0f;
-
 		IEnumerator Grow(){
 			while(trans.localScale.y != targetScale){
 				trans.localScale=new Vector2(trans.localScale.x, Mathf.Lerp(trans.localScale.y, targetScale, Time.deltaTime*lerpSpeed));

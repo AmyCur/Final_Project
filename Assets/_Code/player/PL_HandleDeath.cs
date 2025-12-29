@@ -13,7 +13,7 @@ namespace Player{
 
 		void Update(){
 			if(pc.state == PlayerState.dead){
-				if(magic.key.PressedKey() != KeyCode.DoubleQuote){
+				if(magic.key.down(keys.jump)){
 					SceneManager.LoadScene(0);
 				}
 			}

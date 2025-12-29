@@ -8,7 +8,7 @@ using TMPro;
 namespace Cur.UI{
 	public class Notification{
 		public GameObject obj;
-		public TMP_Text text;
+		public TMP_Text text; 
 		public Image img;
 
 		public IEnumerator DecayNotification(float? decayTime=null){

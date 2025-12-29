@@ -183,16 +183,14 @@ namespace Player {
 			SetSlopeFriction();
 
 			if(Input.GetKeyDown(KeyCode.J)){ 
-				
 				NotificationManager.AddNotification("test");
 				Debug.Log("Added notification");
 			}
 
-			Debug.Log(Enumerable.Repeat("5", 10).ToString());
 		}
 
 		public override void FixedUpdate() {
-			// base.FixedUpdate();
+			// ba3se.FixedUpdate();
 
 			if (state != PlayerState.sliding && state != PlayerState.slamming && canMove) {
 				if (adminState == AdminState.standard) this.Move();
@@ -415,11 +413,6 @@ namespace Player {
 			stamina.Subtract(dash.staminaPer);
 			StartCoroutine(NoGravityDash());
 		}
-
-		void Set0G() => timerOver = true;
-
-
-		bool timerOver = false;
 
 		public IEnumerator DecayDash(float decaySpeed = -1f) {
 			if (decaySpeed == -1f) decaySpeed = dash.decaySpeed;

@@ -11,15 +11,15 @@ namespace Player{
 		[SerializeField] Vector2 breathingRange=new Vector2(-10,10);
 		[SerializeField] float breathingSpeed = 3f;
 		[SerializeField] bool breathingIn;
-		Camera camera=>mas.player.Player.playerCamera;
+		Camera cam=>mas.player.Player.playerCamera;
 
 
 		IEnumerator Breathe(){
 			while(true){
 				float targetFOV=baseFOV+(breathingIn ? breathingRange[0] : breathingRange[1]);
 				
-				while(breathingIn ? camera.fieldOfView-0.1f>=targetFOV : camera.fieldOfView+0.1f<=targetFOV){
-					camera.fieldOfView=Mathf.Lerp(camera.fieldOfView, targetFOV, Time.deltaTime*breathingSpeed);
+				while(breathingIn ? cam.fieldOfView-0.1f>=targetFOV : cam.fieldOfView+0.1f<=targetFOV){
+					cam.fieldOfView=Mathf.Lerp(cam.fieldOfView, targetFOV, Time.deltaTime*breathingSpeed);
 					yield return 0;
 				}
 				
