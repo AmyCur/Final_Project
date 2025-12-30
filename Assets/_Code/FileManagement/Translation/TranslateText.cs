@@ -3,17 +3,16 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Cur.Translation{
-	public class TranslateText : MonoBehaviour{
+	public static class TranslateText{
+		public static bool translated=false;
+		public static TextList tl;
 		
-		static TaskCompletionSource<bool> textLoaded = new TaskCompletionSource<bool>();
-
-		async Task SetText(){
-			await textLoaded.Task;
-			
+		public static Coroutine waitForLoadedRoutine;
+		
+		public static IEnumerator WaitForLoaded(){
+			yield return new WaitUntil(() => true);
+			translated=true;
 		}
 		
-		void Start() {
-			
-		}
 	}
 }

@@ -21,14 +21,9 @@ namespace Cur.Translation{
 				yield return texts[i];
 			}
 		}
+		
 		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 	}
 
-	// public static class aa{
-	// 	static async Task<TextList> LoadTexts(){
-
-	// 	}
-	// 	texts = JsonUtility.FromJson<TextList>(fileContent);
-	}
 
 }

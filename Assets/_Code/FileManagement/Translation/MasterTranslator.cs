@@ -4,13 +4,18 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Cur.Translation{
-	
-	public class MasterTranslation : MonoBehaviour{
+	public class MasterTranslation{
 
 		public TextAsset translationFile;
 		public TextList texts;
 
-		void Start(){
+		// void Awake() {
+		// 	TranslateText.waitForLoadedRoutine = StartCoroutine(TranslateText.WaitForLoaded());
+		// }
+
+
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
+		static async Task Start(){
 			
 		}
 	}
