@@ -191,6 +191,8 @@ namespace MathsAndSome
                 return vector.AbsVector(player.transform.position - gameObject.transform.position);
             }
 
+			
+
             public static GameObject GetPlayerObj() => GameObject.FindGameObjectWithTag(glob.playerTag);
             
             public static Player.PL_Controller Player;

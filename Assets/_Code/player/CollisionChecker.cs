@@ -5,10 +5,10 @@ public class CollisionChecker : MonoBehaviour {
 
     Player.PL_Controller pc;
 
-    void OnTriggerEnter(Collider other) {
-        // if (!pc.justDashed) {
-        //     pc.dashForceMultiplier = 0f;
-        // }
+    void OnTriggerStay(Collider other) {
+        if (!pc.shouldDash) {
+            pc.dash.force = 0f;
+        }
     }
 
 	void Start() {

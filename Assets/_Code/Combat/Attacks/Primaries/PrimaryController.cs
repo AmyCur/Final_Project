@@ -9,7 +9,7 @@ public class PrimaryController : MonoBehaviour
 {
 	GameObject player;
 	Rigidbody rb;
-	static Vector3 direction;
+	Vector3 direction;
 	bool home;
 	public float homeRange=3f;
 
@@ -38,6 +38,6 @@ public class PrimaryController : MonoBehaviour
 	void Start(){
 		player = mas.player.Player.gameObject;
 		rb=GetComponent<Rigidbody>();
-		direction = (player.transform.forward + Camera.main.transform.forward).normalized; 
+		direction = Directions.forward; 
 	}
 }

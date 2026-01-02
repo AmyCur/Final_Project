@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MathsAndSome;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -139,7 +140,7 @@ namespace Player {
 	}
 
 	[Serializable]
-	public class Dash : Force {
+	public class DashForce : Force {
 		[Header("Dash Exclusive")]
 		public float hardCDTime = 0.1f;
 		[Range(0, 100)] public float staminaPer = 30f;

@@ -136,7 +136,7 @@ Material:
     - _Surface: 0
     - _Tile_Scale: 10
     - _Tiling: 0.2
-    - _Tint_Strength: 0.108
+    - _Tint_Strength: 0.6
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
