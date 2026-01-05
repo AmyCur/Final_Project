@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Combat.Attacks;
 using System.Threading.Tasks;
+using Cur.Audio;
 
 namespace Combat {
 	[System.Serializable]
@@ -50,6 +51,15 @@ namespace Combat {
 			// 49 -> 57
 			SwitchWeapon();
 
+			if (magic.key.down(KeyCode.J))
+			{
+				StartCoroutine(MusicManager.CrossFadeAudio(MusicManager.currentLevelAudio.enemyClip));
+			}
+
+			if (magic.key.down(KeyCode.K))
+			{
+				StartCoroutine(MusicManager.CrossFadeAudio(MusicManager.currentLevelAudio.bossClip));
+			}
 		}
 
 		void Start() {
