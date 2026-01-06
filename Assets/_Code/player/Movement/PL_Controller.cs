@@ -104,6 +104,7 @@ namespace Player {
 		[Header("Admin")]
 
 		public bool admin = true;
+		[SerializeField] float adminSpeed = 40f;
 
 		public GameObject EnemySpawnScreen;
 
@@ -190,6 +191,9 @@ namespace Player {
 				Debug.Log("Added notification");
 			}
 
+			if (state != PlayerState.sliding && state != PlayerState.slamming && canMove) {
+				if (adminState == AdminState.noclip) this.AdminMove();	
+			}
 		}
 
 		public override void FixedUpdate() {
@@ -197,7 +201,6 @@ namespace Player {
 
 			if (state != PlayerState.sliding && state != PlayerState.slamming && canMove) {
 				if (adminState == AdminState.standard) this.Move();
-				else this.AdminMove();
 			}
 			
 			Vector2 hVel = new Vector2(rb.linearVelocity.x, rb.linearVelocity.z);
@@ -447,13 +450,19 @@ namespace Player {
 			Vector3 right = playerCamera.transform.right;
 			Vector3 forward = playerCamera.transform.forward;
 
-			rb.linearVelocity = (forward * vInp + right * hInp).normalized * forwardSpeed;
+			rb.linearVelocity = (forward * vInp + right * hInp).normalized * adminSpeed * Time.deltaTime;
 
 			if (magic.key.gk(keys.jump)) rb.linearVelocity = new(rb.linearVelocity.x, 30, rb.linearVelocity.z);
 			if (magic.key.gk(keys.dash)) rb.linearVelocity = new(rb.linearVelocity.x, -30, rb.linearVelocity.z);
 			if (magic.key.down(keys.teleport)) {
-				if (Physics.Raycast(transform.position, forward, out RaycastHit hit, 1020f, ~playerMask)) {
-					transform.position = hit.point;
+				RaycastHit[] hits = Physics.RaycastAll(transform.position, forward, 1020f);
+				if (hits.Length>0) {
+					foreach(RaycastHit hit in hits){
+						if(!hit.isEntity<PL_Controller>()){
+							transform.position = hit.point;
+							Debug.Log(hit.transform.name);
+						}
+					}
 				}
 			}
 		}
