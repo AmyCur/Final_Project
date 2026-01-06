@@ -20,7 +20,7 @@ public abstract class SingularAttack : ScriptableObject {
 
 		if (hits.Length > 0) {
 			foreach (RaycastHit hit in hits) {
-				if (hit.isEntity(typeof(ENM_Controller))) {
+				if (hit.isEntity<ENM_Controller>()) {
 					Entity.ENT_Controller ec = hit.collider.GetComponent<Entity.ENT_Controller>();
 					if (!!ec) {
 						ecs.Add(ec);

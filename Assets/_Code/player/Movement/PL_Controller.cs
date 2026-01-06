@@ -384,7 +384,7 @@ namespace Player {
 			Vector3 startPos = transform.position-new Vector3(0,transform.localScale.y/2f,0);
 			Collider[] colliders = Physics.OverlapBox(startPos, new Vector3(transform.localScale.x*.2f,0.5f*m,transform.localScale.z*.2f));
 			foreach(Collider col in colliders){
-				if(!col.isEntity(typeof(PL_Controller))) {
+				if(!col.isEntity<PL_Controller>()) {
 					// Debug.Log(col.name);
 					return true;}
 			}

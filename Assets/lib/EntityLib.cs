@@ -52,13 +52,23 @@ namespace EntityLib {
 
 
 		// This is so ugly and i hate it but i actually cant figure out another way because i am stupid
-		public static bool isEntity(this object m, Type targetType = null) {
+		// Edit: I figured out another way which is a bit nicer :) i love generics but i hate myself
+		public static bool isEntity(this object m){
+			if (m is RaycastHit h) return !!(h.collider.GetComponent<ENT_Controller>()) || h.collider.CompareTag(Globals.glob.playerChildTag);
+			else if (m is Collider c) return !!(c.GetComponent<ENT_Controller>()) || c.CompareTag(Globals.glob.playerChildTag);
+			else if (m is MonoBehaviour mono) return mono is ENT_Controller;
+			return false;
+		}
+		
+		public static bool isEntity<T>(this object m) {
+			Type targetType = typeof(T);
 			targetType ??= typeof(ENT_Controller);
 
 			if (targetType == typeof(Player.PL_Controller)) {
 				if (m is RaycastHit h) {
 					return h.collider.CompareTag(Globals.glob.playerChildTag) || !!h.collider.GetComponent<Player.PL_Controller>() || h.collider.CompareTag(Globals.glob.playerTag);
 				}
+
 				else if (m is Collider c){
 					bool isPlayer = c.GetComponent<Player.PL_Controller>() != null;
 					bool isPlayerTag = c.CompareTag(Globals.glob.playerChildTag);
@@ -76,14 +86,8 @@ namespace EntityLib {
 				return false;
 			}
 
-			else if (targetType == typeof(ENT_Controller)) {
-
-				if (m is RaycastHit h) return !!(h.collider.GetComponent<ENT_Controller>()) || h.collider.CompareTag(Globals.glob.playerChildTag);
-				else if (m is Collider c) return !!(c.GetComponent<ENT_Controller>()) || c.CompareTag(Globals.glob.playerChildTag);
-				else if (m is MonoBehaviour mono) return mono is ENT_Controller;
-				return false;
-			}
-
+			else if (targetType == typeof(ENT_Controller)) return m.isEntity();
+			
 			return false;
 		}
 

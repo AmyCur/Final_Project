@@ -22,7 +22,7 @@ public class BulletController : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other) {
-		if (other.isEntity(typeof(Player.PL_Controller)) && other != parent) {
+		if (other.isEntity<Player.PL_Controller>() && other != parent) {
 			Entity.ENT_Controller ec = other.GetComponent<Entity.ENT_Controller>();
 			ec ??= other.transform.parent.GetComponent<Entity.ENT_Controller>();
 			ec.TakeDamage(damage, new Element(ElementType.None));
@@ -30,7 +30,7 @@ public class BulletController : MonoBehaviour {
 
 
 		if (
-			other.isEntity(typeof(Player.PL_Controller)) ||
+			other.isEntity<Player.PL_Controller>() ||
 			(other.isEntity() && canHitEntity) ||
 			(!other.isEntity() && other.tag != "Thought")
 		) _="";

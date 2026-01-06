@@ -144,7 +144,7 @@ namespace Combat{
                 foreach (Collider col in ec)
                 {
                     Entity.ENT_Controller RB_Controller = col.GetComponent<Entity.ENT_Controller>();
-                    if (!!RB_Controller && !RB_Controller.isEntity(typeof(Player.PL_Controller)))
+                    if (!!RB_Controller && !RB_Controller.isEntity<Player.PL_Controller>())
                     {
                         RB_Controller.TakeDamage(dmg, element);
                     }
@@ -160,7 +160,7 @@ namespace Combat{
 
                     foreach (Collider col in cols)
                     {
-                        if (col.isEntity(typeof(ENM_Controller)))
+                        if (col.isEntity<ENM_Controller>())
                         {
                             // Entity.ENT_Controller c = col.GetComponent<Entity.ENT_Controller>();
 

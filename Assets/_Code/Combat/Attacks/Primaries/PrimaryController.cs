@@ -25,12 +25,12 @@ public class PrimaryController : MonoBehaviour
 	void Update() => rb.linearVelocity = Direction()*speed;
 
 	void OnTriggerEnter(Collider other){
-		if(other.isEntity(typeof(ENM_Controller))){
+		if(other.isEntity<ENM_Controller>()){
 			ENM_Controller enm = other.GetComponent<ENM_Controller>();
 			enm.health-=player.GetComponent<Combat.CombatController>().ca.primary.damage;
 		}
 		
-		if(!other.isEntity(typeof(PL_Controller))) Destroy(gameObject);
+		if(!other.isEntity<PL_Controller>()) Destroy(gameObject);
 
 	}
 

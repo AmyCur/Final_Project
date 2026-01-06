@@ -113,7 +113,7 @@ namespace Combat {
 		public override bool shouldHunt() {
 			foreach (RaycastHit hit in Physics.RaycastAll(pos, direction, maxHuntRange)) {
 				// Debug.Log(hit.collider.name);
-				if (hit.collider.isEntity(typeof(Player.PL_Controller))) return hit.distance < maxHuntRange && canHunt && !attackOnCD;
+				if (hit.collider.isEntity<Player.PL_Controller>()) return hit.distance < maxHuntRange && canHunt && !attackOnCD;
 			}
 
 			return false;
@@ -121,7 +121,7 @@ namespace Combat {
 
 		public override bool shouldSeek() {
 			foreach (RaycastHit hit in Physics.RaycastAll(pos, direction, maxSeekRange)) {
-				if (hit.isEntity(typeof(Player.PL_Controller))) return hit.distance < maxSeekRange && canSeek;
+				if (hit.isEntity<Player.PL_Controller>()) return hit.distance < maxSeekRange && canSeek;
 			}
 
 			return false;
