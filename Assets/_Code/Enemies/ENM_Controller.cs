@@ -81,7 +81,7 @@ public abstract class ENM_Controller : RB_Controller {
 			{nameof(shouldHunt), shouldHunt()},
 			{nameof(shouldSeek), shouldSeek()},
 		};
-
+		
 		for (int i = 0; i < transform.childCount; i++) {
 			if (!!transform.GetChild(i) && transform.GetChild(i).CompareTag("Thought")) transform.GetChild(i).gameObject.GetComponent<ThoughtBubble>().SetText(thoughts);
 		}

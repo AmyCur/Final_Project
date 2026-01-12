@@ -34,13 +34,19 @@ namespace Cur.UI{
 		public static MonoBehaviour mb;
 
 		public static void AddNotification(string content){
+			// Make notification
 			GameObject notif = GameObject.Instantiate(notifObj);
+			// Set its parent
 			notif.transform.parent=GameObject.Find("Notifications").transform;
+			// Make new notification obhject
 			Notification newNotif=new Notification(notif);
-			Debug.Log(newNotif.img.rectTransform==null);
+			// Set Text
 			newNotif.text.text = content;
+			// Add it to the stack
 			notificationStack.Add(newNotif);
+			// Unity hates this one simple trick
 			newNotif.img.rectTransform.anchoredPosition = new(150,-(210*notificationStack.Count-1));
+			// This code hecking sucks!!!!
 			mb.StartCoroutine(newNotif.DecayNotification());
 		}
 		

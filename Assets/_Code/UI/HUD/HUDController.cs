@@ -105,8 +105,6 @@ namespace Cur.UI {
 			{ElementType.water, waterPath},
 		};
 
-
-
 		public CooldownBar assistBar;
 		public CooldownBar abilityBar;
 
@@ -217,6 +215,14 @@ namespace Cur.UI {
 			RotateWeapons();
 		}
 
+
+
+		// Create a weapon notification
+		// Handle any previous notifications
+		// Profit
+		public void SwitchWeapon(){
+			
+		}
 
 		public void UpdateStaminaBars() {
 

@@ -17,7 +17,6 @@ namespace Elements {
 		readonly public static float lightningArcRange = 2f;
 		public static float randomDecayVariation(ElementType eType) => elementDecayDic[eType] * Random.Range(1, 1.4f);
 
-
 		public static float burnDamage = 10f;
 		public static float burnTime = 5f;
 		public static float lightningNatureBurnDamage = 30f;

@@ -121,7 +121,6 @@ namespace Player {
 			defaultFriction=footCollider.material.dynamicFriction;
 
 			stamina.pc = this;
-
 			StartCoroutine(RegenerateStamina());
 			playerCamera = Camera.main;
 			Cursor.lockState = CursorLockMode.Locked;
@@ -440,8 +439,6 @@ namespace Player {
 
 			}
 		}
-
-
 
 		void AdminMove() {
 			hInp = Input.GetAxisRaw("Horizontal");
