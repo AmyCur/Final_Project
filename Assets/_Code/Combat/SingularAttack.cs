@@ -67,8 +67,14 @@ public abstract class SingularAttack : ScriptableObject {
 	public virtual void OnRelease() { }
 
 	public virtual IEnumerator AttackCooldown() {
+
+		
+
 		canAttack = false;
 		yield return new WaitForSeconds(attackCD);
+		if(this is MeleeAttack atk){
+			atk.animator.SetBool("Attacking", false);
+		}
 		canAttack = true;
 	}
 }

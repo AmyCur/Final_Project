@@ -4,8 +4,12 @@ using Elements;
 
 [CreateAssetMenu(fileName="Melee Attack", menuName="Attacks/Create/Melee")]
 public class MeleeAttack : PrimaryAttack{
+
+		
+	public Animator animator => GameObject.Find("PlayerWeapon").GetComponent<Animator>();
+
 	void RotateModel(){
-		GameObject model = GameObject.Find("PlayerWeapon");
+		animator.SetBool("Attacking", true);
 	}
 
     public override void OnClick(){
