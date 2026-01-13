@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using Magical;
 
 namespace Combat
 {
@@ -52,9 +53,9 @@ namespace Combat
 		public List<EnemyPathPair> enemyPaths;
 		const string basePath="Prefabs/Combat/Enemies/";
 
-		void OnValidate(){
-			
-		}
+		public override bool keyDown() => magic.key.down(keys.attack);
+		public override bool keyStayDown() => magic.key.gk(keys.attack);
+		public override bool keyUp() => magic.key.up(keys.attack);
 
 		void InitialiseEnemyObjects(){
 			EnemyObjs.enemyObjects = new();

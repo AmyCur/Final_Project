@@ -35,6 +35,6 @@ public class MeleeAttack : SingularAttack{
 
 	public IEnumerator SwingCD(){
 		yield return new WaitForSeconds(0.3f);
-		if(!animator.GetBool("Attacking")) animator.SetBool("Alternate", false);
+		if(!animator.GetBool("Attacking"))  animator.SetBool("Alternate", false);
 	}
 }

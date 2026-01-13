@@ -36,19 +36,19 @@ namespace Combat {
 		void CheckSwitchWeapon(){
 			int currentKey = (int)magic.key.PressedKey();
 			//* 49=1 key //*57=9 key
-			if(currentKey >= 49 && currentKey <= 57){
+
+			if(magic.key.down(KeyCode.Alpha5) && mas.player.Player.admin){
+				ca=spawner;
+			}
+			
+			else if(currentKey >= 49 && currentKey <= 57){
 				if(attacks[currentKey-49].primary != null) {
 					caIndex=currentKey-49;
 					ca=attacks[caIndex];
-				}
-				
-				
+				}				
 			}
 
-			if(magic.key.down(KeyCode.Alpha5) && mas.player.Player.admin){
-				caIndex=currentKey-49;
-				ca=spawner;
-			}
+			
 		}
 
 		void CheckForAttackPressed(){

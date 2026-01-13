@@ -1,14 +1,20 @@
 ﻿using UnityEngine;
 using MathsAndSome;
+using Magical;
 
 namespace Combat
 {
 	[CreateAssetMenu(fileName = "Spawner Controller", menuName = "Attacks/Create/Spawner Menu")]
 	public class SpawnerMenuController : Attacks.AlternateAttack{
 
-	   public bool menuActivated=false;
 
-	   public override void OnClick(){
+		public override bool keyDown() => magic.key.down(KeyCode.Mouse1);
+		public override bool keyStayDown() => magic.key.gk(KeyCode.Mouse1);
+		public override bool keyUp() => magic.key.up(KeyCode.Mouse1);
+
+	   	public bool menuActivated=false;
+
+		public override void OnClick(){
 			mas.player.Player.EnemySpawnScreen.SetActive(!menuActivated);
 			menuActivated=!menuActivated;
 			Cursor.visible = menuActivated;
@@ -17,6 +23,6 @@ namespace Combat
 			if(menuActivated)  Cursor.lockState = CursorLockMode.None;
 			else  Cursor.lockState = CursorLockMode.Locked;
 			// Debug.Log($"{mas.player.canva.name}");
-	   }
+		}
    }
 }

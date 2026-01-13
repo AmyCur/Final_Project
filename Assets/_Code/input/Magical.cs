@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.InputSystem;
 
 namespace Magical {
 	public enum tags {
@@ -79,14 +80,21 @@ namespace Magical {
 				
 				return false;
 			}
-			public static bool up(KeyCode[] key) {
-				if (key.Length > 0) {
-					foreach (KeyCode k in key) {
-						if (Input.GetKeyUp(k)) {
-							return true;
+			public static bool up(object obj) {
+				if(obj is KeyCode[] key){
+					if (key.Length > 0) {
+						foreach (KeyCode k in key) {
+							if (Input.GetKeyUp(k)) {
+								return true;
+							}
 						}
 					}
 				}
+
+				else if(obj is KeyCode k){
+					if(Input.GetKeyUp(k)) return true;
+				}
+				
 				return false;
 			}
 			public static bool gk(object obj) {
