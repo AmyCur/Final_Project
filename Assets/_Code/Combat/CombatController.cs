@@ -11,7 +11,7 @@ using Cur.Audio;
 namespace Combat {
 	[System.Serializable]
 	public class SingleAttack : IEnumerable<SingularAttack>{
-		public PrimaryAttack primary;
+		public SingularAttack primary;
 		public AlternateAttack assist;
 		public AlternateAttack ability;
 		
@@ -39,18 +39,35 @@ namespace Combat {
 			if(currentKey >= 49 && currentKey <= 57){
 				if(attacks[currentKey-49].primary != null) {
 					caIndex=currentKey-49;
-					print(currentKey-49);
 					ca=attacks[caIndex];
 				}
+				
+				
+			}
+
+			if(magic.key.down(KeyCode.Alpha5) && mas.player.Player.admin){
+				caIndex=currentKey-49;
+				ca=spawner;
 			}
 		}
 
 		void CheckForAttackPressed(){
+			// Help idk if this is good or not am i doing it wrong :scared:
 			foreach(SingularAttack atk in ca){
 				if (atk.canAttack && atk.keyDown()){
 					atk.OnClick();
 				}
 			}
+		}
+
+		void OnValidate() {
+			if(caIndex<attacks.Count){
+				ca=attacks[caIndex];
+			}
+		}
+
+		void Start(){
+			ca=attacks[caIndex];
 		}
 
 		void Update(){
