@@ -60,7 +60,7 @@ namespace EntityLib {
 			return false;
 		}
 		
-		public static bool isEntity<T>(this object m) {
+		public static bool isEntity<T>(this object m){
 			Type targetType = typeof(T);
 			targetType ??= typeof(ENT_Controller);
 

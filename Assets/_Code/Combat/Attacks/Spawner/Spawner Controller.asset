@@ -27,3 +27,5 @@ MonoBehaviour:
   enemyPaths:
   - enemy: 1
     path: RangedEnemy
+  - enemy: 0
+    path: MeleeEnemy

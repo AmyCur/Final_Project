@@ -258,17 +258,18 @@ namespace Cur.UI {
 			UpdateWeapons();
 		}
 
+		// CURRENTLY UNUSED
 		public void UpdateWeaponIcons() {
-			for (int i = 0; i < weapons.Length; i++) {
-				//FIXME: There has to be a better way to do this
-				try {
-					Combat.SingleAttack atk = cc.attacks[i];
-					weapons[i].img.gameObject.SetActive(true);
-				}
-				catch {
-					weapons[i].img.gameObject.SetActive(false);
-				}
-			}
+			// for (int i = 0; i < weapons.Length; i++) {
+			// 	//FIXME: There has to be a better way to do this
+			// 	try {
+			// 		Combat.SingleAttack atk = cc.attacks[i];
+			// 		weapons[i].img.gameObject.SetActive(true);
+			// 	}
+			// 	catch {
+			// 		weapons[i].img.gameObject.SetActive(false);
+			// 	}
+			// }
 		}
 
 

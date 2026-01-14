@@ -44,18 +44,24 @@ public abstract class SingularAttack : ScriptableObject {
 		hold
 	}
 
+
+	[Header("Stats")]
 	public AttackType attackType;
 	public float damage;
 	public float attackCD;
 	public float range;
 	public bool canAttack = true;
 
-
+	[Header("Elements")]
 	public Element element;
 
+	[Header("Audio")]
 	public AudioClip onClickClip;
 	public AudioClip onReleaseClip;
 	public AudioClip onDamageClip;
+
+	[Header("Life Steal")]
+	public float lifeStealOnHit;
 
 	protected void PlayClip(AudioClip clip) { if (!!clip) source.PlayOneShot(clip); }
 

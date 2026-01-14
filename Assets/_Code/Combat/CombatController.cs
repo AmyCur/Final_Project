@@ -7,6 +7,7 @@ using UnityEngine;
 using Combat.Attacks;
 using System.Threading.Tasks;
 using Cur.Audio;
+using Player;
 
 namespace Combat {
 	[System.Serializable]
@@ -68,11 +69,25 @@ namespace Combat {
 
 		void Start(){
 			ca=attacks[caIndex];
+			(spawner.primary as SpawnerController).Start();
+
+			foreach(SingleAttack atk in attacks){
+				foreach(SingularAttack sAtk in atk){
+					sAtk.canAttack=true;
+				}
+			}
 		}
 
 		void Update(){
 			CheckSwitchWeapon();
 			CheckForAttackPressed();
+		}
+
+		public void OnDrawGizmos(){
+			PL_Controller pc = mas.player.Player;
+			if(pc!=null && pc.playerCamera != null){
+				Gizmos.DrawCube(pc.transform.position+(pc.playerCamera.transform.forward*2f), mas.vector.MultiplyVectors(new List<Vector3>(){new Vector3(1.45f,1.45f,1.45f), Vector3.one}));		
+			}
 		}
 	}
 

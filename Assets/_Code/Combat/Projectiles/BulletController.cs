@@ -5,14 +5,22 @@ using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
 public class BulletController : MonoBehaviour {
-	Rigidbody rb;
+	protected Rigidbody rb;
 
-	[SerializeField] float speed;
+	protected enum Target{
+		player,
+		enemy,
+		both
+	}
+
+	[SerializeField] protected float speed;
 	[HideInInspector] public float damage;
 	[HideInInspector] public Collider parent;
+	[SerializeField] protected Target target=Target.both;
 
 	bool canHitEntity = false;
-	void FixedUpdate() {
+
+	public virtual void FixedUpdate() {
 		rb.linearVelocity = transform.forward * speed;
 	}
 
@@ -22,7 +30,14 @@ public class BulletController : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other) {
-		if (other.isEntity<Player.PL_Controller>() && other != parent) {
+
+		
+		if ((target == Target.player || target== Target.both) && other.isEntity<Player.PL_Controller>() && other != parent) {
+			Entity.ENT_Controller ec = other.GetComponent<Entity.ENT_Controller>();
+			ec ??= other.transform.parent.GetComponent<Entity.ENT_Controller>();
+			ec.TakeDamage(damage, new Element(ElementType.None));
+		}
+		else if((target==Target.enemy || target==Target.both) && other.isEntity<ENM_Controller>()&& other != parent){
 			Entity.ENT_Controller ec = other.GetComponent<Entity.ENT_Controller>();
 			ec ??= other.transform.parent.GetComponent<Entity.ENT_Controller>();
 			ec.TakeDamage(damage, new Element(ElementType.None));

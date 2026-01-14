@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Combat.Attacks;
+using MathsAndSome;
 
 [CreateAssetMenu(fileName = "New ProjectileAttack", menuName = "Attacks/Create/Projectile Attack")]
 public class ProjectileAttack : AlternateAttack {
@@ -10,7 +11,14 @@ public class ProjectileAttack : AlternateAttack {
 
 	public override void OnClick() {
 		if (Projectile == null) Projectile = Resources.Load<GameObject>(projectileAddress);
-		//FIXME: This will only allow the player to use the attack (Not like the enemies have support anyways)
-		GameObject obj = Instantiate((Projectile), pc.transform.position, Quaternion.identity);
+		if (canAttack){
+			//FIXME: This will only allow the player to use the attack (Not like the enemies have support anyways)
+			GameObject obj = Instantiate((Projectile), pc.transform.position, Quaternion.identity);
+			obj.transform.rotation =  Quaternion.LookRotation(Vector3.RotateTowards(obj.transform.forward, mas.player.Player.playerCamera.transform.forward, 1000f*Time.deltaTime, 0f));
+
+			obj.GetComponent<BulletController>().damage=damage;
+			obj.GetComponent<BulletController>().parent=pc.GetComponent<CapsuleCollider>();
+		}
+		
 	}
 }

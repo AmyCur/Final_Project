@@ -76,7 +76,7 @@ namespace Combat
 			if(Physics.Raycast(pc.cameraPos, pc.fw, out RaycastHit hit, range)){
 				cc ??= MathsAndSome.mas.player.Player.GetComponent<CombatController>();
 				if(!(cc.spawner.assist as SpawnerMenuController).menuActivated)
-					Combat.Enemies.Spawning.SpawnEnemy(enemy, hit.point);
+					Enemies.Spawning.SpawnEnemy(enemy, hit.point);
 			}
 		}
 
