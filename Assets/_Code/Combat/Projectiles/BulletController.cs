@@ -29,7 +29,7 @@ public class BulletController : MonoBehaviour {
 		canHitEntity = true;
 	}
 
-	void OnTriggerEnter(Collider other) {
+	public virtual void OnTriggerEnter(Collider other) {
 
 		
 		if ((target == Target.player || target== Target.both) && other.isEntity<Player.PL_Controller>() && other != parent) {

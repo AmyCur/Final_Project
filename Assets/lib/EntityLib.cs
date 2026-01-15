@@ -53,6 +53,8 @@ namespace EntityLib {
 
 		// This is so ugly and i hate it but i actually cant figure out another way because i am stupid
 		// Edit: I figured out another way which is a bit nicer :) i love generics but i hate myself
+
+		// isDetections
 		public static bool isEntity(this object m){
 			if (m is RaycastHit h) return !!(h.collider.GetComponent<ENT_Controller>()) || h.collider.CompareTag(Globals.glob.playerChildTag);
 			else if (m is Collider c) return !!(c.GetComponent<ENT_Controller>()) || c.CompareTag(Globals.glob.playerChildTag);
@@ -91,6 +93,19 @@ namespace EntityLib {
 			return false;
 		}
 
+		public static bool isProjectile(this object p){
+			if(p is RaycastHit h){
+				if(h.collider.CompareTag(glob.projectileTag)) return true;
+			}
+
+			if(p is Collider c){
+				if(c.CompareTag(glob.projectileTag)) return true;
+			}
+
+			return false;
+		}
+		
+		
 		public static bool inRange(this float v, float minRange, float maxRange) {
 			return v >= minRange && v < maxRange;
 		}

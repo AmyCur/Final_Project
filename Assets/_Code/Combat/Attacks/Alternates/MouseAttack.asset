@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackType: 0
   damage: 10
-  attackCD: 0.5
+  attackCD: 2.5
   range: 0
   canAttack: 1
   element:
@@ -26,6 +26,6 @@ MonoBehaviour:
   lifeStealOnHit: 0
   useOnFullHealth: 1
   icon: {fileID: 0}
-  cooldownProgress: 0
+  cooldownProgress: 101
   attackCDIncrements: 100
   projectileName: Mouse

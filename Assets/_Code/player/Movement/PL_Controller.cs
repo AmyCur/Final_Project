@@ -248,13 +248,14 @@ namespace Player {
 
 		public void ClampIfRampTooSteep(){
 			if(Physics.Raycast(transform.position-new Vector3(0f,transform.localScale.y/2f,0f), transform.forward, out RaycastHit hit, 1f)){
-				Debug.Log(hit.normal);
-				float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
-				if(angle>maxSlopeAngle && angle < 90f){
-					Debug.Log("Thats high");
-					rb.linearVelocity=new Vector3(rb.linearVelocity.x,Mathf.Clamp(rb.linearVelocity.y, -1_000f, 0f),rb.linearVelocity.z);
+				if (!hit.isProjectile()){
+					Debug.Log(hit.normal);
+					float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
+					if(angle>maxSlopeAngle && angle < 90f){
+						Debug.Log("Thats high");
+						rb.linearVelocity=new Vector3(rb.linearVelocity.x,Mathf.Clamp(rb.linearVelocity.y, -1_000f, 0f),rb.linearVelocity.z);
+					}
 				}
-
 			}
 		}
 
@@ -386,24 +387,27 @@ namespace Player {
 			Vector3 startPos = transform.position-new Vector3(0,transform.localScale.y/2f,0);
 			Collider[] colliders = Physics.OverlapBox(startPos, new Vector3(transform.localScale.x*.2f,0.5f*m,transform.localScale.z*.2f));
 			foreach(Collider col in colliders){
-				if(!col.isEntity<PL_Controller>()) {
+				if(!col.isEntity<PL_Controller>() && !col.isProjectile()) {
 					// Debug.Log(col.name);
-					return true;}
+					return true;
+				}
 			}
 			return false;
 		}
 
 		public void SetSlopeFriction(){
-			
 			if(Physics.Raycast(footCollider.transform.position, Vector3.down, out slopeHit, 0.6f, ~playerMask) || Physics.Raycast(footCollider.transform.position, MathsAndSome.mas.vector.MultiplyVectors(new List<Vector3>(){Vector3.forward,moveDirection.normalized}), out slopeHit, 1f, ~playerMask)){
-				float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
-				if(moving || state!=PlayerState.walking){
-					if(angle!=0f) footCollider.material.dynamicFriction=slopeFriction;
+				if(!slopeHit.isProjectile()){
+					float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
+					if(moving || state!=PlayerState.walking){
+						if(angle!=0f) footCollider.material.dynamicFriction=slopeFriction;
+						else footCollider.material.dynamicFriction=defaultFriction;
+					}
 					else footCollider.material.dynamicFriction=defaultFriction;
+					
+					Debug.Log(angle);
 				}
-				else footCollider.material.dynamicFriction=defaultFriction;
-				
-				Debug.Log(angle);
+
 				return;
 			}
 			
@@ -412,8 +416,10 @@ namespace Player {
 
 		public bool OnSlope(){
 			if(Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + .5f)){
-				float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
-				return angle < maxSlopeAngle && angle!=0;
+				if(!slopeFriction.isProjectile()){
+					float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
+					return angle < maxSlopeAngle && angle!=0;
+				}
 			}
 			return false;
 		}
