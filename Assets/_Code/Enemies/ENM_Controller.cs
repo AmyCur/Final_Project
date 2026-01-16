@@ -14,7 +14,8 @@ public abstract class ENM_Controller : RB_Controller {
 	public enum EnemyState {
 		seeking,
 		hunting,
-		attacking
+		attacking,
+		staggered
 	}
 
 	protected Vector3 pos => transform.position;
@@ -66,13 +67,26 @@ public abstract class ENM_Controller : RB_Controller {
 		attackOnCD = false;
 	}
 
+	public bool HandleStaggered(){
+		if(eState==EnemyState.staggered){
+			if(agent!=null) agent.destination = transform.position;
+			return true;
+		}
+		return false;
+	}
 	public abstract bool shouldHunt();
 	public abstract bool shouldSeek();
 	public abstract bool shouldAttack();
 
-	public abstract void Hunt();
-	public abstract void Seek();
-	public abstract void Attack();
+	public virtual void Hunt(){
+		if(HandleStaggered()) return;
+	}
+	public virtual void Seek(){
+		if(HandleStaggered()) return;
+	}
+	public virtual void Attack(){
+		if(HandleStaggered()) return;
+	}
 
 	public override void UpdateThoughts() {
 		thoughts = new() {
@@ -91,12 +105,11 @@ public abstract class ENM_Controller : RB_Controller {
 		base.Update();
 
 		//* Should be in this order so the enemy isnt stuck seeking!!!!
-
-		if (shouldAttack()) Attack();
-		else if (shouldHunt()) Hunt();
-		else if (shouldSeek()) Seek();
-
-
+		if (eState != EnemyState.staggered){
+			if (shouldAttack()) Attack();
+			else if (shouldHunt()) Hunt();
+			else if (shouldSeek()) Seek();
+		}
 	}
 
 	// public override void OnValidate() { base.OnValidate(); CheckRanges();}
@@ -119,6 +132,18 @@ public abstract class ENM_Controller : RB_Controller {
 			Gizmos.color=Color.green;
 			Gizmos.DrawWireSphere(transform.position, maxAttackRange);
 		}
+	}
+
+
+
+	IEnumerator StaggerCooldown(float staggerDuration){
+		yield return new WaitForSeconds(staggerDuration);
+		eState = EnemyState.seeking;
+	}
+
+	public void Stagger(float staggerDuration){
+		eState = EnemyState.staggered;
+
 	}
 
 }

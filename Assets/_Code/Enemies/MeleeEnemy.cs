@@ -28,9 +28,12 @@ public sealed class MeleeEnemy : ENM_Controller
     }
 
     public override void Hunt() {
+		base.Hunt();
         agent.SetDestination(playerPosition);
     }
-    public override void Seek() { }
+    public override void Seek(){
+		base.Seek();
+	}
 
     public override void Update()
     {
@@ -56,6 +59,7 @@ public sealed class MeleeEnemy : ENM_Controller
 
     public override void Attack()
     {
+		base.Attack();
         if (canAttack)
         {
             if (Physics.Raycast(pos, direction, attackData.attackRange))

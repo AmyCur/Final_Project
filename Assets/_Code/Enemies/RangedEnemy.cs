@@ -56,8 +56,9 @@ namespace Combat {
 		Vector3 BackwardsVector() => -(direction * Mathf.Clamp((float) rand.NextDouble(), 0.5f, 1f));
 
 
-		public override void Seek() { }
+		public override void Seek() {base.Seek(); }
 		public override void Hunt() {
+			base.Hunt();
 			if (canChangeHuntChoice) {
 				// 0 -> 9
 				int randint = new System.Random().Next(10);
@@ -96,6 +97,7 @@ namespace Combat {
 		}
 
 		public override void Attack() {
+			base.Attack();
 			// If the player is in line of sight
 			if (canAttack && Physics.Raycast(pos, direction * attackData.attackRange)) {
 				agent.destination = transform.position;

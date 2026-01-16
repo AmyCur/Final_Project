@@ -9,6 +9,7 @@ namespace Combat.Attacks{
 
 		public float attackRadius = 3f;
 		[Range(1, 1000)] public int maxEnemies = 10;
+		public float staggerTime = 1f;
 		public GameObject crt;
 
 		List<GameObject> FindAllEnemies() => EntityLib.Entity.GetAllEnemies();
@@ -29,6 +30,7 @@ namespace Combat.Attacks{
 
 		void CreateCRTAbove(GameObject obj){
 			Instantiate(crt, obj.transform.position+(Vector3.up*10f), Quaternion.identity);
+			obj.GetComponent<ENM_Controller>().Stagger(staggerTime);
 		}
 
 		public override bool keyDown() => magic.key.down(keys.ability);
