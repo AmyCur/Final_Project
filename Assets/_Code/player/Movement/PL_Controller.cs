@@ -5,6 +5,7 @@ using Magical;
 using EntityLib;
 using Cur.UI;
 using System.Linq;
+using Combat.Enemies;
 
 namespace Player {
 	[RequireComponent(typeof(AudioSource))]
@@ -249,10 +250,10 @@ namespace Player {
 		public void ClampIfRampTooSteep(){
 			if(Physics.Raycast(transform.position-new Vector3(0f,transform.localScale.y/2f,0f), transform.forward, out RaycastHit hit, 1f)){
 				if (!hit.isProjectile()){
-					Debug.Log(hit.normal);
+					// Debug.Log(hit.normal);
 					float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
 					if(angle>maxSlopeAngle && angle < 90f){
-						Debug.Log("Thats high");
+						// Debug.Log("Thats high");
 						rb.linearVelocity=new Vector3(rb.linearVelocity.x,Mathf.Clamp(rb.linearVelocity.y, -1_000f, 0f),rb.linearVelocity.z);
 					}
 				}

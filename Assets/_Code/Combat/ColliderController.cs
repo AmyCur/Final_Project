@@ -1,6 +1,7 @@
 using EntityLib;
 using MathsAndSome;
 using UnityEngine;
+using Combat.Enemies;
 
 public class ColliderController : MonoBehaviour {
 

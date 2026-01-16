@@ -3,6 +3,7 @@ using EntityLib;
 using Elements;
 using Magical;
 using System.Collections;
+using Combat.Enemies;
 
 [CreateAssetMenu(fileName="Melee Attack", menuName="Attacks/Create/Melee")]
 public class MeleeAttack : SingularAttack{

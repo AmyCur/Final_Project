@@ -3,6 +3,7 @@ using MathsAndSome;
 using System.Collections;
 using UnityEngine;
 using Vortex;
+using Combat.Enemies;
 
 namespace Vortex {
     public static class Create {

@@ -3,6 +3,7 @@ using MathsAndSome;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Combat.Enemies;
 
 public class ThoughtBubbleCreator : MonoBehaviour {
     [Header("Display Settings")]

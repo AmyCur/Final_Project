@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: New CRT Attack
   m_EditorClassIdentifier: 
   attackType: 0
-  damage: 0
-  attackCD: 0.01
+  damage: 100
+  attackCD: 10
   range: 0
   canAttack: 1
   element:
@@ -28,6 +28,7 @@ MonoBehaviour:
   icon: {fileID: 0}
   cooldownProgress: 101
   attackCDIncrements: 100
-  attackRadius: 1000
+  attackRadius: 20
   maxEnemies: 30
+  staggerTime: 1
   crt: {fileID: 3520980513144508162, guid: b75979b50ee01374193cc5b70047b9e2, type: 3}

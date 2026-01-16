@@ -2,6 +2,7 @@
 using UnityEngine;
 using Elements;
 using System.Collections;
+using Combat.Enemies;
 
 [RequireComponent(typeof(Rigidbody))]
 public class BulletController : MonoBehaviour {

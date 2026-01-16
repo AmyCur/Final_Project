@@ -23,7 +23,8 @@ MonoBehaviour:
   onClickClip: {fileID: 0}
   onReleaseClip: {fileID: 0}
   onDamageClip: {fileID: 0}
-  enemy: 1
+  lifeStealOnHit: 0
+  enemy: 0
   enemyPaths:
   - enemy: 1
     path: RangedEnemy

@@ -1,73 +1,35 @@
 ﻿using UnityEngine;
-using static EntityLib.Entity;
-using static Cur.Settings.Combat;
-using MathsAndSome;
+using System.Collections;
+using EntityLib;
 
+namespace Combat.Enemies{
+	public sealed class MeleeEnemy : ENM_Controller
+	{
+		// Called every frame
+		protected override void Hunt(){
+			agent.destination = pc.transform.position - ((transform.position-pc.transform.position).normalized*3f);
+		}
 
-public sealed class MeleeEnemy : ENM_Controller
-{
-    public override bool shouldHunt()
-    {
-        if (Physics.Raycast(pos, direction, out RaycastHit hit, maxHuntRange)) return hit.isEntity() && hit.distance < maxHuntRange && canHunt;
+		// Called every frame
+		protected override void Attack(){
+			if (canAttack){
+				gameObject.ShootPlayer(range, damage, out _);
+				base.Attack();
+			}
+		}
 
+		protected override bool ShouldAttack(){
+			bool playerInRange=false;
 
-        return false;
-    }
-    public override bool shouldSeek()
-    {
-       
+			if(Physics.Raycast(transform.position, playerPosition-transform.position, out RaycastHit hit, range)){
+				playerInRange = hit.isEntity<Player.PL_Controller>();
+			}
+			
+			return playerInRange;
+		}
 
-        if (Physics.Raycast(pos, direction, out RaycastHit hit, maxSeekRange)) return hit.isEntity() && hit.distance < maxSeekRange && canSeek;
-        return false;
-    }
-    
-    public override bool shouldAttack()
-    {
-        if (Physics.Raycast(pos, direction, out RaycastHit hit, maxSeekRange)) return hit.isEntity() && hit.distance < maxAttackRange && canAttack;
-        return false;
-    }
-
-    public override void Hunt() {
-		base.Hunt();
-        agent.SetDestination(playerPosition);
-    }
-    public override void Seek(){
-		base.Seek();
-	}
-
-    public override void Update()
-    {
-        base.Update();
-    }
-
-    bool attackSuccessful()
-    {
-        Vector3 rbV = pc.rb.linearVelocity;
-        rbV = new Vector3(Mathf.Abs(rbV.x), Mathf.Abs(rbV.y), Mathf.Abs(rbV.z));
-        float mag = (rbV.x > rbV.z ? rbV.x : rbV.z) + rbV.y;
-        Debug.Log(mag);
-
-        if (mag >= EnemyGlobals.Melee.velocityFailureSpeed)
-        {
-            // Exlusive
-            int randint = new System.Random().Next(2);
-            return randint == 0;
-        }
-
-        return true;
-    }
-
-    public override void Attack()
-    {
-		base.Attack();
-        if (canAttack)
-        {
-            if (Physics.Raycast(pos, direction, attackData.attackRange))
-            {
-                if (attackSuccessful()) pc.TakeDamage(attackData.damage, attackElement);
-                StartCoroutine(CooldownAttack());
-            }
-        }
-
-    }
-}    
+		protected override bool ShouldHunt(){
+			return !ShouldAttack();
+		}
+	}    
+}

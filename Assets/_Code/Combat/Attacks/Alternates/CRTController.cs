@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Combat.Enemies;
 
 
 namespace Combat.Attacks{
@@ -7,6 +8,7 @@ namespace Combat.Attacks{
 
 		[SerializeField] float maxLifeTime=30f;
 		[SerializeField] LayerMask groundMask;
+		[HideInInspector] public float damage;
 
 		IEnumerator WaitForGrounded(){
 			print("wait");
@@ -16,11 +18,18 @@ namespace Combat.Attacks{
 
 		IEnumerator EmergencyStuckCase(){
 			yield return new WaitForSeconds(maxLifeTime);	
+			Destroy(gameObject);
 		}
 		
 		void Start(){
 			StartCoroutine(EmergencyStuckCase());
 			StartCoroutine(WaitForGrounded());
+		}
+
+		void OnTriggerEnter(Collider other){
+			if(other.TryGetComponent<ENM_Controller>(out ENM_Controller ec)){
+				ec.health-=damage;
+			}
 		}
 	}
 }

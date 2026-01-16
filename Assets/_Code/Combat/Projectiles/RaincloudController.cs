@@ -2,6 +2,7 @@
 using Globals;
 using System.Collections;
 using Elements;
+using Combat.Enemies;
 
 [RequireComponent(typeof(Rigidbody))]
 public class RaincloudController : MonoBehaviour

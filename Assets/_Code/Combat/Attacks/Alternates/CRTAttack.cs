@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Magical;
+using Combat.Enemies;
 
 namespace Combat.Attacks{
 	[CreateAssetMenu(fileName = "New CRT Attack", menuName = "Attacks/Create/CRT Attack")]
@@ -29,8 +30,9 @@ namespace Combat.Attacks{
 		}
 
 		void CreateCRTAbove(GameObject obj){
-			Instantiate(crt, obj.transform.position+(Vector3.up*10f), Quaternion.identity);
-			obj.GetComponent<ENM_Controller>().Stagger(staggerTime);
+			GameObject crtObj = Instantiate(crt, obj.transform.position+(Vector3.up*10f), Quaternion.identity);
+			crtObj.GetComponent<CRTController>().damage=damage;
+			pc.StartCoroutine(obj.GetComponent<ENM_Controller>().Stagger(staggerTime));
 		}
 
 		public override bool keyDown() => magic.key.down(keys.ability);
@@ -44,9 +46,8 @@ namespace Combat.Attacks{
 					CreateCRTAbove(obj); 
 				}
 			}
-			
 
-            base.OnClick();
+            if(enemies.Count > 0) base.OnClick();
         }
 	}
 }

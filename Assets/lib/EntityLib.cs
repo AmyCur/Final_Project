@@ -6,6 +6,7 @@ using Entity;
 using System.Linq;
 using MathsAndSome;
 using Globals;
+using Combat.Enemies;
 
 namespace EntityLib {
 	public static class Entity {
@@ -15,26 +16,13 @@ namespace EntityLib {
 			{typeof(ENT_Controller), "entity"},
 		};
 
-		static void KillPlayer(){ 
-			Player.PL_Controller pc = mas.player.Player;
-			pc.health.h-=pc.health.h;
-		}
-
-		static void KillEnemies(){
-			GameObject[] enemies = GameObject.FindGameObjectsWithTag(glob.enemyTag);
-			foreach(GameObject obj in enemies){
-				ENM_Controller e = obj.GetComponent<ENM_Controller>();
-				e.health.h-=e.health.h;
-			}
-		}
-
 		public static void KillAll(Type targetType=null){
 			if(targetType==null){
-				KillEnemies();
-				KillPlayer();
+				Enemy.KillEnemies();
+				PlayerUtils.KillPlayer();
 			}
-			else if(targetType == typeof(Player.PL_Controller)) KillPlayer();
-			else if(targetType == typeof(ENM_Controller)) KillEnemies();
+			else if(targetType == typeof(Player.PL_Controller)) PlayerUtils.KillPlayer();
+			else if(targetType == typeof(ENM_Controller)) Enemy.KillEnemies();
 		}
 
 		public static bool isGrounded(this object obj, float range){
@@ -54,7 +42,7 @@ namespace EntityLib {
 		// This is so ugly and i hate it but i actually cant figure out another way because i am stupid
 		// Edit: I figured out another way which is a bit nicer :) i love generics but i hate myself
 
-		// isDetections
+		
 		public static bool isEntity(this object m){
 			if (m is RaycastHit h) return !!(h.collider.GetComponent<ENT_Controller>()) || h.collider.CompareTag(Globals.glob.playerChildTag);
 			else if (m is Collider c) return !!(c.GetComponent<ENT_Controller>()) || c.CompareTag(Globals.glob.playerChildTag);
@@ -105,10 +93,26 @@ namespace EntityLib {
 			return false;
 		}
 		
-		
-		public static bool inRange(this float v, float minRange, float maxRange) {
-			return v >= minRange && v < maxRange;
+		// Horizontal
+		public static bool inRange3D(this GameObject obj, GameObject targetObject, float range){			
+			return (targetObject.transform.localPosition - obj.transform.localPosition).magnitude <= range;
 		}
+
+		public static bool inRange2D(this GameObject obj, GameObject targetObject, float range)
+		{
+			float distance = new Vector2(
+				targetObject.transform.localPosition.x-obj.transform.localPosition.x,
+				targetObject.transform.localPosition.z-obj.transform.localPosition.z
+			).magnitude;
+
+			return distance <= range;
+		}
+
+	
+		
+		// public static bool inRange(this float v, float minRange, float maxRange) {
+		// 	return v >= minRange && v < maxRange;
+		// }
 
 		public static List<GameObject> GetAllEnemies() => GameObject.FindGameObjectsWithTag(Globals.glob.enemyTag).ToList();
 
@@ -134,6 +138,29 @@ namespace EntityLib {
 
 			return nearest;
 			
+		}
+	}
+
+	public static class PlayerUtils{
+		public static void ShootPlayer(this GameObject obj, float range, float damage, out RaycastHit hit){
+			hit=new();
+			if(Physics.Raycast(obj.transform.position, mas.player.Player.transform.position-obj.transform.position, out hit, range)){
+				if (hit.isEntity<Player.PL_Controller>()){
+					mas.player.Player.health-=damage;
+				}
+			}
+		}
+
+		public static void KillPlayer() => mas.player.Player.health -= mas.player.Player.health;
+	}
+
+	public static class Enemy{
+		public static void KillEnemies(){
+			GameObject[] enemies = GameObject.FindGameObjectsWithTag(glob.enemyTag);
+			foreach(GameObject obj in enemies){
+				ENM_Controller e = obj.GetComponent<ENM_Controller>();
+				e.health-=e.health;
+			}
 		}
 	}
 }

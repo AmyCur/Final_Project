@@ -3,6 +3,7 @@ using MathsAndSome;
 using EntityLib;
 using System.Collections;
 using Player;
+using Combat.Enemies;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PrimaryController : MonoBehaviour
