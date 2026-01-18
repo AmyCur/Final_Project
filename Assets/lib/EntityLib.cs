@@ -7,6 +7,7 @@ using System.Linq;
 using MathsAndSome;
 using Globals;
 using Combat.Enemies;
+using Combat.Attacks.Projectiles;
 
 namespace EntityLib {
 	public static class Entity {
@@ -56,6 +57,7 @@ namespace EntityLib {
 
 			if (targetType == typeof(Player.PL_Controller)) {
 				if (m is RaycastHit h) {
+					
 					return h.collider.CompareTag(Globals.glob.playerChildTag) || !!h.collider.GetComponent<Player.PL_Controller>() || h.collider.CompareTag(Globals.glob.playerTag);
 				}
 
@@ -152,8 +154,9 @@ namespace EntityLib {
 			}
 
 			if(typeof(T) == typeof(BulletController)){
-				GameObject projectile = Resources.Load<GameObject>("Prefabs/Combat/Projectiles/Primary");
-				GameObject proj = GameObject.Instantiate(projectile, mas.player.Player.playerCamera.transform.position, Quaternion.identity);
+				GameObject projectile = Resources.Load<GameObject>("Prefabs/Combat/Projectiles/Bullet");
+				GameObject proj = GameObject.Instantiate(projectile, obj.transform.position, Quaternion.identity);
+				proj.GetComponent<BulletController>().Init((mas.player.Player.transform.position-obj.transform.position).normalized, damage);
 				proj.transform.parent=GameObject.FindWithTag("Bullets").transform;
 			}
 			
