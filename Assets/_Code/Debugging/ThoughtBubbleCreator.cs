@@ -5,8 +5,6 @@ using System.Linq;
 using UnityEngine;
 using Combat.Enemies;
 
-namespace Debugging;
-
 public class ThoughtBubbleCreator : MonoBehaviour {
     [Header("Display Settings")]
     public float displayRange = 10f;

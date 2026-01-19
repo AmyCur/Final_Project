@@ -1,18 +1,18 @@
 using UnityEngine;
 
-namespace Cur.Settings;
-
-public static class Combat
+namespace Cur.Settings
 {
-	public static bool drawLightningArcRadius = false;
-	public static bool drawVortexRadius = true;
-	public static bool drawSeekRay = false;
-	public static bool drawHuntRay = false;
-	public static bool showThoughts = true;
-}
+    public static class Combat
+    {
+        public static bool drawLightningArcRadius = false;
+        public static bool drawVortexRadius = true;
+        public static bool drawSeekRay = false;
+        public static bool drawHuntRay = false;
+        public static bool showThoughts = true;
+    }
 
-public static class Player
-{
-	public static bool drawJumpCollider = false;
+    public static class Player
+    {
+        public static bool drawJumpCollider = false;
+    }
 }
-

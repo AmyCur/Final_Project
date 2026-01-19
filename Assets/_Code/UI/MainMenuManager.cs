@@ -5,8 +5,6 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using Cur.UI;
 
-namespace UI;
-
 public class MainMenuManager : MonoBehaviour {
 	// True when buttons are in the centre, false when they have been slid to the left
 

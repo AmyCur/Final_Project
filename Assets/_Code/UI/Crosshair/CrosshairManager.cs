@@ -3,8 +3,6 @@ using MathsAndSome;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Crosshair;
-
 public class CrosshairManager : MonoBehaviour
 {
     Player.PL_Controller pc;

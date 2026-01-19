@@ -3,8 +3,6 @@ using MathsAndSome;
 using UnityEngine;
 using Combat.Enemies;
 
-namespace Combat.Attacks;
-
 public class ColliderController : MonoBehaviour {
 
     BeamAttack atk;

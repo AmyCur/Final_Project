@@ -1,8 +1,5 @@
-﻿using Input.Magical;
+﻿using Magical;
 using UnityEngine;
-
-
-namespace Combat.Attacks;
 
 [CreateAssetMenu(fileName="Primary Attack", menuName="Attacks/Create/Primary")]
 public class PrimaryAttack : SingularAttack {

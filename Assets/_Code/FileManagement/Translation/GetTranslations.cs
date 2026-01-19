@@ -4,8 +4,11 @@ using System.IO;
 using Cur.IO;
 using UnityEngine;
 
-namespace FileManagement.Translation;
-	
-public static class GetTranslations{
-	public static string path => Application.persistentDataPath + "/Translation/Translations.json";
+namespace Cur.Translation{
+	public static class GetTranslations{
+		public static string path => Application.persistentDataPath + "/Translation/Translations.json";
+
+		
+
+	}
 }

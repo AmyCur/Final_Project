@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using MathsAndSome;
 using System.Collections.Generic;
-using Input.Magical;
+using Magical;
 using Cur.UI;
 
 namespace Player{

@@ -1,9 +1,6 @@
 using MathsAndSome;
 using UnityEngine;
 
-namespace Debugging;
-
-
 public class Sensitivity {
     public static RefreshRate refreshRate;
 

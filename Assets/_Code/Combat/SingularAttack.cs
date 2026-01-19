@@ -6,8 +6,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Combat.Enemies;
 
-namespace Combat.Attacks;
-
 public abstract class SingularAttack : ScriptableObject {
 
 	protected AudioSource source;

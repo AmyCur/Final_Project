@@ -1,9 +1,8 @@
+
 using Elements;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
-namespace UI.HUD;
 
 public class UpdateWeaponIcon : MonoBehaviour {
     Image img;

@@ -5,8 +5,6 @@ using System.Collections;
 using Player;
 using Combat.Enemies;
 
-namespace Combat.Attacks.Primaries;
-
 [RequireComponent(typeof(Rigidbody))]
 public class PrimaryController : MonoBehaviour
 {

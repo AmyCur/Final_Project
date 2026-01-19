@@ -4,16 +4,14 @@ using MathsAndSome;
 using Player;
 using EntityLib;
 
-namespace Combat.Projectiles.Enemy;
-
-
-public class BoomerangController : Projectiles.BulletController
+public class BoomerangController : BulletController
 {
 	Vector3 forward;
 
 	[SerializeField] float initialTurnAroundTime=1f;
 	[SerializeField] float lerpSpeed = 10f;
 	bool destroyIfTouchingPlayer;
+	float moveSpeed=1f;
 
 	IEnumerator TurnAround(){
 		yield return new WaitForSeconds(initialTurnAroundTime);
@@ -29,11 +27,11 @@ public class BoomerangController : Projectiles.BulletController
 		}
 	}
 
-	protected override void FixedUpdate(){
+	public override void FixedUpdate(){
 		rb.linearVelocity=forward*moveSpeed;
 	}
 
-	protected override void OnTriggerEnter(Collider other)
+	public override void OnTriggerEnter(Collider other)
 	{
 		base.OnTriggerEnter(other);
 		if(destroyIfTouchingPlayer && other.isEntity<PL_Controller>()){
@@ -41,10 +39,8 @@ public class BoomerangController : Projectiles.BulletController
 		}  
 	}
 
-	protected override void Start(){
-		base.Start();
-		forward = transform.forward * moveSpeed;
+    void Start(){
+		forward = transform.forward * speed;
 		StartCoroutine(TurnAround());
 	}
 }
-

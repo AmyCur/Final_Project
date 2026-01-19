@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-namespace Debugging;
-
 public class ThoughtBubble : MonoBehaviour {
     public TMP_Text variablesText;
 

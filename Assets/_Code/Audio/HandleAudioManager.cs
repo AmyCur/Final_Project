@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using Input.Magical;
+using Magical;
 using System.Collections.Generic;
 
 namespace Cur.Audio{

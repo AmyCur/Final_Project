@@ -13,7 +13,6 @@ TagManager:
   - Raincloud
   - Bullets
   - Enemies
-  - Projectile
   layers:
   - Default
   - TransparentFX

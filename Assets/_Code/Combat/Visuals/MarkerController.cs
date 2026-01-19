@@ -2,8 +2,6 @@ using UnityEngine;
 using MathsAndSome;
 using System.Collections;
 
-namespace Combat.Visuals;
-
 public static class MarkerUtils {
     public const float markerDestructionTime = 2f;
 }
