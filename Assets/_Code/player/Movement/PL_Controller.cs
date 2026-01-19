@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Magical;
-using Entities;
+using EntityLib;
 using Cur.UI;
 using System.Linq;
 using Combat.Enemies;
@@ -133,7 +133,7 @@ namespace Player {
 
 		void AdminFunctionality()
         {
-            if(Input.GetKeyDown(KeyCode.LeftBracket)) Entities.Entity.KillAll(typeof(ENM_Controller));
+            if(Input.GetKeyDown(KeyCode.LeftBracket)) EntityLib.Entity.KillAll(typeof(ENM_Controller));
 			if (magic.key.down(keys.noclip)) CheckForAdmin();
         }
 

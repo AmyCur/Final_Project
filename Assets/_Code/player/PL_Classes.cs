@@ -4,7 +4,7 @@ using System.Collections;
 using UnityEngine;
 
 
-namespace Entities {
+namespace Entity {
 	[Serializable]
 	public class Health {
 

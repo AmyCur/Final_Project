@@ -1,4 +1,4 @@
-using Entities;
+using EntityLib;
 using MathsAndSome;
 using UnityEngine;
 using Combat.Enemies;
@@ -10,7 +10,7 @@ public class ColliderController : MonoBehaviour {
     void OnTriggerEnter(Collider other) {
         
         if (other.isEntity<ENM_Controller>()) {
-            // atk.AddEnemy(other.GetComponent<Entities.ENT_Controller>());
+            // atk.AddEnemy(other.GetComponent<Entity.ENT_Controller>());
         }
     }
 

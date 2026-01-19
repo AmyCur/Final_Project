@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Entities;
+using Entity;
 
 namespace Elements {
 	public enum ElementType : short {
@@ -37,7 +37,7 @@ namespace Elements {
 		public ElementType type;
 		public float f;
 
-		public IEnumerator DecayElement(Entities.ENT_Controller ec) {
+		public IEnumerator DecayElement(Entity.ENT_Controller ec) {
 			yield return new WaitForSeconds(0.1f);
 			f -= 0.1f;
 			if (f > 0) {
@@ -49,11 +49,11 @@ namespace Elements {
 
 		}
 
-		public void StartDecay(Entities.ENT_Controller ec) {
+		public void StartDecay(Entity.ENT_Controller ec) {
 			ec.StartCoroutine(DecayElement(ec));
 		}
 
-		public void RestartDecay(Entities.ENT_Controller ec) {
+		public void RestartDecay(Entity.ENT_Controller ec) {
 			StartDecay(ec);
 		}
 
@@ -69,7 +69,7 @@ namespace Elements {
 			cols.Remove(obj.GetComponent<BoxCollider>());
 
 			foreach (Collider col in cols) {
-				Entities.ENT_Controller ec = col.GetComponent<Entities.ENT_Controller>();
+				Entity.ENT_Controller ec = col.GetComponent<Entity.ENT_Controller>();
 				if (!!ec) {
 					ec.ApplyElements(element);
 				}

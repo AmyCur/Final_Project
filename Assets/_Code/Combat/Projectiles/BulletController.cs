@@ -1,4 +1,4 @@
-﻿using Entities;
+﻿using EntityLib;
 using UnityEngine;
 using Elements;
 using System.Collections;
@@ -32,13 +32,13 @@ public class BulletController : MonoBehaviour {
 
 	public virtual void OnTriggerEnter(Collider other) {
 		if ((target == Target.player || target== Target.both) && other.isEntity<Player.PL_Controller>() && other != parent) {
-			Entities.ENT_Controller ec = other.GetComponent<Entities.ENT_Controller>();
-			ec ??= other.transform.parent.GetComponent<Entities.ENT_Controller>();
+			Entity.ENT_Controller ec = other.GetComponent<Entity.ENT_Controller>();
+			ec ??= other.transform.parent.GetComponent<Entity.ENT_Controller>();
 			ec.TakeDamage(damage, new Element(ElementType.None));
 		}
 		else if((target==Target.enemy || target==Target.both) && other.isEntity<ENM_Controller>()&& other != parent){
-			Entities.ENT_Controller ec = other.GetComponent<Entities.ENT_Controller>();
-			ec ??= other.transform.parent.GetComponent<Entities.ENT_Controller>();
+			Entity.ENT_Controller ec = other.GetComponent<Entity.ENT_Controller>();
+			ec ??= other.transform.parent.GetComponent<Entity.ENT_Controller>();
 			ec.TakeDamage(damage, new Element(ElementType.None));
 		}
 

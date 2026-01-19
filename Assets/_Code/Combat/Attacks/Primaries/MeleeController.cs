@@ -1,5 +1,5 @@
 using UnityEngine;
-using Entities;
+using EntityLib;
 using Elements;
 using Magical;
 using System.Collections;

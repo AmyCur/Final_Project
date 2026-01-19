@@ -1,67 +1,67 @@
-﻿// using Elements;
+﻿using Elements;
+using EntityLib;
+using Magical;
+using MathsAndSome;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Entity;
+using Combat.Enemies;
 
-// using Magical;
-// using MathsAndSome;
-// using System.Collections;
-// using System.Collections.Generic;
-// using UnityEngine;
-// using Entities;
-// using Combat.Enemies;
+public abstract class thingie : ScriptableObject {
 
-// public abstract class thingie : ScriptableObject {
+	public enum AttackType {
+		singular,
+		hold
+	}
 
-// 	public enum AttackType {
-// 		singular,
-// 		hold
-// 	}
+	[Header("Stats")]
+	public float damage;
+	public float attackCD;
+	public float range;
+	public bool canAttack = true;
+	public Element element;
+	public AttackType attackType;
 
-// 	[Header("Stats")]
-// 	public float damage;
-// 	public float attackCD;
-// 	public float range;
-// 	public bool canAttack = true;
-// 	public Element element;
-// 	public AttackType attackType;
+	protected Entity.ENT_Controller[] hitEnemies(Vector3 startPos, Vector3 direction, float range) {
+		Debug.DrawLine(startPos, startPos + (direction * range), Color.red, 1);
+		List<Entity.ENT_Controller> ecs = new();
+		Vector3 pos = startPos;
+		float dist = range;
 
-// 	protected Entities.ENT_Controller[] hitEnemies(Vector3 startPos, Vector3 direction, float range) {
-// 		Debug.DrawLine(startPos, startPos + (direction * range), Color.red, 1);
-// 		List<Entities.Entity.ENT_Controller> ecs = new();
-// 		Vector3 pos = startPos;
-// 		float dist = range;
+		RaycastHit[] hits = Physics.RaycastAll(startPos, direction, range);
 
-// 		RaycastHit[] hits = Physics.RaycastAll(startPos, direction, range);
+		if (hits.Length > 0) {
+			foreach (RaycastHit hit in hits) {
+				if (hit.isEntity<ENM_Controller>()) {
+					Entity.ENT_Controller ec = hit.collider.GetComponent<Entity.ENT_Controller>();
 
-// 		if (hits.Length > 0) {
-// 			foreach (RaycastHit hit in hits) {
-// 				if (hit.isEntities.Entity<ENM_Controller>()) {
-// 					Entities.Entity.ENT_Controller ec = hit.collider.GetComponent<Entities.Entity.ENT_Controller>();
+					if (!!ec) {
+						ecs.Add(ec);
+					}
+				}
+			}
+		}
 
-// 					if (!!ec) {
-// 						ecs.Add(ec);
-// 					}
-// 				}
-// 			}
-// 		}
+		if (ecs.Count > 0) {
+			return ecs.ToArray();
+		}
 
-// 		if (ecs.Count > 0) {
-// 			return ecs.ToArray();
-// 		}
+		return null;
+	}
 
-// 		return null;
-// 	}
+	protected IEnumerator AttackCooldown() {
+		canAttack = false;
+		yield return new WaitForSeconds(attackCD);
+		canAttack = true;
+	}
 
-// 	protected IEnumerator AttackCooldown() {
-// 		canAttack = false;
-// 		yield return new WaitForSeconds(attackCD);
-// 		canAttack = true;
-// 	}
+	public Player.PL_Controller pc => mas.player.Player;
 
-// 	public Player.PL_Controller pc => mas.player.Player;
-
-// 	public abstract bool keyDown();
-// 	public abstract bool keyStayDown();
+	public abstract bool keyDown();
+	public abstract bool keyStayDown();
 
 
-// 	public abstract void OnClick();
-// 	public abstract void OnRelease();
-// }
+	public abstract void OnClick();
+	public abstract void OnRelease();
+}

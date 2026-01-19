@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Entities;
+using EntityLib;
 
 namespace Combat.Enemies{
 	public sealed class RangedEnemy : ENM_Controller

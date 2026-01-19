@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using MathsAndSome;
 using Player;
-using Entities;
+using EntityLib;
 
 public class BoomerangController : BulletController
 {
