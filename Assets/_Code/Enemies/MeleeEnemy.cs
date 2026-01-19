@@ -13,7 +13,7 @@ namespace Combat.Enemies{
 		// Called every frame
 		protected override void Attack(){
 			if (canAttack){
-				gameObject.ShootPlayer<RaycastHit>(range, damage);
+				gameObject.ShootPlayer(range, damage, out _);
 				base.Attack();
 			}
 		}

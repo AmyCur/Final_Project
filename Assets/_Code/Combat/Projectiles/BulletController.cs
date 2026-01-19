@@ -31,6 +31,8 @@ public class BulletController : MonoBehaviour {
 	}
 
 	public virtual void OnTriggerEnter(Collider other) {
+
+		
 		if ((target == Target.player || target== Target.both) && other.isEntity<Player.PL_Controller>() && other != parent) {
 			Entity.ENT_Controller ec = other.GetComponent<Entity.ENT_Controller>();
 			ec ??= other.transform.parent.GetComponent<Entity.ENT_Controller>();

@@ -142,24 +142,14 @@ namespace EntityLib {
 	}
 
 	public static class PlayerUtils{
-		public static void ShootPlayer<T>(this GameObject obj, float range, float damage){
-			if(typeof(T) == typeof(RaycastHit)){
-				if(Physics.Raycast(obj.transform.position, mas.player.Player.transform.position-obj.transform.position, out RaycastHit hit, range)){
-					if (hit.isEntity<Player.PL_Controller>()){
-						mas.player.Player.health-=damage;
-					}
+		public static void ShootPlayer(this GameObject obj, float range, float damage, out RaycastHit hit){
+			hit=new();
+			if(Physics.Raycast(obj.transform.position, mas.player.Player.transform.position-obj.transform.position, out hit, range)){
+				if (hit.isEntity<Player.PL_Controller>()){
+					mas.player.Player.health-=damage;
 				}
 			}
-
-			if(typeof(T) == typeof(BulletController)){
-				GameObject projectile = Resources.Load<GameObject>("Prefabs/Combat/Projectiles/Primary");
-				GameObject proj = GameObject.Instantiate(projectile, mas.player.Player.playerCamera.transform.position, Quaternion.identity);
-				proj.transform.parent=GameObject.FindWithTag("Bullets").transform;
-			}
-			
 		}
-
-		
 
 		public static void KillPlayer() => mas.player.Player.health -= mas.player.Player.health;
 	}
