@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using MathsAndSome;
+using Combat.Attacks.Projectiles;
 
 namespace Combat.Attacks{
 	[CreateAssetMenu(fileName = "New ProjectileAttack", menuName = "Attacks/Create/Projectile Attack")]
@@ -16,8 +17,9 @@ namespace Combat.Attacks{
 				GameObject obj = Instantiate(Projectile, pc.transform.position, Quaternion.identity);
 				obj.transform.rotation =  Quaternion.LookRotation(Vector3.RotateTowards(obj.transform.forward, mas.player.Player.playerCamera.transform.forward, 1000f*Time.deltaTime, 0f));
 
-				obj.GetComponent<BulletController>().damage=damage;
-				obj.GetComponent<BulletController>().parent=pc.GetComponent<CapsuleCollider>();
+				obj.GetComponent<BulletController>().Init(pc.playerCamera.transform.forward,damage);
+				// obj.GetComponent<BulletController>().damage=damage;
+				// obj.GetComponent<BulletController>().parent=pc.GetComponent<CapsuleCollider>();
 			}
 
 			base.OnClick();		

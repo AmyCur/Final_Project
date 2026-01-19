@@ -5,7 +5,7 @@ using System.Collections;
 using Combat.Enemies;
 
 [RequireComponent(typeof(Rigidbody))]
-public class BulletController : MonoBehaviour {
+public class HomingBulletController : MonoBehaviour {
 	protected Rigidbody rb;
 
 	protected enum Target{
@@ -30,6 +30,7 @@ public class BulletController : MonoBehaviour {
 		canHitEntity = true;
 	}
 
+	// Are we deadass?
 	public virtual void OnTriggerEnter(Collider other) {
 		if ((target == Target.player || target== Target.both) && other.isEntity<Player.PL_Controller>() && other != parent) {
 			Entity.ENT_Controller ec = other.GetComponent<Entity.ENT_Controller>();
