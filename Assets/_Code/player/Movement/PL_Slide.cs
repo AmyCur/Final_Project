@@ -1,4 +1,4 @@
-using Magical;
+using Input.Magical;
 using MathsAndSome;
 using System.Collections;
 using UnityEngine;

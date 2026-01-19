@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Entity;
 
+namespace Combat.Attacks.Primaries;
 
 // [CreateAssetMenu(fileName = "Beam Attack", menuName = "Attacks/Primary/Beam", order = 0)]
 public class BeamAttack : PrimaryAttack {

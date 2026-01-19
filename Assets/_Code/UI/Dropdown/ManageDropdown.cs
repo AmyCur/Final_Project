@@ -1,7 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Cur.Settings;
-using Magical;
+using Input.Magical;
+
+namespace UI.Dropdown;
 
 public class ManageDropdown : MonoBehaviour
 {

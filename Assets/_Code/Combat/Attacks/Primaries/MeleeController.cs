@@ -1,9 +1,11 @@
 using UnityEngine;
 using EntityLib;
 using Elements;
-using Magical;
+using Input.Magical;
 using System.Collections;
 using Combat.Enemies;
+
+namespace Combat.Attacks.Primaries;
 
 [CreateAssetMenu(fileName="Melee Attack", menuName="Attacks/Create/Melee")]
 public class MeleeAttack : SingularAttack{

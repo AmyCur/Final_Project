@@ -2,6 +2,8 @@
 using Elements;
 using MathsAndSome;
 
+namespace Combat.Projectiles.Enemy;
+
 public class ProjectileController : MonoBehaviour {
 
 	public enum Target {

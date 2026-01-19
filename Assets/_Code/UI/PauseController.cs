@@ -1,7 +1,8 @@
 using UnityEngine;
-using Magical;
+using Input.Magical;
 using System;
 
+namespace UI;
 
 public class PauseController : MonoBehaviour
 {

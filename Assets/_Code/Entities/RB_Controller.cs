@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace Entities;
+
 [RequireComponent(typeof(Rigidbody))]
 public class RB_Controller : Entity.ENT_Controller {
 	[Header("Movement")]

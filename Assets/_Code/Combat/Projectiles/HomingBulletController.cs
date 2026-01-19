@@ -4,6 +4,8 @@ using Elements;
 using System.Collections;
 using Combat.Enemies;
 
+namespace Combat.Projectiles.Enemy;
+
 [RequireComponent(typeof(Rigidbody))]
 public class HomingBulletController : MonoBehaviour {
 	protected Rigidbody rb;

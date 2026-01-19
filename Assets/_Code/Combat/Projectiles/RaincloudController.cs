@@ -4,6 +4,8 @@ using System.Collections;
 using Elements;
 using Combat.Enemies;
 
+namespace Combat.Projectiles.Enemy;
+
 [RequireComponent(typeof(Rigidbody))]
 public class RaincloudController : MonoBehaviour
 {

@@ -1,6 +1,8 @@
 using Globals;
 using UnityEngine;
 
+namespace Combat.Projectiles.Enemy;
+
 [RequireComponent(typeof(Rigidbody))]
 public class FireballController : ProjectileController {
 

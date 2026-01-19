@@ -1,21 +1,21 @@
-using Magical;
+using Input.Magical;
 using MathsAndSome;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Player{
-	public class PL_HandleDeath : MonoBehaviour {
-		PL_Controller pc;
+namespace Player;
 
-		void Start() {
-			pc=mas.player.Player;
-		}
+public class PL_HandleDeath : MonoBehaviour {
+	PL_Controller pc;
 
-		void Update(){
-			if(pc.state == PlayerState.dead){
-				if(magic.key.down(keys.jump)){
-					SceneManager.LoadScene(0);
-				}
+	void Start() {
+		pc=mas.player.Player;
+	}
+
+	void Update(){
+		if(pc.state == PlayerState.dead){
+			if(magic.key.down(keys.jump)){
+				SceneManager.LoadScene(0);
 			}
 		}
 	}

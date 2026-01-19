@@ -1,6 +1,8 @@
 using MathsAndSome;
 using UnityEngine;
 
+namespace Player;
+
 public class CollisionChecker : MonoBehaviour {
 
     Player.PL_Controller pc;

@@ -1,5 +1,8 @@
 using UnityEngine;
 
+namespace Misc;
+
+
 public class EnableOnStart:MonoBehaviour
 {
     public GameObject[] objects;
