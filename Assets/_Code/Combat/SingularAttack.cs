@@ -1,5 +1,5 @@
 ﻿using Elements;
-using EntityLib;
+using Entities;
 using MathsAndSome;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,9 +10,9 @@ public abstract class SingularAttack : ScriptableObject {
 
 	protected AudioSource source;
 
-	protected Entity.ENT_Controller[] hitEnemies(Vector3 startPos, Vector3 direction, float range) {
+	protected Entities.ENT_Controller[] hitEnemies(Vector3 startPos, Vector3 direction, float range) {
 		Debug.DrawLine(startPos, startPos + (direction * range), Color.red, 1);
-		List<Entity.ENT_Controller> ecs = new();
+		List<Entities.ENT_Controller> ecs = new();
 		Vector3 pos = startPos;
 		float dist = range;
 
@@ -22,7 +22,7 @@ public abstract class SingularAttack : ScriptableObject {
 		if (hits.Length > 0) {
 			foreach (RaycastHit hit in hits) {
 				if (hit.isEntity<ENM_Controller>()) {
-					Entity.ENT_Controller ec = hit.collider.GetComponent<Entity.ENT_Controller>();
+					Entities.ENT_Controller ec = hit.collider.GetComponent<Entities.ENT_Controller>();
 					if (!!ec) {
 						ecs.Add(ec);
 					}

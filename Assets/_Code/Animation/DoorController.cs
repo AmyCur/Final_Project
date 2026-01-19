@@ -1,4 +1,4 @@
-using EntityLib;
+using Entities;
 using MathsAndSome;
 using Player;
 using System.Collections;

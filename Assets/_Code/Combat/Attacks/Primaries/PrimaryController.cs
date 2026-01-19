@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using MathsAndSome;
-using EntityLib;
+using Entities;
 using System.Collections;
 using Player;
 using Combat.Enemies;

@@ -2,13 +2,13 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Entity;
+using Entities;
 using System.Linq;
 using MathsAndSome;
 using Globals;
 using Combat.Enemies;
 
-namespace EntityLib {
+namespace Entities {
 	public static class Entity {
 		static Dictionary<Type, string> enemyTypeToName = new() {
 			{typeof(Player.PL_Controller), "player"},

@@ -6,7 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Entity {
+namespace Entities {
 	// [RequireComponent(typeof(Rigidbody))]           // For movement
 	public abstract class ENT_Controller : MonoBehaviour {
 

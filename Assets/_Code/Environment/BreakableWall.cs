@@ -1,10 +1,8 @@
 ﻿using System;
 using UnityEngine;
-using Entity;
+using Entities;
 
-
-
-public class BreakableWall : Entity.ENT_Controller {
+public class BreakableWall : Entities.ENT_Controller {
 	public override void Start() {
 		base.Start();
 		if (!!GetComponent<Rigidbody>()) Destroy(GetComponent<Rigidbody>());

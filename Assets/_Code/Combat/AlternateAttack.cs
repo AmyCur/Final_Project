@@ -5,7 +5,7 @@ using System.Collections.Generic;
 // using System;
 // using UnityEditor;
 // using System.Reflection;
-using EntityLib;
+using Entities;
 using UnityEngine.UI;
 
 namespace Combat{

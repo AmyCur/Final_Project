@@ -13,7 +13,7 @@ namespace Combat.Attacks{
 		public float staggerTime = 1f;
 		public GameObject crt;
 
-		List<GameObject> FindAllEnemies() => EntityLib.Entity.GetAllEnemies();
+		List<GameObject> FindAllEnemies() => Entities.Entity.GetAllEnemies();
 
 		List<GameObject> FindAllEnemiesInRadius(){
 			List<GameObject> targetedObjs = new();

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class RB_Controller : Entity.ENT_Controller {
+public class RB_Controller : Entities.ENT_Controller {
 	[Header("Movement")]
 	public bool canMove = true;
 	public Vector3 movementVector;
