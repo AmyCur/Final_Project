@@ -7,7 +7,7 @@ using UnityEngine;
 using Combat.Attacks;
 using System.Threading.Tasks;
 using Cur.Audio;
-using Player;
+using Player.Movement;
 
 namespace Combat {
 	[System.Serializable]

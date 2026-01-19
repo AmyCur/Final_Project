@@ -1,4 +1,6 @@
-﻿namespace Player {
+﻿using Player.Movement;
+
+namespace Player {
 	public static class Consts {
 		public static class Movement {
 			const float MID_AIR_SPEED_REDUCTION = 0.714f;

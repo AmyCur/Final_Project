@@ -24,7 +24,7 @@ namespace Combat.Enemies{
 		[Header("Enemy")]
 		[Header("State")]
 		public EnemyState eState;
-		protected Player.PL_Controller pc=>mas.player.Player;
+		protected Player.Movement.PL_Controller pc=>mas.player.Player;
 		protected Vector3 playerPosition => mas.player.Player.transform.position;
 
 		[Header("Attacking")]

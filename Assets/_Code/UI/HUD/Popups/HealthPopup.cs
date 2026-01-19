@@ -1,5 +1,5 @@
 using MathsAndSome;
-using Player;
+using Player.Movement;
 using System;
 using TMPro;
 using UnityEngine;

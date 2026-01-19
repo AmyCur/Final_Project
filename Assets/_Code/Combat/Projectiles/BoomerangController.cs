@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using MathsAndSome;
-using Player;
+using Player.Movement;
 using EntityLib;
 
 namespace Combat.Attacks{

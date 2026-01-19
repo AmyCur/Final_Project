@@ -7,7 +7,7 @@ using Cur.UI;
 using System.Linq;
 using Combat.Enemies;
 
-namespace Player {
+namespace Player.Movement {
 	[RequireComponent(typeof(AudioSource))]
 	public class PL_Controller : RB_Controller {
 

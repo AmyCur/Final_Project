@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Magical;
-using PlayerStates;
+using Player.MovementStates;
 using MathsAndSome;
 using Globals;
 using Elements;
@@ -177,7 +177,7 @@ namespace Player
 			public float s;
 			public bool regenerating;
 			public float regenTime;
-			[HideInInspector] public Player.PL_Controller pc;
+			[HideInInspector] public Player.Movement.PL_Controller pc;
 
 			public IEnumerator RegenerateStamina()
 			{

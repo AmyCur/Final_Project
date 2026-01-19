@@ -32,7 +32,7 @@ public class HomingBulletController : MonoBehaviour {
 
 	// Are we deadass?
 	public virtual void OnTriggerEnter(Collider other) {
-		if ((target == Target.player || target== Target.both) && other.isEntity<Player.PL_Controller>() && other != parent) {
+		if ((target == Target.player || target== Target.both) && other.isEntity<Player.Movement.PL_Controller>() && other != parent) {
 			Entity.ENT_Controller ec = other.GetComponent<Entity.ENT_Controller>();
 			ec ??= other.transform.parent.GetComponent<Entity.ENT_Controller>();
 			ec.TakeDamage(damage, new Element(ElementType.None));
@@ -45,7 +45,7 @@ public class HomingBulletController : MonoBehaviour {
 
 
 		if (
-			other.isEntity<Player.PL_Controller>() ||
+			other.isEntity<Player.Movement.PL_Controller>() ||
 			(other.isEntity() && canHitEntity) ||
 			(!other.isEntity() && other.tag != "Thought")
 		) _="";

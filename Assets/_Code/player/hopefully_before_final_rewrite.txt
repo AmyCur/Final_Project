@@ -7,7 +7,7 @@ using Magical;
 using MathsAndSome;
 using Globals;
 using Elements;
-using Player.PlayerStates;
+using Player.Movement.PlayerStates;
 
 namespace Player {
 	namespace PlayerStates {

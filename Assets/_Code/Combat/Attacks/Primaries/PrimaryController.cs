@@ -2,7 +2,7 @@
 using MathsAndSome;
 using EntityLib;
 using System.Collections;
-using Player;
+using Player.Movement;
 using Combat.Enemies;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -39,6 +39,6 @@ public class PrimaryController : MonoBehaviour
 	void Start(){
 		player = mas.player.Player.gameObject;
 		rb=GetComponent<Rigidbody>();
-		direction = Directions.forward; 
+		direction = Player.Directions.forward; 
 	}
 }

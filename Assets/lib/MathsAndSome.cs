@@ -195,7 +195,7 @@ namespace MathsAndSome
 
             public static GameObject GetPlayerObj() => GameObject.FindGameObjectWithTag(glob.playerTag);
             
-            public static Player.PL_Controller Player;
+            public static Player.Movement.PL_Controller Player;
             public static Combat.CombatController Combat;
             
             

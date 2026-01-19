@@ -1,6 +1,6 @@
 using EntityLib;
 using MathsAndSome;
-using Player;
+using Player.Movement;
 using System.Collections;
 using UnityEngine;
 

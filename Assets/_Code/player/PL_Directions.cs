@@ -1,5 +1,6 @@
 using UnityEngine;
 using MathsAndSome;
+using Player.Movement;
 
 namespace Player {
     public static class Directions{

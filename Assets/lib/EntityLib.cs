@@ -12,7 +12,7 @@ using Combat.Attacks.Projectiles;
 namespace EntityLib {
 	public static class Entity {
 		static Dictionary<Type, string> enemyTypeToName = new() {
-			{typeof(Player.PL_Controller), "player"},
+			{typeof(Player.Movement.PL_Controller), "player"},
 			{typeof(ENM_Controller), "enemy"},
 			{typeof(ENT_Controller), "entity"},
 		};
@@ -22,7 +22,7 @@ namespace EntityLib {
 				Enemy.KillEnemies();
 				PlayerUtils.KillPlayer();
 			}
-			else if(targetType == typeof(Player.PL_Controller)) PlayerUtils.KillPlayer();
+			else if(targetType == typeof(Player.Movement.PL_Controller)) PlayerUtils.KillPlayer();
 			else if(targetType == typeof(ENM_Controller)) Enemy.KillEnemies();
 		}
 
@@ -55,19 +55,19 @@ namespace EntityLib {
 			Type targetType = typeof(T);
 			targetType ??= typeof(ENT_Controller);
 
-			if (targetType == typeof(Player.PL_Controller)) {
+			if (targetType == typeof(Player.Movement.PL_Controller)) {
 				if (m is RaycastHit h) {
 					
-					return h.collider.CompareTag(Globals.glob.playerChildTag) || !!h.collider.GetComponent<Player.PL_Controller>() || h.collider.CompareTag(Globals.glob.playerTag);
+					return h.collider.CompareTag(Globals.glob.playerChildTag) || !!h.collider.GetComponent<Player.Movement.PL_Controller>() || h.collider.CompareTag(Globals.glob.playerTag);
 				}
 
 				else if (m is Collider c){
-					bool isPlayer = c.GetComponent<Player.PL_Controller>() != null;
+					bool isPlayer = c.GetComponent<Player.Movement.PL_Controller>() != null;
 					bool isPlayerTag = c.CompareTag(Globals.glob.playerChildTag);
-					bool isPlayerChild = c.transform.parent != null ? c.transform.parent.GetComponent<Player.PL_Controller>()!=null : false;
+					bool isPlayerChild = c.transform.parent != null ? c.transform.parent.GetComponent<Player.Movement.PL_Controller>()!=null : false;
 					return (isPlayer || isPlayerTag || isPlayerChild);
 				}
-				else if (m is MonoBehaviour mono) return mono is Player.PL_Controller;
+				else if (m is MonoBehaviour mono) return mono is Player.Movement.PL_Controller;
 				return false;
 			}
 
@@ -147,7 +147,7 @@ namespace EntityLib {
 		public static void ShootPlayer<T>(this GameObject obj, float range, float damage){
 			if(typeof(T) == typeof(RaycastHit)){
 				if(Physics.Raycast(obj.transform.position, mas.player.Player.transform.position-obj.transform.position, out RaycastHit hit, range)){
-					if (hit.isEntity<Player.PL_Controller>()){
+					if (hit.isEntity<Player.Movement.PL_Controller>()){
 						mas.player.Player.health-=damage;
 					}
 				}

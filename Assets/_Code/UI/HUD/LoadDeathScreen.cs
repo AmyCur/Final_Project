@@ -6,7 +6,7 @@ namespace Cur.UI{
 	public class LoadDeathScreen : MonoBehaviour
 	{
 		RectTransform trans;
-		Player.PL_Controller pc;
+		Player.Movement.PL_Controller pc;
 		[SerializeField] float targetScale = 1f;
 		[SerializeField] float lerpSpeed = 5f;
 

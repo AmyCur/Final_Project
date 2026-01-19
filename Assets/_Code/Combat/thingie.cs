@@ -56,7 +56,7 @@ public abstract class thingie : ScriptableObject {
 		canAttack = true;
 	}
 
-	public Player.PL_Controller pc => mas.player.Player;
+	public Player.Movement.PL_Controller pc => mas.player.Player;
 
 	public abstract bool keyDown();
 	public abstract bool keyStayDown();

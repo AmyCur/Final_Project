@@ -90,7 +90,7 @@ namespace Cur.UI {
 
 	public class HUDController : MonoBehaviour {
 		// Paths
-		Player.PL_Controller pc => mas.player.Player;
+		Player.Movement.PL_Controller pc => mas.player.Player;
 
 		const string baseIconPath = "UI/Icons/Elements/";
 		const string windPath = baseIconPath + "Wind";

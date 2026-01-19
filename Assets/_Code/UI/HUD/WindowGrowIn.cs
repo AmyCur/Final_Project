@@ -6,7 +6,7 @@ namespace Cur.UI{
 	public class WindowGrowIn : MonoBehaviour
 	{
 		RectTransform trans;
-		Player.PL_Controller pc;
+		Player.Movement.PL_Controller pc;
 		[SerializeField] float delay=1f;
 		[SerializeField] float targetScale = 1f;
 		[SerializeField] bool closeOnDeath=true;

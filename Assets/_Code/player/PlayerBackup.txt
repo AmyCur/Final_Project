@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Magical;
-using PlayerStates;
+using Player.MovementStates;
 using MathsAndSome;
 using Globals;
 using Elements;
@@ -27,7 +27,7 @@ namespace PlayerStates {
 
 [RequireComponent(typeof(CapsuleCollider))]     // For Collision
 [RequireComponent(typeof(AudioSource))]
-public class Player.PL_Controller : RB_Controller {
+public class Player.Movement.PL_Controller : RB_Controller {
 	#region Variables
 
 	readonly Vector2 checkScale = new(.3f, 0.06f);

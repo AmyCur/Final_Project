@@ -22,7 +22,7 @@ namespace Combat.Enemies{
 			bool playerInRange=false;
 
 			if(Physics.Raycast(transform.position, playerPosition-transform.position, out RaycastHit hit, range)){
-				playerInRange = hit.isEntity<Player.PL_Controller>();
+				playerInRange = hit.isEntity<Player.Movement.PL_Controller>();
 			}
 			
 			return playerInRange;

@@ -2,6 +2,7 @@ using Magical;
 using MathsAndSome;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Player.Movement;
 
 namespace Player{
 	public class PL_HandleDeath : MonoBehaviour {
