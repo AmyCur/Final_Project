@@ -4,16 +4,15 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - Enemy
-  - RadialBar
-  - VortexHolder
-  - WeaponIcon
-  - PlayerChild
   - Thought
+  - PlayerChild
+  - Enemy
+  - Projectile
   - Raincloud
   - Bullets
+  - VortexHolder
   - Enemies
-  - Projectile
+  - WeaponIcon
   layers:
   - Default
   - TransparentFX
@@ -25,7 +24,7 @@ TagManager:
   - Marker
   - Player
   - Enemy
-  - 
+  - Ground
   - 
   - 
   - 
