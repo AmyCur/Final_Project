@@ -5,7 +5,6 @@ using System;
 
 namespace Admin;
 
-
 public struct Command{
 	public object parent;
 	public List<object> parentVariables;

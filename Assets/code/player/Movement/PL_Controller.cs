@@ -6,6 +6,7 @@ using EntityLib;
 using FileManagement.UI;
 using System.Linq;
 using Combat.Enemies;
+using UI;
 
 namespace Player.Movement {
 	[RequireComponent(typeof(AudioSource))]
