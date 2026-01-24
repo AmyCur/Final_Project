@@ -1,6 +1,0 @@
-<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI%20Toolkit/USS/DarkBG.uss?fileID=7433441132597879392&amp;guid=a2e09d8abacd171249e209890a4da9ac&amp;type=3#DarkBG" />
-    <ui:VisualElement name="Container" style="flex-grow: 1;">
-        <RadialProgressLib.RadialProgress style="width: 150px; height: 150px; position: absolute; right: 20px; bottom: 20px;" />
-    </ui:VisualElement>
-</ui:UXML>

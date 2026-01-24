@@ -2,7 +2,7 @@ using UnityEngine;
 using Globals;
 using TMPro;
 
-namespace Cur.Settings
+namespace FileManagement.Settings
 {
     [System.Serializable]
     public enum languages

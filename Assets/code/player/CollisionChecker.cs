@@ -1,0 +1,17 @@
+using MathsAndSome;
+using UnityEngine;
+
+public class CollisionChecker : MonoBehaviour {
+
+    Player.Movement.PL_Controller pc;
+
+    void OnTriggerStay(Collider other) {
+        if (!pc.shouldDash) {
+            pc.dash.force = 0f;
+        }
+    }
+
+	void Start() {
+        pc = mas.player.Player;
+	}
+}

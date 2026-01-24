@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Cur.Settings
+namespace FileManagement.Settings
 {
     public static class Combat
     {
