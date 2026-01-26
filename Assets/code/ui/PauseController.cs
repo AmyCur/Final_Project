@@ -1,23 +1,24 @@
-using UnityEngine;
+﻿using UnityEngine;
 using Magical;
 using System;
 
+namespace UI{
+	public class PauseController : MonoBehaviour
+	{
 
-public class PauseController : MonoBehaviour
-{
+		bool paused;
 
-    bool paused;
+		GameObject pauseMenu;
 
-    GameObject pauseMenu;
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (magic.key.down(keys.pause))
-        {
-            paused = !paused;
-            PlayerPrefs.SetInt(nameof(paused), Convert.ToInt32(paused));
-            pauseMenu.SetActive(paused);
-        }
-    }
+		// Update is called once per frame
+		void Update()
+		{
+			if (magic.key.down(keys.pause))
+			{
+				paused = !paused;
+				PlayerPrefs.SetInt(nameof(paused), Convert.ToInt32(paused));
+				pauseMenu.SetActive(paused);
+			}
+		}
+	}
 }

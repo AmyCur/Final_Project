@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using EntityLib;
+using Entity;
 
 namespace Combat.Enemies{
 	public sealed class RangedEnemy : ENM_Controller
@@ -13,6 +13,7 @@ namespace Combat.Enemies{
 		// Called every frame
 		protected override void Attack(){
 			if (canAttack){
+				Debug.Log("Attack");
 				gameObject.ShootPlayer<Attacks.Projectiles.BulletController>(range, damage);
 				base.Attack();
 			}

@@ -1,7 +1,7 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 
-namespace Combat {
+namespace Combat.Enemy {
    
     public enum Projectile {
         bullet,

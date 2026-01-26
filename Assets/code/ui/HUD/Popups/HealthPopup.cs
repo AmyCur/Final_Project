@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 
 
-namespace FileManagement.UI{
+namespace UI{
 	public class HealthPopup : Popup{
 		PL_Controller pc;
 		TMP_Text message;

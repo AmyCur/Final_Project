@@ -1,5 +1,5 @@
 ﻿using Combat.Enemies;
-using EntityLib;
+using Entity;
 using UnityEngine;
 using System.Collections.Generic;
 using Entities;
@@ -13,9 +13,9 @@ namespace Combat.Attacks.Projectiles{
 		[SerializeField] protected float moveSpeed=5f;
 		[SerializeField] List<EnemyTypes> targetTypes;
 
-		public virtual void Init(Vector3 direction, float damage){
-			this.direction=direction;
-			this.damage=damage;
+		public virtual void Init(Vector3 dir, float dmg){
+			direction=dir;
+			damage=dmg;
 		}
 		
 		protected virtual void FixedUpdate(){

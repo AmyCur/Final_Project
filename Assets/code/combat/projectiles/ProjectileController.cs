@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using Elements;
+using Combat.Elements;
 using MathsAndSome;
 
 public class ProjectileController : MonoBehaviour {

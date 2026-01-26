@@ -1,8 +1,8 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using MathsAndSome;
 using Player.Movement;
-using EntityLib;
+using Entity;
 
 namespace Combat.Attacks{
 	public class BoomerangController : Projectiles.BulletController
@@ -10,8 +10,12 @@ namespace Combat.Attacks{
 		Vector3 forward;
 
 		[SerializeField] float initialTurnAroundTime=1f;
+		
 		[SerializeField] float lerpSpeed = 10f;
+
 		bool destroyIfTouchingPlayer;
+
+		LineRenderer lr;
 
 		IEnumerator TurnAround(){
 			yield return new WaitForSeconds(initialTurnAroundTime);
@@ -19,7 +23,7 @@ namespace Combat.Attacks{
 			Vector3 f = forward;
 			destroyIfTouchingPlayer=true;
 			while (forward != target){
-			transform.rotation =  Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, -mas.player.Player.playerCamera.transform.forward, 10f*Time.deltaTime, 0f));
+			transform.rotation =  Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, -mas.player.Player.playerCamera.transform.forward, 30f*Time.deltaTime, 0f));
 				print(moveSpeed);
 				forward = mas.vector.LerpVectors(forward, (-transform.position+mas.player.Player.transform.position).normalized*10f, Time.deltaTime*lerpSpeed*moveSpeed);
 				moveSpeed+=0.01f;
@@ -29,6 +33,13 @@ namespace Combat.Attacks{
 
 		protected override void FixedUpdate(){
 			rb.linearVelocity=forward*moveSpeed;
+		}
+
+		void Update(){
+			if (lr != null){
+				lr.SetPosition(0, mas.player.Player.transform.position);
+				lr.SetPosition(1, transform.position);
+			}			
 		}
 
 		protected override void OnTriggerEnter(Collider other)
@@ -43,6 +54,7 @@ namespace Combat.Attacks{
 			base.Start();
 			forward = transform.forward * moveSpeed;
 			StartCoroutine(TurnAround());
+			lr=GetComponent<LineRenderer>();
 		}
 	}
 }

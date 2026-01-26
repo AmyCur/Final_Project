@@ -1,6 +1,6 @@
 using System;
 
-namespace FileManagement.UI{
+namespace UI{
 	public static class Jumble{
 		//TODO: Add support for custom character inputs
 		static char[] characters = {'!', '£', '$', '€', '%', '^', '&', '*', '(', ')', '-', '_', '+', '='};

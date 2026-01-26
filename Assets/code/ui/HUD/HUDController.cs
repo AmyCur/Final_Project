@@ -1,4 +1,4 @@
-﻿using Elements;
+﻿using Combat.Elements;
 using MathsAndSome;
 using System.Collections.Generic;
 using System.Collections;
@@ -7,7 +7,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Threading.Tasks;
 
-namespace FileManagement.UI {
+namespace UI.HUD {
 	public static class BarColors {
 		public static Color fireColor = new Color(0.780f, 0.19f, 0.27f, 1);
 		public static Color waterColor = new Color(0, 0, 1, 1);

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Globals;
 using System.Collections;
-using Elements;
+using Combat.Elements;
 using Combat.Enemies;
 
 [RequireComponent(typeof(Rigidbody))]

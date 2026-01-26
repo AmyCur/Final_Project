@@ -2,7 +2,7 @@
 using Magical;
 using System.Collections.Generic;
 
-namespace FileManagement.Audio{
+namespace Audio{
 
 	public class Sound{
 		public GameObject player;

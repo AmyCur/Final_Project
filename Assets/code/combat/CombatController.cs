@@ -6,7 +6,7 @@ using System.Collections;
 using UnityEngine;
 using Combat.Attacks;
 using System.Threading.Tasks;
-using FileManagement.Audio;
+using Audio;
 using Player.Movement;
 
 namespace Combat {

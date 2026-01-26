@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using EntityLib;
+using Entity;
 
 public class UnloadOjbs : MonoBehaviour{
 

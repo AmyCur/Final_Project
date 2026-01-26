@@ -3,7 +3,7 @@ using MathsAndSome;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.AI;
-using Elements;
+using Combat.Elements;
 
 namespace Combat.Enemies{
 	public abstract class ENM_Controller : RB_Controller {

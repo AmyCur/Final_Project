@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Magical;
-using EntityLib;
-using FileManagement.UI;
+using Entity;
+using UI;
+using UI.HUD;
 using System.Linq;
 using Combat.Enemies;
-using UI;
 
 namespace Player.Movement {
 	[RequireComponent(typeof(AudioSource))]
@@ -134,7 +134,7 @@ namespace Player.Movement {
 
 		void AdminFunctionality()
         {
-            if(Input.GetKeyDown(KeyCode.LeftBracket)) EntityLib.Entity.KillAll(typeof(ENM_Controller));
+            if(Input.GetKeyDown(KeyCode.LeftBracket)) Entity.Entity.KillAll(typeof(ENM_Controller));
 			if (magic.key.down(keys.noclip)) CheckForAdmin();
         }
 
@@ -195,6 +195,8 @@ namespace Player.Movement {
 			if (state != PlayerState.sliding && state != PlayerState.slamming && canMove) {
 				if (adminState == AdminState.noclip) this.AdminMove();	
 			}
+
+			Audio.ChangeAudioOnIntensity.FadeSongBasedOnDangerLevel();
 		}
 
 		public override void FixedUpdate() {
@@ -407,7 +409,6 @@ namespace Player.Movement {
 					}
 					else footCollider.material.dynamicFriction=defaultFriction;
 					
-					Debug.Log(angle);
 				}
 
 				return;

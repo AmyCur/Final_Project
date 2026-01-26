@@ -12,8 +12,8 @@ namespace MathsAndSome
                 return GameObject.FindGameObjectWithTag("VortexHolder").transform;
             }
 
-            public static FileManagement.UI.HUDController HC() {
-                return GameObject.FindGameObjectWithTag(glob.WeaponIconTag).GetComponent<FileManagement.UI.HUDController>();
+            public static UI.HUD.HUDController HC() {
+                return GameObject.FindGameObjectWithTag(glob.WeaponIconTag).GetComponent<UI.HUD.HUDController>();
             }
         }
 

@@ -18,7 +18,7 @@ namespace Combat
 			mas.player.Player.EnemySpawnScreen.SetActive(!menuActivated);
 			menuActivated=!menuActivated;
 			Cursor.visible = menuActivated;
-			FileManagement.UI.Props.inMenu=menuActivated;
+			UI.Props.inMenu=menuActivated;
 
 			if(menuActivated)  Cursor.lockState = CursorLockMode.None;
 			else  Cursor.lockState = CursorLockMode.Locked;

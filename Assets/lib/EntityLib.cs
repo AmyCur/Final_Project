@@ -1,4 +1,4 @@
-﻿using Elements;
+﻿using Combat.Elements;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +9,7 @@ using Globals;
 using Combat.Enemies;
 using Combat.Attacks.Projectiles;
 
-namespace EntityLib {
+namespace Entity {
 	public static class Entity {
 		static Dictionary<Type, string> enemyTypeToName = new() {
 			{typeof(Player.Movement.PL_Controller), "player"},

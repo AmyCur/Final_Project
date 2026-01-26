@@ -1,10 +1,9 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-namespace FileManagement.Audio{
-
+namespace Audio{
 	[System.Serializable]
 	public class Audio{
 		public AudioClip clip;
@@ -80,10 +79,8 @@ namespace FileManagement.Audio{
 			return Resources.Load<GameObject>("Prefabs/Sound/MusicPlayer");
 		}
 
-		static LevelAudio GetCurrentLevelAudio()
-		{
-			return Resources.Load<LevelAudio>($"Scriptables/Audio/{SceneManager.GetActiveScene().name}");
-		}
+		public static LevelAudio GetCurrentLevelAudio() => Resources.Load<LevelAudio>($"Scriptables/Audio/{SceneManager.GetActiveScene().name}");
+		
 
 
      	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]

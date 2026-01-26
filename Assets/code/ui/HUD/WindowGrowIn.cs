@@ -1,8 +1,8 @@
-using MathsAndSome;
+﻿using MathsAndSome;
 using System.Collections;
 using UnityEngine;
 
-namespace FileManagement.UI{
+namespace UI.HUD{
 	public class WindowGrowIn : MonoBehaviour
 	{
 		RectTransform trans;

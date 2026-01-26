@@ -7,7 +7,7 @@ using Magical;
 using Player.MovementStates;
 using MathsAndSome;
 using Globals;
-using Elements;
+using Combat.Elements;
 
 namespace PlayerStates {
 	public enum state {

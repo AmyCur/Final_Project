@@ -2,11 +2,12 @@
 using MathsAndSome;
 using UnityEngine;
 using TMPro;
+using Entities;
 
 public class SwitchSpawnControllerEnemy : MonoBehaviour
 {
     SpawnerController sc;
-    public Enemy enm;
+    public EnemyTypes enm;
 	TMP_Text EnemyText => GameObject.Find("EnemyText").GetComponent<TMP_Text>();
 
     public void SetEnemy(){

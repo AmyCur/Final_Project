@@ -1,7 +1,7 @@
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections.Generic;
 
-
-namespace FileManagement.Audio
+namespace Audio
 {
 	[CreateAssetMenu(fileName = "New Level Audio", menuName = "Audio/Create/Audio")]
 	public class LevelAudio : ScriptableObject
@@ -9,5 +9,7 @@ namespace FileManagement.Audio
 		public AudioClip baseClip; 
 		public AudioClip enemyClip; 
 		public AudioClip bossClip; 
+
+		public List<AudioClip> clips => new(){baseClip, enemyClip, bossClip};		
 	}
 }

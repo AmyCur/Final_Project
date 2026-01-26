@@ -1,10 +1,11 @@
-﻿using Elements;
-using EntityLib;
+﻿using Combat.Elements;
+using Entity;
 using MathsAndSome;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Combat.Enemies;
+using Combat.Attacks.Primary;
 
 public abstract class SingularAttack : ScriptableObject {
 

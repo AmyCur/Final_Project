@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Entity;
 
+namespace Combat.Attacks.Primary;
 
 // [CreateAssetMenu(fileName = "Beam Attack", menuName = "Attacks/Primary/Beam", order = 0)]
 public class BeamAttack : PrimaryAttack {
@@ -10,9 +11,6 @@ public class BeamAttack : PrimaryAttack {
 	[SerializeField] List<Entity.ENT_Controller> hitEnems = new();
 	GameObject markerPrefab;
 	List<GameObject> markers;
-
-
-
 
 	[Header("Lightning")]
 	[SerializeField] Material defaultMaterial;

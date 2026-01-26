@@ -1,6 +1,6 @@
-﻿using EntityLib;
+﻿using Entity;
 using UnityEngine;
-using Elements;
+using Combat.Elements;
 using System.Collections;
 using Combat.Enemies;
 

@@ -65,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9d1414bb99583747ea87e78d2f99bbe1, type: 2}
+  - {fileID: 2100000, guid: 03cc4c3a933a7f7428d69a9171dd1215, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -291,23 +291,8 @@ MonoBehaviour:
   rb: {fileID: 0}
   SV: []
   eState: 0
-  maxSeekRange: 1000
-  maxHuntRange: 15
-  maxAttackRange: 5
-  attackData: {fileID: 11400000, guid: dd28c561d28e3b9389b482457ed132ac, type: 2}
-  canSeek: 1
-  canHunt: 1
-  canIdle: 1
+  damage: 10
+  attackCD: 1
+  range: 3
   canAttack: 1
-  displayDebugInfo: 1
-  attackElement:
-    type: 0
-    f: 0
-  rc: 0
-  movementChoiceTime: 5
-  Offset:
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  retreatDistance: 3
-  bulletPath: Prefabs/Combat/Projectiles/Bullet
-  pipePath: Prefabs/Combat/Projectiles/Pipe
+  staggered: 0

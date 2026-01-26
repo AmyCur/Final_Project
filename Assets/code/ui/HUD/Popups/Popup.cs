@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace FileManagement.UI{
+namespace UI{
 	public class Popup : MonoBehaviour{
 		RectTransform trans;
 		[SerializeField] float initScale=0f;

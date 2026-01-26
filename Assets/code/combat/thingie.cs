@@ -1,5 +1,5 @@
-﻿using Elements;
-using EntityLib;
+﻿using Combat.Elements;
+using Entity;
 using Magical;
 using MathsAndSome;
 using System.Collections;

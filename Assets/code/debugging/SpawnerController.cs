@@ -1,25 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Magical;
+using Entities;
 
 namespace Combat
 {
-	public enum Enemy{
-		melee,
-		ranged
-	}
-
+	
 	[System.Serializable]
 	public struct EnemyPathPair{
-		public Enemy enemy;
+		public EnemyTypes enemy;
 		public string path;
 	}
 
 	public static class EnemyObjs{
-		public static Dictionary<Enemy, GameObject> enemyObjects = new Dictionary<Enemy, GameObject>();
+		public static Dictionary<EnemyTypes, GameObject> enemyObjects = new Dictionary<EnemyTypes, GameObject>();
 		public static void Print(){
 			if(enemyObjects!=null){
-				foreach(KeyValuePair<Enemy, GameObject> kvp in enemyObjects){
+				foreach(KeyValuePair<EnemyTypes, GameObject> kvp in enemyObjects){
 					Debug.Log($"{kvp.Key} : {kvp.Value}");
 				}
 			}
@@ -28,7 +25,7 @@ namespace Combat
 
 	namespace Enemies{
 		public static class Spawning{
-			public static GameObject SpawnEnemy(Enemy eType, Vector3 pos){
+			public static GameObject SpawnEnemy(EnemyTypes eType, Vector3 pos){
 				EnemyObjs.Print();
 				GameObject obj=EnemyObjs.enemyObjects[eType] ;
 
@@ -48,7 +45,7 @@ namespace Combat
 		
 		[Header("Spawner")]
 		
-		public Enemy enemy;
+		public EnemyTypes enemy;
 
 		public List<EnemyPathPair> enemyPaths;
 		const string basePath="Prefabs/Combat/Enemies/";

@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
 using Magical;
 using Combat.Enemies;
@@ -13,7 +13,7 @@ namespace Combat.Attacks{
 		public float staggerTime = 1f;
 		public GameObject crt;
 
-		List<GameObject> FindAllEnemies() => EntityLib.Entity.GetAllEnemies();
+		List<GameObject> FindAllEnemies() => Entity.Entity.GetAllEnemies();
 
 		List<GameObject> FindAllEnemiesInRadius(){
 			List<GameObject> targetedObjs = new();
