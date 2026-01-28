@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: InteriorTiles
-  m_Shader: {fileID: -6465566751694194690, guid: 99f039e2e3bdeb30b8a479ea31348c8b, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 7628670afe31ee94190f1fdcf03f6695, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -73,7 +73,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture:
-        m_Texture: {fileID: 2800000, guid: e386086c818449980a3dc79a2853b0db, type: 3}
+        m_Texture: {fileID: 2800000, guid: cebbb5ab7a59c2247be129f14a028ac1, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -93,7 +93,7 @@ Material:
     - _AddPrecomputedVelocity: 0
     - _AlphaClip: 0
     - _AlphaToMask: 0
-    - _Blend: 1
+    - _Blend: 5
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
     - _ClearCoatMask: 0

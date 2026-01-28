@@ -87,7 +87,8 @@ namespace Audio{
 		public static void Start(){
 			player=GetPlayer();
 			currentLevelAudio=GetCurrentLevelAudio();
-			PlaySong(currentLevelAudio.baseClip);
+			if(currentLevelAudio!=null) PlaySong(currentLevelAudio.baseClip);
+			else Debug.LogWarning($"Level music not found for {SceneManager.GetActiveScene().name}");
 		}
 	}
 }
