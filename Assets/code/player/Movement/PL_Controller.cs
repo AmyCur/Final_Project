@@ -350,7 +350,7 @@ namespace Player.Movement {
 
 			float airChange = Consts.Movement.AirSpeedChange(Grounded());
 
-			Vector3 force = (forward * vInp * (Grounded() ? fwSpeed : sdSpeed) * airChange) + (right * hInp * sdSpeed * airChange);
+			Vector3 force = (forward * vInp * fwSpeed * airChange) + (right * hInp * sdSpeed * airChange);
 			moveDirection=force;
 
 			slide.ChangeDirection(force.normalized);
