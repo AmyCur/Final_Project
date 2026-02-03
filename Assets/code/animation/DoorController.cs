@@ -10,6 +10,8 @@ namespace Animation{
 		Vector3 startPos;
 		Coroutine routine;
 		[SerializeField] float doorOpenSpeed = 10f;
+		[HideInInspector] public bool locked;
+		bool canMove => !locked;
 
 		IEnumerator MoveDoorRoutine(Vector3 targetPosition){
 			Vector3 startPosition=transform.position;
@@ -26,13 +28,13 @@ namespace Animation{
 		}
 
 		void OnTriggerEnter(Collider other){
-			if(other.isEntity<PL_Controller>()){
+			if(other.isEntity<PL_Controller>() && canMove){
 				MoveDoor(startPos+(Vector3.up*5f));
 			}
 		}
 
 		void OnTriggerExit(Collider other){
-			if(other.isEntity<PL_Controller>()){
+			if(other.isEntity<PL_Controller>() && canMove){
 				MoveDoor(startPos);
 			}
 		}

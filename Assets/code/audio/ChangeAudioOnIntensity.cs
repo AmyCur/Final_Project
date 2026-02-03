@@ -35,7 +35,8 @@ namespace Audio{
 				AudioClip targetClip = currentDangerLevel switch{
 					DangerLevel.no_enemy => levelAudio.baseClip,
 					DangerLevel.enemy => levelAudio.enemyClip,
-					DangerLevel.boss => levelAudio.bossClip
+					DangerLevel.boss => levelAudio.bossClip,
+					_ => levelAudio.baseClip
 				};
 
 				
