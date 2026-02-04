@@ -34,13 +34,13 @@ namespace Animation{
 		}
 
 		void OnTriggerExit(Collider other){
-			if(other.isEntity<PL_Controller>() && canMove){
+			if(other.isEntity<PL_Controller>()){
 				MoveDoor(startPos);
 			}
 		}
 
 		void Start(){
-			startPos=transform.position;
+		startPos=transform.position;
 		}
 	}
 }

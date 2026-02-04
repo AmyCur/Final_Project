@@ -8,7 +8,7 @@ namespace Combat.Spawning{
 		void OnTriggerEnter(Collider other) {
 			if(other.isEntity<PL_Controller>()){
 				GetComponent<BoxCollider>().enabled=false;
-				SpawnEnemies();
+				this.SpawnEnemies();
 			}
 		}
 	}

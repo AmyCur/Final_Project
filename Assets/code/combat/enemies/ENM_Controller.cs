@@ -16,6 +16,8 @@ namespace Combat.Enemies{
 			attacking
 		}
 
+		public bool isEnabled;
+
 		protected NavMeshAgent agent;
 
 		protected Vector3 pos => transform.position;
@@ -70,6 +72,7 @@ namespace Combat.Enemies{
 		protected IEnumerator HuntRoutine(){
 			eState = EnemyState.hunting;
 			while (true){
+				
 				yield return 0;
 				if(!staggered) Hunt();
 				if (ShouldAttack()) SwitchRoutine(); 
@@ -87,10 +90,14 @@ namespace Combat.Enemies{
 
 
 		protected IEnumerator HandleAIChoices(){
+			
 			// If the ais doing nothing
 			do {
-				if(ShouldAttack()) combatRoutine = StartCoroutine(AttackRoutine());
-				else if(ShouldHunt()) combatRoutine = StartCoroutine(HuntRoutine()); 
+				if (isEnabled){
+					if(ShouldAttack()) combatRoutine = StartCoroutine(AttackRoutine());
+					else if(ShouldHunt()) combatRoutine = StartCoroutine(HuntRoutine()); 
+				}
+				
 				yield return 0;
 			} while (combatRoutine == null);
 

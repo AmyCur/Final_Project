@@ -37,8 +37,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Intensity: 1.2
+    - _Intensity: 2
     m_Colors:
-    - _White: {r: 0.8352941, g: 0.76862746, b: 0.6313726, a: 1}
+    - _White: {r: 0.18396229, g: 0.23104157, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

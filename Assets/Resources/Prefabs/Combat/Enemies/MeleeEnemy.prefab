@@ -248,7 +248,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5519382602060475077}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.5000001
   m_Speed: 15
@@ -290,6 +290,7 @@ MonoBehaviour:
   movementVector: {x: 0, y: 0, z: 0}
   rb: {fileID: 0}
   SV: []
+  enabled: 0
   eState: 0
   damage: 10
   attackCD: 0.5
