@@ -1,4 +1,4 @@
-using MathsAndSome;
+﻿using MathsAndSome;
 using System.Collections;
 using UnityEngine;
 
@@ -16,15 +16,19 @@ public static class Dash{
 		pc.StartCoroutine(NoGravityDash());
 	}
 
+
+	public static Vector3 dashForceToAdd = Vector3.zero;
+
+
 	public static IEnumerator DecayDash(float decaySpeed = -1f) {
 		if (decaySpeed == -1f) decaySpeed = pc.dash.decaySpeed;
 		float force = pc.dash.force;
 
 		// idk if this needs to be a do while
 		do {
-			Vector3 forceToAdd = pc.dash.direction * force * 1_000f * Time.deltaTime;
+			dashForceToAdd = pc.dash.direction * force * 1_000f * Time.deltaTime;
 			// Debug.Log(forceToAdd);
-			pc.rb.AddForce(forceToAdd);
+			pc.rb.AddForce(dashForceToAdd);
 			force = Mathf.Lerp(force, 0, Time.deltaTime * decaySpeed);
 			yield return 0;
 		} while (force > 0.1f && !pc.shouldDash && pc.state != PlayerState.slamming && pc.adminState != AdminState.noclip);

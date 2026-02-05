@@ -47,10 +47,10 @@ namespace Combat.Spawning{
 		// 	if(!CheckForSpawningComplete()) StartCoroutine(HandleEnemySpawning());
 		// }
 
-		async void EnableEnemies(ENM_Controller enm){
+		void EnableEnemies(ENM_Controller enm){
 			enm.isEnabled=true;
 			enm.GetComponent<UnityEngine.AI.NavMeshAgent>().enabled = true;
-			await Task.Delay(200);
+
 		}
 
 		bool completedSpawning=false;
@@ -62,11 +62,10 @@ namespace Combat.Spawning{
 
 
 			foreach(SpawnPointType spt in currentWave.wave){
-				await Task.Delay(Mathf.FloorToInt(currentWave.delay*1000));
 				GameObject ce = Enemies.Spawning.SpawnEnemy(spt.type, spt.pos);
 				EnableEnemies(ce.GetComponent<ENM_Controller>());
-				
 				currentEnemies.Add(ce);
+				await Task.Delay(Mathf.FloorToInt(currentWave.delay*1000));
 			}
 
 			completedSpawning = true;
@@ -91,20 +90,37 @@ namespace Combat.Spawning{
 			LockDoors();
 		}
 
-		void LockDoors(){
+		void LockDoors(bool locked=true){
 			if(doorsToLock.Length>0){
 				foreach(DoorController dc in doorsToLock) {
-					dc.locked=true;
+					dc.locked=locked;
 				}
 			}
 		}
 
+		async void IncrementWave(){
+			waveIndex+=1;
+
+			if(!CheckForSpawningComplete()) {
+				spawningNewWave=true;
+				await Task.Delay(Mathf.FloorToInt(timeBetweenWaves*1000));
+				HandleEnemySpawning();
+				spawningNewWave=false;
+			}
+			
+			if (waveIndex > waves.Count){
+				LockDoors(false);
+			}
+		}
+
+		bool spawningNewWave;
+
 		void Update(){
 			if (waveTriggered){
 				// if(completedSpawning) EnableEnemies();
-				if(WaveCompleted()){
-					waveIndex+=1;
-					if(!CheckForSpawningComplete()) HandleEnemySpawning();
+				if(WaveCompleted() && !spawningNewWave){
+					IncrementWave();
+					if (waveIndex > waves.Count) return;
 				}
 			}
 		}
