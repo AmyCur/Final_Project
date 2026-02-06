@@ -366,7 +366,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17b2d2d511275400fa2e5841d26d1a27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  doorOpenSpeed: 4.3
+  doorOpenSpeed: 5
+  locked: 0
 --- !u!65 &9092859458032590959
 BoxCollider:
   m_ObjectHideFlags: 0
