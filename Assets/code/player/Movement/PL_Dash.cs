@@ -1,5 +1,6 @@
 ﻿using MathsAndSome;
 using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Player.Movement;
@@ -19,10 +20,21 @@ public static class Dash{
 
 	public static Vector3 dashForceToAdd = Vector3.zero;
 
+	static bool shouldStopDash=false;
+
+	public static async void StopDash(){
+		dashForceToAdd=Vector3.zero;
+		shouldStopDash=true;
+		await Task.Delay(200);
+		shouldStopDash=false;
+	}
+
+	public static float force;
+
 
 	public static IEnumerator DecayDash(float decaySpeed = -1f) {
 		if (decaySpeed == -1f) decaySpeed = pc.dash.decaySpeed;
-		float force = pc.dash.force;
+		force = pc.dash.force;
 
 		// idk if this needs to be a do while
 		do {
@@ -31,7 +43,7 @@ public static class Dash{
 			pc.rb.AddForce(dashForceToAdd);
 			force = Mathf.Lerp(force, 0, Time.deltaTime * decaySpeed);
 			yield return 0;
-		} while (force > 0.1f && !pc.shouldDash && pc.state != PlayerState.slamming && pc.adminState != AdminState.noclip);
+		} while (force > 0.1f && !pc.shouldDash && pc.state != PlayerState.slamming && pc.adminState != AdminState.noclip && !shouldStopDash);
 
 		pc.dash.state = MovementState.none;
 
@@ -50,9 +62,11 @@ public static class Dash{
 
 		pc.StartCoroutine(WaitForGravityDash());
 
+		float force=pc.dash.gravityDashForce;
 
 		do {
-			pc.rb.AddForce(pc.dash.direction * pc.dash.gravityDashForce * Consts.Multipliers.DASH_MULTIPLIER * Time.deltaTime, ForceMode.Acceleration);
+			if(shouldStopDash) break;
+			pc.rb.AddForce(pc.dash.direction * force * Consts.Multipliers.DASH_MULTIPLIER * Time.deltaTime, ForceMode.Acceleration);
 
 
 			yield return 0;
@@ -63,8 +77,9 @@ public static class Dash{
 
 		pc.dash.state = MovementState.end;
 
-
-		if (pc.Grounded()) pc.StartCoroutine(DecayDash(decaySpeed: pc.slide.decaySpeed));
+		if(!shouldStopDash){
+			if (pc.Grounded()) pc.StartCoroutine(DecayDash(decaySpeed: pc.slide.decaySpeed));
+		}
 
 		pc.dash.state = MovementState.none;
 
@@ -93,9 +108,12 @@ public static class Dash{
 		pc.dash.direction = Directions.DashDirection(pc, true);
 
 		pc.rb.linearVelocity = Vector3.zero;
-		while (!noGravTimerOver && pc.state != PlayerState.slamming && pc.adminState != AdminState.noclip) {
+		
+		force = pc.dash.force;
 
-			pc.rb.AddForce(pc.dash.direction * pc.dash.force * Time.deltaTime * Consts.Multipliers.DASH_MULTIPLIER, ForceMode.Acceleration);
+		while (!noGravTimerOver && pc.state != PlayerState.slamming && pc.adminState != AdminState.noclip && !shouldStopDash) {
+
+			pc.rb.AddForce(pc.dash.direction * force * Time.deltaTime * Consts.Multipliers.DASH_MULTIPLIER, ForceMode.Acceleration);
 
 			yield return 0;
 		}

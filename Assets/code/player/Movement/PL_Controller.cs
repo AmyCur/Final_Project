@@ -7,16 +7,19 @@ using UI;
 using UI.HUD;
 using System.Linq;
 using Combat.Enemies;
+using MathsAndSome;
 
 namespace Player.Movement {
 	[RequireComponent(typeof(AudioSource))]
 	public class PL_Controller : RB_Controller {
 
-		[HideInInspector] public bool justSlid=false;
 
 		public bool shouldJump => canJump && BoxGrounded(justSlid ? 2f : 1.3f) && magic.key.down(keys.jump);
+
 		public bool shouldSlide => slide.can && Grounded(1.3f) && magic.key.down(keys.slide) && state != PlayerState.sliding;
+		
 		public bool shouldDash => dash.can && magic.key.down(keys.dash) && stamina.s - dash.staminaPer >= 0;
+		
 		public bool shouldSlam => slam.can && magic.key.down(keys.slam) && !Grounded() && state != PlayerState.slamming;
 
 		[Header("Player")]
@@ -24,35 +27,52 @@ namespace Player.Movement {
 		
 
 		public PlayerState state;
+		
 		public MovementState jumpState = MovementState.none;
+		
 		public MovementState slideState = MovementState.none;
+		
 		public MovementState slamState = MovementState.none;
+		
 		public AdminState adminState = AdminState.standard;
 
 		[Header("Movement")]
 		public float forwardSpeed = 12f;
+		
 		public float sidewaysSpeed = 12f;
+		
 		public float maxSpeed = 35f;
+		
 		public float maxVerticalSpeed = 35f;
+		
 		public LayerMask playerMask;
 
 
 		[Header("Jumping")]
 		public bool canJump;
+		
 		public float jumpForce;
+		
 		[SerializeField] float groundedRange = 1.08f;
+		
 		public float trueGroundedRange (float m = 1f) => transform.localScale.y * groundedRange * m;
 
 		[Header("Slam")]
 
 		public bool canSlam;
+		
 		[SerializeField] float finalSlamVelocity;
+		
 		[SerializeField] float slamCheckRange=2f;
 
 		[Header("Sliding")]
 
+		[HideInInspector] public bool justSlid=false;
+
 		public Force slide;
+		
 		public GameObject slideCameraObject;
+		
 		public GameObject defaultCameraObject;
 
 		[Header("Dashing")]
@@ -62,9 +82,11 @@ namespace Player.Movement {
 		[Header("Mouse")]
 
 		public float mouseSensitivityX;
+		
 		public float mouseSensitivityY;
 
 		[SerializeField] float maxY = 90;
+		
 		[SerializeField] float minY = -90;
 
 		float currentXRotation;
@@ -78,26 +100,36 @@ namespace Player.Movement {
 		public Force slam;
 
 		[HideInInspector] public Camera playerCamera;
+		
 		public new CapsuleCollider collider;
+		
 		[SerializeField] CapsuleCollider footCollider;
+		
 		float playerHeight => collider.height;
-		//
-
 
 		float hInp;
+		
 		float vInp;
 
 		[HideInInspector] public Vector3 fw => (transform.forward + Camera.main.transform.forward).normalized;
+		
 		[HideInInspector] public Vector3 cameraPos => playerCamera.transform.position;
 
 		[Header("Slope")]
 
 		public float maxSlopeAngle=30f;
-		[SerializeField] float defaultFriction;
-		[SerializeField] float slopeFriction=0.5f;
+		
 		RaycastHit slopeHit;
 
 		public GameObject forwardObject;
+
+		[Header("Friction")]
+
+		[SerializeField] float defaultFriction;
+		
+		[SerializeField] float slopeFriction=0.5f;
+
+		[SerializeField] float dashFriction=0f;
 
 		[Header("UI")]
 
@@ -106,6 +138,7 @@ namespace Player.Movement {
 		[Header("Admin")]
 
 		public bool admin = true;
+		
 		[SerializeField] float adminSpeed = 40f;
 
 		public GameObject EnemySpawnScreen;
@@ -118,9 +151,6 @@ namespace Player.Movement {
 
 		public override void SetStartDefaults() {
 			base.SetStartDefaults();
-
-			//FIXME: The player CANNOT start on a slope!!!!
-			defaultFriction=footCollider.material.dynamicFriction;
 
 			stamina.pc = this;
 			StartCoroutine(RegenerateStamina());
@@ -164,6 +194,12 @@ namespace Player.Movement {
 			}
         }
 
+		void ClampVerticalVelocity(){
+			if(rb!=null){
+				rb.linearVelocity=new Vector3(rb.linearVelocity.x, Mathf.Clamp(rb.linearVelocity.y, -1000, maxVerticalSpeed), rb.linearVelocity.z);
+			}
+		}
+
 		public override void Update() {
 
 			base.Update();
@@ -187,17 +223,25 @@ namespace Player.Movement {
 
 			SetSlopeFriction();
 
-			if(Input.GetKeyDown(KeyCode.J)){ 
-				NotificationManager.AddNotification("test");
-				Debug.Log("Added notification");
-			}
+			ClampVerticalVelocity();
 
 			if (state != PlayerState.sliding && state != PlayerState.slamming && canMove) {
 				if (adminState == AdminState.noclip) this.AdminMove();	
 			}
 
 			Audio.ChangeAudioOnIntensity.FadeSongBasedOnDangerLevel();
+
+			SetDashFriction();
+
+			print(Dash.dashForceToAdd);
 		}
+
+		void SetDashFriction(){
+			if(dash.state!=MovementState.none){
+				footCollider.SetFriction(dashFriction);
+			}
+		}
+
 
 		public override void FixedUpdate() {
 			// ba3se.FixedUpdate();
@@ -404,17 +448,17 @@ namespace Player.Movement {
 				if(!slopeHit.isProjectile()){
 					float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
 					if(moving || state!=PlayerState.walking){
-						if(angle!=0f) footCollider.material.dynamicFriction=slopeFriction;
-						else footCollider.material.dynamicFriction=defaultFriction;
+						if(angle!=0f) footCollider.SetFriction(slopeFriction);
+						else footCollider.SetFriction(defaultFriction);
 					}
-					else footCollider.material.dynamicFriction=defaultFriction;
+					else footCollider.SetFriction(defaultFriction);
 					
 				}
 
 				return;
 			}
 			
-			footCollider.material.dynamicFriction=defaultFriction;
+			footCollider.SetFriction(defaultFriction);
 		}
 
 		public bool OnSlope(){

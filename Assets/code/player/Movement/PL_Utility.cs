@@ -3,8 +3,14 @@ using MathsAndSome;
 
 namespace Player.Movement{
 	public class PL_Utility : MonoBehaviour{
-		void OnCollisionStay(Collision other){
-			Dash.dashForceToAdd = mas.vector.LerpVectors(Dash.dashForceToAdd, Vector3.zero, Time.deltaTime*2f); 
-		}		
+		[SerializeField] float DashForceDecaySpeed=10f;
+
+		void OnTriggerStay(Collider other){
+			Dash.force = Mathf.Lerp(Dash.force, 0, Time.deltaTime*DashForceDecaySpeed); 
+		}	
+
+		// void OnTriggerEnter(Collider other){
+		// 	Dash.StopDash();
+		// }		
 	}	
 }

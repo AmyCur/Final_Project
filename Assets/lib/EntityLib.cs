@@ -65,7 +65,7 @@ namespace Entity {
 					bool isPlayer = c.GetComponent<Player.Movement.PL_Controller>() != null;
 					bool isPlayerTag = c.CompareTag(Globals.glob.playerChildTag);
 					bool isPlayerChild = c.transform.parent != null ? c.transform.parent.GetComponent<Player.Movement.PL_Controller>()!=null : false;
-					return (isPlayer || isPlayerTag || isPlayerChild);
+					return (isPlayer || isPlayerTag || isPlayerChild) && c.GetType()!=typeof(BoxCollider);
 				}
 				else if (m is MonoBehaviour mono) return mono is Player.Movement.PL_Controller;
 				return false;
