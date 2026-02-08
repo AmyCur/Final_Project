@@ -11,7 +11,7 @@ using MathsAndSome;
 
 namespace Player.Movement {
 	[RequireComponent(typeof(AudioSource))]
-	public class PL_Controller : RB_Controller {
+	public class PL_Controller : RB_Controller{
 
 
 		public bool shouldJump => canJump && BoxGrounded(justSlid ? 2f : 1.3f) && magic.key.down(keys.jump);
@@ -157,6 +157,7 @@ namespace Player.Movement {
 			playerCamera = Camera.main;
 			Cursor.lockState = CursorLockMode.Locked;
 			Cursor.visible = false;
+			Debug.Log(Singleton<PL_Utility>.Instance.gameObject.name);
 		}
 		#endregion
 

@@ -1,6 +1,7 @@
-using Magical;
+﻿using Magical;
 using MathsAndSome;
 using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Player.Movement;
@@ -9,6 +10,13 @@ public static class Slide{
 
 	static PL_Controller pc => mas.player.Player;
 	static bool canBreakFromSlidePreservation = false;
+	static bool shouldStopSlide=false;
+	
+	public static async void StopSlide(){
+		shouldStopSlide = true;
+		await Task.Delay(200);
+		shouldStopSlide =false;
+	}
 
 	public static IEnumerator DecaySlide(float decaySpeed = -1f) {
 		if (decaySpeed == -1f) decaySpeed = pc.slide.decaySpeed;
