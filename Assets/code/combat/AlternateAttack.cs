@@ -28,7 +28,7 @@ namespace Combat{
             public bool useOnFullHealth = true;
 
   
-            public bool grounded => pc.Grounded();
+            public bool grounded => Instance<Player.Movement.PL_Controller>.instance.Grounded();
 
             [Header("UI")]
 

@@ -2,7 +2,7 @@
 using MathsAndSome;
 
 namespace Player.Movement{
-	public class PL_Utility : Singleton<PL_Utility>{
+	public class PL_Utility : MonoBehaviour{
 		[SerializeField] float DashForceDecaySpeed=10f;
 
 		// void OnTriggerStay(Collider other){

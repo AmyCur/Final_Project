@@ -133,7 +133,7 @@ namespace Player.Movement {
 
 		[Header("UI")]
 
-		public HUDController hc;
+		public HUDController hc => Instance<HUDController>.instance;
 
 		[Header("Admin")]
 
@@ -157,7 +157,7 @@ namespace Player.Movement {
 			playerCamera = Camera.main;
 			Cursor.lockState = CursorLockMode.Locked;
 			Cursor.visible = false;
-			Debug.Log(Singleton<PL_Utility>.Instance.gameObject.name);
+			// Debug.Log(Instance<PL_Utility>.Instance.gameObject.name);
 		}
 		#endregion
 
