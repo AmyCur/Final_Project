@@ -133,7 +133,7 @@ namespace Player.Movement {
 
 		[Header("UI")]
 
-		public HUDController hc => Instance<HUDController>.instance;
+		public HUDController hc;
 
 		[Header("Admin")]
 

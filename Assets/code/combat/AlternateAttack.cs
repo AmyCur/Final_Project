@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using MathsAndSome;
 // using System;
 // using UnityEditor;
 // using System.Reflection;
@@ -28,7 +29,7 @@ namespace Combat{
             public bool useOnFullHealth = true;
 
   
-            public bool grounded => Instance<Player.Movement.PL_Controller>.instance.Grounded();
+            public bool grounded => mas.player.Player.Grounded();
 
             [Header("UI")]
 
