@@ -13,6 +13,9 @@ TagManager:
   - VortexHolder
   - Enemies
   - WeaponIcon
+  - language_text
+  - enemy
+  - CollisionChecker
   layers:
   - Default
   - TransparentFX

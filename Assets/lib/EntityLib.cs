@@ -146,8 +146,9 @@ namespace Entity {
 	public static class PlayerUtils{
 		public static void ShootPlayer<T>(this GameObject obj, float range, float damage){
 			if(typeof(T) == typeof(RaycastHit)){
+				Debug.DrawRay(obj.transform.position, mas.player.Player.transform.position);
 				if(Physics.Raycast(obj.transform.position, mas.player.Player.transform.position-obj.transform.position, out RaycastHit hit, range)){
-					if (hit.isEntity<Player.Movement.PL_Controller>()){
+					if (hit.isEntity<Player.Movement.PL_Controller>() || hit.collider.CompareTag("CollisionChecker")){
 						mas.player.Player.health-=damage;
 					}
 				}

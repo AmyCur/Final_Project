@@ -11,6 +11,9 @@ namespace UI.Menus{
                 ManageMenus.currentOpenMenu=menu;
                 ManageMenus.currentOpenMenu.Open();
             }
+            else{
+                ManageMenus.currentOpenMenu=null;
+            }
         
         }
     }
