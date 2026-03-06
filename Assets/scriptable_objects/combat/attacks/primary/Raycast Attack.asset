@@ -15,7 +15,7 @@ MonoBehaviour:
   attackType: 0
   damage: 34
   attackCD: 0.1
-  range: 10
+  range: 30
   canAttack: 1
   element:
     type: 0
