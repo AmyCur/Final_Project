@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 875096f03db9b56dc879471e8a0ee3bb, type: 3}
+  m_Name: Raycast Attack
+  m_EditorClassIdentifier: 
+  attackType: 0
+  damage: 34
+  attackCD: 0.1
+  range: 10
+  canAttack: 1
+  element:
+    type: 0
+    f: 0
+  onClickClip: {fileID: 0}
+  onReleaseClip: {fileID: 0}
+  onDamageClip: {fileID: 0}
+  lifeStealOnHit: 0
+  attackSounds:
+  - {fileID: 8300000, guid: fab36e28e9604d72486f039cc361eceb, type: 3}
+  - {fileID: 8300000, guid: 909764d09ce612a8f9d2be4c88cba5a0, type: 3}
+  - {fileID: 8300000, guid: 666eed277d2018dae9e0a7e3ee00e870, type: 3}
+  - {fileID: 8300000, guid: adb60e397fa0e97cc9e6ead91a6040bd, type: 3}
+  - {fileID: 8300000, guid: 0a81a2b408a64dc788130e29bfc1a296, type: 3}
