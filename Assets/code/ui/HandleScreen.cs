@@ -1,9 +1,14 @@
-﻿using UnityEngine;
+﻿using MathsAndSome;
+using System.Collections;
+using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace UI{
 	public class HandleScreen : MonoBehaviour{
+
 		public GameObject screen;
 		public bool open;
+		[SerializeField] float animationSpeed=10f;
 		
 		void Start(){
 			screen.transform.localScale=new(
@@ -13,17 +18,52 @@ namespace UI{
 			);
 		}
 
-		public void CloseScreen(){
+		public IEnumerator CloseScreen(){
+			open=!open;
+			while(screen.transform.localScale.y > 0){
+				screen.transform.localScale=mas.vector.LerpVectors(
+					screen.transform.localScale,
+					new Vector3(
+						screen.transform.localScale.x,
+						-0.1f,
+						screen.transform.localScale.z
+					),
 
+					Time.deltaTime*animationSpeed
+				);
+
+				yield return 0;
+			}
+
+			screen.transform.localScale=new(screen.transform.localScale.x, 0, screen.transform.localScale.z);
 		}
 
-		public void OpenScreen(){
+		public IEnumerator OpenScreen(){
+			open=!open;
+			while(screen.transform.localScale.y < 1){
+				screen.transform.localScale=mas.vector.LerpVectors(
+					screen.transform.localScale,
+					new Vector3(
+						screen.transform.localScale.x,
+						1.01f,
+						screen.transform.localScale.z
+					),
 
+					Time.deltaTime*animationSpeed
+				);
+
+				yield return 0;
+			}
+
+			screen.transform.localScale=new(screen.transform.localScale.x, 1, screen.transform.localScale.z);
 		}
+
+		Coroutine screenAnimation;
 
 		public void ChangeScreenState(){
-			if(open) CloseScreen();
-			else OpenScreen();
+			if(screenAnimation!=null) StopCoroutine(screenAnimation);
+			if(open) screenAnimation = StartCoroutine(CloseScreen());
+			else screenAnimation = StartCoroutine(OpenScreen());
 		}
 	}
 }
