@@ -9,6 +9,7 @@ namespace Combat.Enemies{
 	public abstract class ENM_Controller : RB_Controller {
 		
 		public Dictionary<string, object> thoughts;
+		public AudioClip hurtSound;
 
 		public enum EnemyState {
 			seeking,

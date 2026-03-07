@@ -45,6 +45,7 @@ public sealed class RaycastAttack : SingularAttack {
 		if(Physics.Raycast(pc.playerCamera.transform.position ,pc.playerCamera.transform.forward, out RaycastHit hit, range)){
 			if(hit.isEntity<ENM_Controller>()){
 				hit.collider.GetComponent<ENM_Controller>().TakeDamage(damage, new(Combat.Elements.ElementType.None));
+				AudioManager.PlaySoundUntilStop(hit.collider.GetComponent<ENM_Controller>().hurtSound);
 			}	
 		}	
 		SetAnimation();

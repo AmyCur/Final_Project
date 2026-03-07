@@ -290,6 +290,7 @@ MonoBehaviour:
   movementVector: {x: 0, y: 0, z: 0}
   rb: {fileID: 0}
   SV: []
+  hurtSound: {fileID: 8300000, guid: 38323d4029ea07049a66caa8068c6b32, type: 3}
   isEnabled: 0
   eState: 0
   damage: 10

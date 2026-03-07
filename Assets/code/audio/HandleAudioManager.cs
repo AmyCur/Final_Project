@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Magical;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Audio{
 
@@ -36,6 +37,15 @@ namespace Audio{
 			return s;
 		}
 
+		public static async void PlaySoundUntilStop(AudioClip clip){
+			GameObject source = GameObject.Instantiate(audioPlayer);
+			System.Random r = new System.Random();
+			source.GetComponent<AudioSource>().clip = clip;
+			source.GetComponent<AudioSource>().Play();
+			await Task.Delay((int)(source.GetComponent<AudioSource>().clip.length*1000));
+			GameObject.Destroy(source);
+		}
+
 		public static void Stop(Sound sound){
 			sound.audioSource.Stop();
 			GameObject.Destroy(sound.player);
@@ -45,7 +55,9 @@ namespace Audio{
 
 		}
 
+		[RuntimeInitializeOnLoadMethod]
 		public static void Init(){
+			Debug.Log("Ran");
 			audioPlayer=ham.audioPlayer;
 		}
 	}

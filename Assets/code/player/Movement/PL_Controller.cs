@@ -437,6 +437,7 @@ namespace Player.Movement {
 			Collider[] colliders = Physics.OverlapBox(startPos, new Vector3(transform.localScale.x*.2f,0.5f*m,transform.localScale.z*.2f));
 			foreach(Collider col in colliders){
 				if(!col.isEntity<PL_Controller>() && !col.isProjectile()) {
+					Debug.Log(col.name);
 					// Debug.Log(col.name);
 					return true;
 				}

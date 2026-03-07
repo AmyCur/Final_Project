@@ -2,11 +2,15 @@
 using System.Collections;
 using Entity;
 using MathsAndSome;
+using Audio;
 
 namespace Combat.Enemies{
 	public sealed class MeleeEnemy : ENM_Controller
 	{
+
+
 		protected override void Hunt(){
+			// AudioManager.PlaySoundUntilStop(huntSound);
 			agent.destination = pc.transform.position - ((transform.position-pc.transform.position).normalized*3f);
 		}
 
