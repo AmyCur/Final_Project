@@ -19,6 +19,7 @@ namespace UI{
 		}
 
 		public IEnumerator CloseScreen(){
+			HandleAllMenus.openScreens.Remove(this);
 			open=!open;
 			while(screen.transform.localScale.y > 0){
 				screen.transform.localScale=mas.vector.LerpVectors(
@@ -39,6 +40,8 @@ namespace UI{
 		}
 
 		public IEnumerator OpenScreen(){
+			HandleAllMenus.CloseOpenScreens();
+			HandleAllMenus.openScreens.Add(this);
 			open=!open;
 			while(screen.transform.localScale.y < 1){
 				screen.transform.localScale=mas.vector.LerpVectors(
