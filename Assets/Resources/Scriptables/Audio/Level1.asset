@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84a70795b24c5b444bfe462612580944, type: 3}
   m_Name: Level1
   m_EditorClassIdentifier: 
-  baseClip: {fileID: 8300000, guid: 884392ed3d1b44afb8ab0063fc5c2527, type: 3}
-  enemyClip: {fileID: 8300000, guid: 884392ed3d1b44afb8ab0063fc5c2527, type: 3}
-  bossClip: {fileID: 8300000, guid: 884392ed3d1b44afb8ab0063fc5c2527, type: 3}
+  baseClip: {fileID: 8300000, guid: 679335a1cb1f2434291245fff37c1c2f, type: 3}
+  enemyClip: {fileID: 8300000, guid: 679335a1cb1f2434291245fff37c1c2f, type: 3}
+  bossClip: {fileID: 8300000, guid: 679335a1cb1f2434291245fff37c1c2f, type: 3}

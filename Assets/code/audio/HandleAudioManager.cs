@@ -55,7 +55,7 @@ namespace Audio{
 
 		}
 
-		[RuntimeInitializeOnLoadMethod]
+		// [RuntimeInitializeOnLoadMethod]
 		public static void Init(){
 			Debug.Log("Ran");
 			audioPlayer=ham.audioPlayer;
