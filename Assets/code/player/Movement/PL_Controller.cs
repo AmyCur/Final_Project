@@ -143,6 +143,8 @@ namespace Player.Movement {
 
 		public GameObject EnemySpawnScreen;
 
+		public ParticleSystem speedLines => GameObject.Find("SpeedLines").GetComponent<ParticleSystem>();
+
 		#region Start
 		void Awake(){
 			MathsAndSome.mas.player.Player=this;
@@ -225,6 +227,15 @@ namespace Player.Movement {
 			SetSlopeFriction();
 
 			ClampVerticalVelocity();
+
+			if (state != PlayerState.sliding)
+			{
+				speedLines.startSpeed  = 0;
+			}
+			else
+			{
+				speedLines.startSpeed  = Mathf.Clamp(10f+rb.linearVelocity.magnitude*3f, 10f, 30f);
+			}
 
 			if (state != PlayerState.sliding && state != PlayerState.slamming && canMove) {
 				if (adminState == AdminState.noclip) this.AdminMove();	
