@@ -25,7 +25,7 @@ namespace Combat.Attacks{
 			transform.rotation =  Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, -mas.player.Player.playerCamera.transform.forward, 30f*Time.deltaTime, 0f));
 
 			while (forward != target){
-				print(moveSpeed);
+				// print(moveSpeed);
 				forward = mas.vector.LerpVectors(forward, (-transform.position+mas.player.Player.transform.position).normalized*10f, Time.deltaTime*lerpSpeed*moveSpeed);
 				moveSpeed+=0.01f;
 				yield return 0;

@@ -2,6 +2,7 @@
 using MathsAndSome;
 using System.Collections;
 using System.Threading.Tasks;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Player.Movement;
@@ -76,14 +77,55 @@ public static class Slide{
 		GameObject.Find("Legs").GetComponent<Animator>().SetBool("just_slid", false);
 	}
 
+	static bool CheckForSlideNotMoving(){
+		// Debug.Log($"{pc.rb.linearVelocity.magnitude} : {pc.slide.force}");
+		return pc.rb.linearVelocity.magnitude < pc.slide.force;
+	}
+
+	// static async Task<bool> WaitForSlideChange(){
+	// 	for(int i = 0; i < 10; i++){
+	// 		if(CheckForSlideNotMoving()){
+	// 			if(i==10){
+	// 				return true;
+	// 			}
+	// 		}
+	// 		else{
+	// 			break;
+	// 		}
+
+	// 		await Task.Delay(50);
+	// 	}
+
+	// 	return false;
+	// }
+
+	static IEnumerator WaitForSlideChange(){
+		Debug.Log("AAA");
+		for(int i = 0; i < 10; i++){
+			if(CheckForSlideNotMoving()){
+				if(i==9){
+					shouldStopSliding = true;
+					Debug.Log("AAAA");
+				}
+			}
+			else{
+				break;
+			}
+
+			yield return new WaitForSeconds(0.03f);
+		}
+
+		shouldStopSliding = false;
+	}
+
+
+	static bool shouldStopSliding=false;
 
 	public static IEnumerator SlideRoutine() {
 
 		pc.justSlid=false;
 		
 		GameObject.Find("Legs").GetComponent<Animator>().SetBool("legs_out", true);
-
-
 
 		pc.collider.height=1;
 
@@ -96,10 +138,15 @@ public static class Slide{
 		cameraSlideRoutine = pc.StartCoroutine(LerpCameraSlide(true));
 
 		do {
+			if(CheckForSlideNotMoving()){
+				pc.StartCoroutine(WaitForSlideChange());
+			}
 			pc.rb.AddForce(direction * (pc.slide.force/*+finalSlamVelocity*/) * Consts.Multipliers.SLIDE_MULTIPLIER * Time.deltaTime);
 			yield return 0;
 			GameObject.Find("Legs").GetComponent<Animator>().SetBool("sliding", true);
-		} while (magic.key.gk(keys.slide) && !pc.shouldJump  && pc.state != PlayerState.slamming && pc.adminState != AdminState.noclip);
+			
+			
+		} while (magic.key.gk(keys.slide) && !pc.shouldJump  && pc.state != PlayerState.slamming && pc.adminState != AdminState.noclip && !shouldStopSliding);
 
 		GameObject.Find("Legs").GetComponent<Animator>().SetBool("sliding", false);
 		GameObject.Find("Legs").GetComponent<Animator>().SetBool("legs_out", false);
