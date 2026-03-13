@@ -69,10 +69,21 @@ public static class Slide{
 		}
 	}
 
+	static async void WaitForJustSlid()
+	{
+		GameObject.Find("Legs").GetComponent<Animator>().SetBool("just_slid", true);
+		await Task.Delay(100);
+		GameObject.Find("Legs").GetComponent<Animator>().SetBool("just_slid", false);
+	}
+
 
 	public static IEnumerator SlideRoutine() {
 
 		pc.justSlid=false;
+		
+		GameObject.Find("Legs").GetComponent<Animator>().SetBool("legs_out", true);
+
+
 
 		pc.collider.height=1;
 
@@ -87,7 +98,12 @@ public static class Slide{
 		do {
 			pc.rb.AddForce(direction * (pc.slide.force/*+finalSlamVelocity*/) * Consts.Multipliers.SLIDE_MULTIPLIER * Time.deltaTime);
 			yield return 0;
+			GameObject.Find("Legs").GetComponent<Animator>().SetBool("sliding", true);
 		} while (magic.key.gk(keys.slide) && !pc.shouldJump  && pc.state != PlayerState.slamming && pc.adminState != AdminState.noclip);
+
+		GameObject.Find("Legs").GetComponent<Animator>().SetBool("sliding", false);
+		GameObject.Find("Legs").GetComponent<Animator>().SetBool("legs_out", false);
+		WaitForJustSlid();
 
 
 		if(cameraSlideRoutine!=null) pc.StopCoroutine(cameraSlideRoutine);
@@ -109,6 +125,7 @@ public static class Slide{
 		pc.justSlid=true;
 		pc.collider.height=2;
 		yield return new WaitForSeconds(0.2f);
+
 		pc.justSlid=false;
 	}
 
