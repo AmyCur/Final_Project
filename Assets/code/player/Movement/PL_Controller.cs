@@ -153,7 +153,8 @@ namespace Player.Movement {
 
 		public override void SetStartDefaults() {
 			base.SetStartDefaults();
-
+			
+			Entity.Entity.KillAll(typeof(ENM_Controller));
 			stamina.pc = this;
 			StartCoroutine(RegenerateStamina());
 			playerCamera = Camera.main;
@@ -203,6 +204,19 @@ namespace Player.Movement {
 			}
 		}
 
+		void HandleSpeedLines(){
+			if (state != PlayerState.sliding){
+				speedLines.startSpeed  = 0;
+			}
+			else{
+				speedLines.startSpeed  = Mathf.Clamp(10f+rb.linearVelocity.magnitude*3f, 10f, 30f);
+			}
+		}
+
+		void HandleFOV(){
+			playerCamera.fieldOfView = Mathf.Clamp(Mathf.Lerp(playerCamera.fieldOfView, rb.linearVelocity.magnitude > 16 ? (rb.linearVelocity.magnitude)/3f+90 : 90, Time.deltaTime*10f), 90, 100);	
+		}
+
 		public override void Update() {
 
 			base.Update();
@@ -222,20 +236,15 @@ namespace Player.Movement {
 
 			//* Combat
 			HandleIFrames();
+			
 			if (hc != null) hc.UpdateHeath();
 
 			SetSlopeFriction();
 
 			ClampVerticalVelocity();
 
-			if (state != PlayerState.sliding)
-			{
-				speedLines.startSpeed  = 0;
-			}
-			else
-			{
-				speedLines.startSpeed  = Mathf.Clamp(10f+rb.linearVelocity.magnitude*3f, 10f, 30f);
-			}
+			HandleSpeedLines();
+			HandleFOV();
 
 			if (state != PlayerState.sliding && state != PlayerState.slamming && canMove) {
 				if (adminState == AdminState.noclip) this.AdminMove();	
