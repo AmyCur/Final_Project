@@ -199,11 +199,10 @@ namespace MathsAndSome
             public static Combat.CombatController Combat;
             
             
-
-            // public static Combat.CombatController GetCombat.CombatController()
-            // {
-            //     return GameObject.FindGameObjectWithTag(glob.playerTag).GetComponent<Combat.CombatController>();
-            // }
+            public static Combat.CombatController CombatController()
+            {
+                return GameObject.FindGameObjectWithTag(glob.playerTag).GetComponent<Combat.CombatController>();
+            }
 
             public static RaycastHit ShootPlayer(GameObject player, Vector3 origin)
             {

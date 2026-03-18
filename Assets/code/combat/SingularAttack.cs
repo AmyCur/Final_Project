@@ -53,6 +53,7 @@ public abstract class SingularAttack : ScriptableObject {
 	public float attackCD;
 	public float range;
 	public bool canAttack = true;
+	public bool hasHoming;
 
 	[Header("Elements")]
 	public Element element;
@@ -72,6 +73,7 @@ public abstract class SingularAttack : ScriptableObject {
 	public virtual bool keyStayDown() => false;
 
 	public virtual void OnClick() { pc.StartCoroutine(AttackCooldown()); }
+	public virtual void OnClickHoming(){}
 	public virtual void OnRelease() { }
 
 	public virtual IEnumerator AttackCooldown() {

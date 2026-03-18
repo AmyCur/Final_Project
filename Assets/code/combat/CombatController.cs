@@ -29,6 +29,7 @@ namespace Combat {
 		public SingleAttack ca;
 		public List<SingleAttack> attacks;
 		public int caIndex;
+		public bool homing=false;
 
 		[Header("Admin")]
 
@@ -56,7 +57,8 @@ namespace Combat {
 			// Help idk if this is good or not am i doing it wrong :scared:
 			foreach(SingularAttack atk in ca){
 				if (atk.canAttack && atk.keyDown()){
-					atk.OnClick();
+					if(atk.hasHoming && mas.player.Combat.homing) atk.OnClickHoming();
+					else atk.OnClick();
 				}
 			}
 		}
@@ -78,9 +80,14 @@ namespace Combat {
 			}
 		}
 
+		void CheckForHover(){
+		// 	if(Physics.Raycast(transform.position1))
+		}
+
 		void Update(){
 			CheckSwitchWeapon();
 			CheckForAttackPressed();
+			CheckForHover();
 		}
 
 		public void OnDrawGizmos(){
