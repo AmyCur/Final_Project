@@ -146,7 +146,7 @@ public static class Slide{
 			GameObject.Find("Legs").GetComponent<Animator>().SetBool("sliding", true);
 			
 			
-		} while (magic.key.gk(keys.slide) && !pc.shouldJump  && pc.state != PlayerState.slamming && pc.adminState != AdminState.noclip && !shouldStopSliding);
+		} while (magic.key.gk(keys.slide) && !pc.shouldJump  && pc.state != PlayerState.slamming && pc.adminState != AdminState.noclip && !shouldStopSliding && pc.dash.state != MovementState.start);
 
 		GameObject.Find("Legs").GetComponent<Animator>().SetBool("sliding", false);
 		GameObject.Find("Legs").GetComponent<Animator>().SetBool("legs_out", false);
