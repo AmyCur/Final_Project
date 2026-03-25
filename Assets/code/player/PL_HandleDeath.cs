@@ -1,4 +1,4 @@
-using Magical;
+﻿using Magical;
 using MathsAndSome;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -15,7 +15,7 @@ namespace Player{
 		void Update(){
 			if(pc.state == PlayerState.dead){
 				if(magic.key.down(keys.jump)){
-					SceneManager.LoadScene(0);
+					SceneManager.LoadScene(1);
 				}
 			}
 		}
