@@ -31,7 +31,6 @@ public sealed class RaycastAttack : SingularAttack {
 		source.GetComponent<AudioSource>().Play();
 		await Task.Delay((int)(source.GetComponent<AudioSource>().clip.length*1000));
 		Destroy(source);
-
 	}
 
 	void OnClickShared(){

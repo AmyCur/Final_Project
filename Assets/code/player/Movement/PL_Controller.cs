@@ -47,6 +47,8 @@ namespace Player.Movement {
 		
 		public LayerMask playerMask;
 
+		public List<AudioClip> footsteps = new();
+
 
 		[Header("Jumping")]
 		public bool canJump;
