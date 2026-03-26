@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Entities;
 using System.Threading.Tasks;
+using MathsAndSome;
 
 
 namespace Combat.Spawning{
@@ -120,7 +121,9 @@ namespace Combat.Spawning{
 				// if(completedSpawning) EnableEnemies();
 				if(WaveCompleted() && !spawningNewWave){
 					IncrementWave();
-					if (waveIndex > waves.Count) return;
+					if (waveIndex > waves.Count) {
+						return;
+					}
 				}
 			}
 		}

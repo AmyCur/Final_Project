@@ -158,8 +158,77 @@ namespace Entity {
 
 		}
 
+		Coroutine damageRoutine;
+
+		[SerializeField] protected Color baseColor;
+		[SerializeField] protected Color damageTargetColor;
+		[SerializeField] protected Color fireDamageTargetColor;
+
+		public void HandleDamageAnimation(){
+			if(damageRoutine!=null) StopCoroutine(damageRoutine);
+			damageRoutine=StartCoroutine(DamageAnimation());
+		}
+
+		Color TargetColor(){
+
+			foreach(Element e in currentElements){
+				if(e.type==ElementType.fire){
+					return fireDamageTargetColor;
+					
+				}
+			}
+			return damageTargetColor;
+		}
+
+		IEnumerator DamageAnimation(){
+			MeshRenderer childMesh = transform.GetChild(0).GetComponent<MeshRenderer>();
+			
+			
+			
+			for(int i = 0; i<50; i++){
+
+
+				Vector3 CV=
+				mas.vector.LerpVectors(
+					new Vector3(
+						childMesh.material.color.r,
+						childMesh.material.color.g,
+						childMesh.material.color.b
+					), 
+					new Vector3(TargetColor().r,TargetColor().g,TargetColor().b),
+					Time.deltaTime*17f
+				);
+				
+				childMesh.material.color = new Color(CV.x,CV.y,CV.z);
+				
+				yield return 0;
+			}
+
+			for(int i = 0; i<200; i++){
+
+				Vector3 CV=
+				mas.vector.LerpVectors(
+					new Vector3(
+						childMesh.material.color.r,
+						childMesh.material.color.g,
+						childMesh.material.color.b
+					), 
+					new Vector3(baseColor.r,baseColor.g,baseColor.b),
+					
+					Time.deltaTime*19f
+				);
+				
+				childMesh.material.color = new Color(CV.x,CV.y,CV.z);
+				
+				yield return 0;
+			}
+
+
+		}
+
 		#region Damage
 		public void TakeDamage(float damage, Element element, float armourPenetration = 0) {
+			HandleDamageAnimation();
 			float defenceDmgReduction = Positive(defence - armourPenetration) / 2;
 			damage -= defenceDmgReduction;
 

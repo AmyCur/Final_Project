@@ -35,6 +35,8 @@ namespace Combat.Enemies{
 		public float damage=10f;
 		public float attackCD=0.5f;
 		public float range=3f;
+
+		
 		[SerializeField] protected bool canAttack=true;
 
 		[Header("Debuffs")]
@@ -46,6 +48,8 @@ namespace Combat.Enemies{
 			yield return new WaitForSeconds(staggerTime);
 			staggered = false;
 		}
+
+	
 		
 
 
@@ -117,7 +121,12 @@ namespace Combat.Enemies{
 		}
 
 		
-		public override void Die() => Destroy(gameObject);
+		public override void Die() {
+			mas.player.Player.health.h+=10;
+			Mathf.Clamp(mas.player.Player.health.h, -1000f, 100);
+			Destroy(gameObject);
+			
+		}
 
 	}
 }

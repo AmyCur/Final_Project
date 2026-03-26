@@ -46,15 +46,22 @@ namespace Combat.Attacks{
 		protected override void OnTriggerEnter(Collider other)
 		{
 			base.OnTriggerEnter(other);
+			Debug.Log($"hit {damage} | {other.gameObject.name}");
 			if(destroyIfTouchingPlayer && other.isEntity<PL_Controller>()){
 				Destroy(gameObject);
 			}  
+		}
+
+		IEnumerator DestroyAfterTime(){
+			yield return new WaitForSeconds(4);
+			Destroy(gameObject);
 		}
 
 		protected override void Start(){
 			base.Start();
 			forward = transform.forward * moveSpeed;
 			StartCoroutine(TurnAround());
+			StartCoroutine(DestroyAfterTime());
 			lr=GetComponent<LineRenderer>();
 		}
 	}

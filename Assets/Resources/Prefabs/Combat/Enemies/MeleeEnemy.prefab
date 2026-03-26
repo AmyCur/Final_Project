@@ -287,6 +287,9 @@ MonoBehaviour:
   burnDuration: 5
   currentBurnTime: 5
   burning: 0
+  baseColor: {r: 1, g: 1, b: 1, a: 0}
+  damageTargetColor: {r: 1, g: 0, b: 0.093779564, a: 1}
+  fireDamageTargetColor: {r: 1, g: 0.4713461, b: 0, a: 1}
   canMove: 1
   movementVector: {x: 0, y: 0, z: 0}
   rb: {fileID: 0}

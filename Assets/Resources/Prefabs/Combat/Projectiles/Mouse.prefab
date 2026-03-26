@@ -148,9 +148,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54ac29b5ec5ff754e870ffb7663a9827, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  element:
+    type: 1
+    f: 0
   damage: 0
-  moveSpeed: 5
-  targetTypes: 
+  moveSpeed: 10
+  targetTypes: 01000000
   initialTurnAroundTime: 0.4
   lerpSpeed: 10
 --- !u!65 &6243435294105146910

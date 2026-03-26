@@ -710,6 +710,9 @@ MonoBehaviour:
   burnDuration: 5
   currentBurnTime: 5
   burning: 0
+  baseColor: {r: 0, g: 0, b: 0, a: 0}
+  damageTargetColor: {r: 0, g: 0, b: 0, a: 0}
+  fireDamageTargetColor: {r: 0, g: 0, b: 0, a: 0}
   canMove: 1
   movementVector: {x: 0, y: 0, z: 0}
   rb: {fileID: 0}
@@ -1174,7 +1177,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &586184588
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1659,7 +1662,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &832377675
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2033,7 +2036,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &939187658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2158,7 +2161,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1024214882
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3547,8 +3550,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -144.0188, y: 97.53915}
-  m_SizeDelta: {x: 113.72299, y: 103}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 227.446, y: 206}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1606115234
 MonoBehaviour:
@@ -3898,7 +3901,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 50, y: 50}
+  m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1838374285
 MonoBehaviour:
@@ -4476,7 +4479,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2098724871
 RectTransform:
   m_ObjectHideFlags: 0

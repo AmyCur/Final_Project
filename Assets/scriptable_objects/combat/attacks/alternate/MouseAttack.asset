@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: MouseAttack
   m_EditorClassIdentifier: 
   attackType: 0
-  damage: 10
+  damage: 49
   attackCD: 2.5
   range: 0
   canAttack: 1
+  hasHoming: 0
   element:
-    type: 0
+    type: 1
     f: 0
   onClickClip: {fileID: 0}
   onReleaseClip: {fileID: 0}

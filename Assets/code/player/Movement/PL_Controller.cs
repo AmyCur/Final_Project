@@ -248,6 +248,8 @@ namespace Player.Movement {
 			HandleSpeedLines();
 			HandleFOV();
 
+			if(health.h>health.maxHealth) health.h=health.maxHealth;
+
 			if (state != PlayerState.sliding && state != PlayerState.slamming && canMove) {
 				if (adminState == AdminState.noclip) this.AdminMove();	
 			}
