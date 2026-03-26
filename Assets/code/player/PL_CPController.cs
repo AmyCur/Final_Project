@@ -10,7 +10,7 @@ namespace Player{
 
 		public Vector3 ReadCurrentCPP {
 			get {
-				string[] splitCPP = PlayerPrefs.GetString(CPPKey).Split(":");
+				string[] splitCPP = PlayerPrefs.GetString(CPPKey).Split("|")[0].Split(":");
 
 				return new Vector3(
 					float.Parse(splitCPP[0]),
@@ -22,10 +22,17 @@ namespace Player{
 
 		void Start() {
 			// If the current position cp has been set
-		
 
 			if(PlayerPrefs.HasKey(CPPKey)){
 				mas.player.Player.transform.position=ReadCurrentCPP;
+				string[] splitForard = PlayerPrefs.GetString(CPPKey).Split("|")[1].Split(":");
+				Vector3 fwVector=new Vector3(
+					float.Parse(splitForard[0]),
+					float.Parse(splitForard[1]),
+					float.Parse(splitForard[2])
+			
+				);
+				mas.player.Player.transform.localRotation=Quaternion.LookRotation(fwVector, Vector3.up);
 			}
 
 			
@@ -40,7 +47,8 @@ namespace Player{
 		
 		void SaveCP(){
 			Vector3 CPP = currentCP.transform.position;
-			PlayerPrefs.SetString(CPPKey, $"{CPP.x}:{CPP.y}:{CPP.z}");
+			Vector3 CPPR = currentCP.transform.forward;
+			PlayerPrefs.SetString(CPPKey, $"{CPP.x}:{CPP.y}:{CPP.z}|{CPPR.x}{CPPR.y}{CPPR.z}");
 			PlayerPrefs.Save();
 		}
 	}

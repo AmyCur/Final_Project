@@ -502,7 +502,7 @@ namespace Player.Movement {
 
 
 		void HandleMouse() {
-			if(!Props.inMenu){
+			if(!Props.inMenu && !UI.Pause.paused){
 				float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensitivityX;
 				float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensitivityY;
 

@@ -1966,6 +1966,7 @@ RectTransform:
   m_LocalScale: {x: 0.10851204, y: 0.10851204, z: 0.10851204}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1100059638}
   - {fileID: 162528054}
   - {fileID: 1662622197}
   m_Father: {fileID: 1543158076}
@@ -2313,14 +2314,14 @@ RectTransform:
   m_GameObject: {fileID: 1100059637}
   m_LocalRotation: {x: -0, y: -0, z: 0.2588186, w: 0.965926}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.5291, y: 2.5291, z: 2.5291}
+  m_LocalScale: {x: 2.49141, y: 2.49141, z: 2.49141}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1657529265}
+  m_Father: {fileID: 899527150}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 30}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -294.4829, y: 299.15726}
+  m_AnchoredPosition: {x: -290.09427, y: 277.37442}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1100059639
@@ -2682,6 +2683,7 @@ GameObject:
   - component: {fileID: 1206202919}
   - component: {fileID: 1206202918}
   - component: {fileID: 1206202921}
+  - component: {fileID: 1206202922}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2807,6 +2809,18 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!114 &1206202922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1206202917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7594d6c6c88e91a4895d09ba98023a76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1216127375
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3447,7 +3461,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 1
@@ -3739,7 +3753,6 @@ RectTransform:
   m_Children:
   - {fileID: 2044516857}
   - {fileID: 290926222}
-  - {fileID: 1100059638}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
