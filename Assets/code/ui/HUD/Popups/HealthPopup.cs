@@ -29,12 +29,12 @@ namespace UI{
 					active=true;
 				}
 
-				message.text=Jumble.DistortString("LOCK IN!", 30);
+				message.text=Jumble.DistortString("Losing power rapidly!", 30);
 				if(pc.health.h <= pc.health.maxHealth/4f){
-					message.text=Jumble.DistortString("YOURE TAKING TOO MUCH DAMAGE!");
+					message.text=Jumble.DistortString("Power Loss Near Critical!");
 
 					if(pc.health.h <= pc.health.maxHealth/10f){
-					message.text=Jumble.DistortString("YOURe aisdj sdjwi ajiejdiasjdi djwia!", 1);
+					message.text=Jumble.DistortString("Critical Power Loss aisdj sdjwi ajiejdiasjdi djwia!", 1);
 					}
 				}
 			}

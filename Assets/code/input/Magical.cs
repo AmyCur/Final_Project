@@ -33,7 +33,7 @@ namespace Magical {
 
 		public static KeyCode[] goToSpawnKey = { KeyCode.F6 };
 
-		public static KeyCode[] pause = { /*KeyCode.Escape,*/ KeyCode.Tab };
+		public static KeyCode[] pause = { KeyCode.Escape, KeyCode.Tab };
 
 		public static KeyCode[] teleport = { KeyCode.T };
 

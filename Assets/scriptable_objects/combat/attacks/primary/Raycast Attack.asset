@@ -19,7 +19,7 @@ MonoBehaviour:
   canAttack: 1
   hasHoming: 0
   element:
-    type: 0
+    type: 1
     f: 0
   onClickClip: {fileID: 0}
   onReleaseClip: {fileID: 0}
