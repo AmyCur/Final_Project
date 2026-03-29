@@ -37,10 +37,12 @@ namespace Audio{
 			return s;
 		}
 
-		public static async void PlaySoundUntilStop(AudioClip clip){
+		public static async void PlaySoundUntilStop(AudioClip clip, float volume=1f, float speed=1f){
 			GameObject source = GameObject.Instantiate(audioPlayer);
 			System.Random r = new System.Random();
 			source.GetComponent<AudioSource>().clip = clip;
+			source.GetComponent<AudioSource>().volume = Mathf.Clamp(volume, 0, 3);
+			
 			source.GetComponent<AudioSource>().Play();
 			await Task.Delay((int)(source.GetComponent<AudioSource>().clip.length*1000));
 			GameObject.Destroy(source);

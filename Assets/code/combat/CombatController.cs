@@ -8,6 +8,7 @@ using Combat.Attacks;
 using System.Threading.Tasks;
 using Audio;
 using Player.Movement;
+using Unity.VisualScripting;
 
 namespace Combat {
 	[System.Serializable]
@@ -15,6 +16,7 @@ namespace Combat {
 		public SingularAttack primary;
 		public AlternateAttack assist;
 		public AlternateAttack ability;
+		public Material material;
 		
 		public IEnumerator<SingularAttack> GetEnumerator(){
 			yield return primary;
@@ -30,6 +32,7 @@ namespace Combat {
 		public List<SingleAttack> attacks;
 		public int caIndex;
 		public bool homing=false;
+		GameObject weapon => mas.player.Player.playerCamera.transform.GetChild(1).gameObject;
 
 		[Header("Admin")]
 
@@ -37,6 +40,8 @@ namespace Combat {
 
 		void CheckSwitchWeapon(){
 			int currentKey = (int)magic.key.PressedKey();
+			int caIndexPrev=caIndex;
+
 			//* 49=1 key //*57=9 key
 
 			if(magic.key.down(KeyCode.Alpha5) && mas.player.Player.admin){
@@ -50,7 +55,15 @@ namespace Combat {
 				}				
 			}
 
+			if(caIndex!=caIndexPrev){
+				UpdateWeapon();
+			}
+
 			
+		}
+
+		void UpdateWeapon(){
+			weapon.GetComponent<Animator>().SetBool("lower",true);
 		}
 
 		void CheckForAttackPressed(){

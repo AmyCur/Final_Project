@@ -16,6 +16,7 @@ TagManager:
   - language_text
   - enemy
   - CollisionChecker
+  - MusicPlayer
   layers:
   - Default
   - TransparentFX

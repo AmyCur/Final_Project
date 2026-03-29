@@ -8,6 +8,7 @@ using UI.HUD;
 using System.Linq;
 using Combat.Enemies;
 using MathsAndSome;
+using Audio;
 
 namespace Player.Movement {
 	[RequireComponent(typeof(AudioSource))]
@@ -147,6 +148,10 @@ namespace Player.Movement {
 
 		public ParticleSystem speedLines => GameObject.Find("SpeedLines").GetComponent<ParticleSystem>();
 
+		[Header("Audio")]
+
+		public AudioClip jumpSFX;
+
 		#region Start
 		void Awake(){
 			MathsAndSome.mas.player.Player=this;
@@ -194,7 +199,7 @@ namespace Player.Movement {
 				rb.linearVelocity = MathsAndSome.mas.vector.ClampVector(rb.linearVelocity, new Vector3[]
 					{
 						new Vector3(-1_000,-1_000,-1_000),
-						new Vector3(1000, jumpState==MovementState.none ? 5 : 15, 1000)
+						new Vector3(1000, jumpState==MovementState.none ? 0 : 15, 1000)
 					}
 				);
 			}
@@ -378,6 +383,7 @@ namespace Player.Movement {
 		public void Jump() {
 			jumpState=MovementState.middle;
 			rb.AddForce(0, jumpForce * Consts.Multipliers.JUMP_MULTIPLIER, 0);
+			AudioManager.PlaySoundUntilStop(jumpSFX);
 			StartCoroutine(WaitForJumpEnd());
 
 
@@ -460,7 +466,7 @@ namespace Player.Movement {
 			Vector3 startPos = transform.position-new Vector3(0,transform.localScale.y/2f,0);
 			Collider[] colliders = Physics.OverlapBox(startPos, new Vector3(transform.localScale.x*.2f,0.5f*m,transform.localScale.z*.2f));
 			foreach(Collider col in colliders){
-				if(!col.isEntity<PL_Controller>() && !col.isProjectile()) {
+				if(!col.isEntity<PL_Controller>() && !col.isProjectile() && !col.CompareTag("CollisionChecker") && !col.isTrigger) {
 					Debug.Log(col.name);
 					// Debug.Log(col.name);
 					return true;
