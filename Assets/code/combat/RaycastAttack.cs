@@ -42,6 +42,7 @@ public sealed class RaycastAttack : SingularAttack {
 			}	
 		}	
 
+		shootingAnimation.SetInteger("weapon_type", 0);
 		SetAnimation();
 			//! This is causing crash
 			base.OnClick();

@@ -9,10 +9,15 @@ using Combat.Attacks.Primary;
 using System.Threading.Tasks;
 using UnityEditor.Animations;
 
+// Weapon types
+// 0 = Shoot
+// 1 = Swing
+
+
 public abstract class SingularAttack : ScriptableObject {
 
 	protected AudioSource source;
-	Animator shootingAnimation=> GameObject.Find("Weapon").GetComponent<Animator>();
+	protected Animator shootingAnimation=> GameObject.Find("Weapon").GetComponent<Animator>();
 	// public AnimatorController weaponAnimatorController;
 
 	protected Entity.ENT_Controller[] hitEnemies(Vector3 startPos, Vector3 direction, float range) {
@@ -73,6 +78,9 @@ public abstract class SingularAttack : ScriptableObject {
 	public float range;
 	public bool canAttack = true;
 	public bool hasHoming;
+
+	[Header("Times")]
+	public float pullOutTime;
 
 	[Header("Elements")]
 	public Element element;
