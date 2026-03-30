@@ -3,7 +3,7 @@ using MathsAndSome;
 using Combat.Attacks.Projectiles;
 
 namespace Combat.Attacks{
-	[CreateAssetMenu(fileName = "New ProjectileAttack", menuName = "Attacks/Create/Projectile Attack")]
+	[CreateAssetMenu(fileName = "New ProjectileAttack", menuName = "Attacks/Other/Projectile Attack")]
 	public class ProjectileAttack : AlternateAttack {
 		public string projectileName = "IceSpear";
 		const string projectileRoot = "Prefabs/Combat/Projectiles/";

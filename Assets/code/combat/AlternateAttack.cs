@@ -18,7 +18,7 @@ namespace Combat{
             ability
         }
 
-        [CreateAssetMenu(fileName = "New alternate attack", menuName = "Attacks/Create/Alternate")]
+        [CreateAssetMenu(fileName = "New alternate attack", menuName = "Attacks/Other/Alternate")]
         public class AlternateAttack : SingularAttack
         {
 
@@ -72,6 +72,7 @@ namespace Combat{
                     if (cc.attacks[cc.caIndex].assist == this) pc.hc.assistBar.UpdateBarCD((float)cooldownProgress, attackCDIncrements);
                     else if (cc.attacks[cc.caIndex].ability == this) pc.hc.abilityBar.UpdateBarCD((float)cooldownProgress, attackCDIncrements);
                 }
+				
                 canAttack = true;
             }
         }

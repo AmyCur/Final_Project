@@ -40,7 +40,7 @@ namespace Combat
 		}
 	}
 
-	[CreateAssetMenu(fileName = "Spawner Controller", menuName = "Attacks/Create/Spawner")]
+	[CreateAssetMenu(fileName = "Spawner Controller", menuName = "Attacks/Other/Spawner")]
 	public class SpawnerController : PrimaryAttack{
 		
 		[Header("Spawner")]

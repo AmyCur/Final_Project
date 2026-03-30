@@ -4,7 +4,7 @@ using System.Collections;
 using Magical;
 
 namespace Combat.Attacks{
-    [CreateAssetMenu(fileName = "New Homijng Attack", menuName = "Attacks/Create/Create Homing Attack")]
+    [CreateAssetMenu(fileName = "New Homijng Attack", menuName = "Attacks/Other/Create Homing Attack")]
     public class HomingAttack : AlternateAttack
     {
         

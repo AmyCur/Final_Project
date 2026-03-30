@@ -4,7 +4,7 @@ using Magical;
 using Combat.Enemies;
 
 namespace Combat.Attacks{
-	[CreateAssetMenu(fileName = "New CRT Attack", menuName = "Attacks/Create/CRT Attack")]
+	[CreateAssetMenu(fileName = "New CRT Attack", menuName = "Attacks/Other/CRT Attack")]
 	public class CRTAttack : AlternateAttack {
 		[Header("Stats")]
 

@@ -100,7 +100,3 @@ public class Force {
 		}
 	}
 }
-
-
-
-

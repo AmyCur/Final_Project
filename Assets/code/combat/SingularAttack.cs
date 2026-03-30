@@ -6,10 +6,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using Combat.Enemies;
 using Combat.Attacks.Primary;
+using System.Threading.Tasks;
+using UnityEditor.Animations;
 
 public abstract class SingularAttack : ScriptableObject {
 
 	protected AudioSource source;
+	Animator shootingAnimation=> GameObject.Find("Weapon").GetComponent<Animator>();
+	// public AnimatorController weaponAnimatorController;
 
 	protected Entity.ENT_Controller[] hitEnemies(Vector3 startPos, Vector3 direction, float range) {
 		Debug.DrawLine(startPos, startPos + (direction * range), Color.red, 1);
@@ -36,6 +40,21 @@ public abstract class SingularAttack : ScriptableObject {
 		}
 
 		return null;
+	}
+
+	protected async void SetAnimation(){
+		// shootingAnimation ??= GameObject.Find("Weapon").GetComponent<Animator>();
+		// Son 
+		shootingAnimation.SetBool("shoot",true);
+		await Task.Delay(100);
+		shootingAnimation.SetBool("shoot",false);
+	}
+
+
+	protected void OnClickShared(){
+		SetAnimation();
+		//! This is causing crash
+		this.OnClick();
 	}
 
 

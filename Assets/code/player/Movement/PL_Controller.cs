@@ -263,7 +263,7 @@ namespace Player.Movement {
 
 			SetDashFriction();
 
-			print(Dash.dashForceToAdd);
+			// print(Dash.dashForceToAdd);
 		}
 
 		void SetDashFriction(){
@@ -467,7 +467,7 @@ namespace Player.Movement {
 			Collider[] colliders = Physics.OverlapBox(startPos, new Vector3(transform.localScale.x*.2f,0.5f*m,transform.localScale.z*.2f));
 			foreach(Collider col in colliders){
 				if(!col.isEntity<PL_Controller>() && !col.isProjectile() && !col.CompareTag("CollisionChecker") && !col.isTrigger) {
-					Debug.Log(col.name);
+					// Debug.Log(col.name);
 					// Debug.Log(col.name);
 					return true;
 				}

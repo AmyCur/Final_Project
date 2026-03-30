@@ -27,6 +27,6 @@ MonoBehaviour:
   lifeStealOnHit: 0
   useOnFullHealth: 1
   icon: {fileID: 0}
-  cooldownProgress: 101
+  cooldownProgress: 0
   attackCDIncrements: 100
   projectileName: Mouse

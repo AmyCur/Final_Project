@@ -13,7 +13,7 @@ namespace Combat.Enemy {
         burst
     }
 
-    [CreateAssetMenu(fileName = "New Attack Data", menuName = "Attacks/Create/Attack Data/New")]
+    [CreateAssetMenu(fileName = "New Attack Data", menuName = "Attacks/Other/Attack Data/New")]
     public class AttackData : ScriptableObject {
 
         [Header("Attack Stats")]
@@ -23,7 +23,7 @@ namespace Combat.Enemy {
         public float attackRange=10f;
     }
 
-    [CreateAssetMenu(fileName = "New Ranged Data", menuName = "Attacks/Create/Attack Data/Ranged")]
+    [CreateAssetMenu(fileName = "New Ranged Data", menuName = "Attacks/Other/Attack Data/Ranged")]
     public class RangedData : AttackData {
         
 

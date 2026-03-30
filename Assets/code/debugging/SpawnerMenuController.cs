@@ -4,7 +4,7 @@ using Magical;
 
 namespace Combat
 {
-	[CreateAssetMenu(fileName = "Spawner Controller", menuName = "Attacks/Create/Spawner Menu")]
+	[CreateAssetMenu(fileName = "Spawner Controller", menuName = "Attacks/Other/Spawner Menu")]
 	public class SpawnerMenuController : Attacks.AlternateAttack{
 
 

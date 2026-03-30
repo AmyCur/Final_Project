@@ -453,6 +453,7 @@ GameObject:
   - component: {fileID: 172011693124297072}
   - component: {fileID: 3303770484352610824}
   - component: {fileID: 43376643173987879}
+  - component: {fileID: 4401055990074592803}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -764,6 +765,7 @@ MonoBehaviour:
   admin: 1
   adminSpeed: 4000
   EnemySpawnScreen: {fileID: 0}
+  jumpSFX: {fileID: 8300000, guid: ec669363f9c53c4ff9131ffac44ad384, type: 3}
 --- !u!114 &5051447779828918764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -862,6 +864,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 0}
+  targetFrequency: 4000
+  normalFrequency: 22000
+--- !u!114 &4401055990074592803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3466662717193666348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 747e1e5f86d2aa84f971ba607e7a1ee7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  c1: {fileID: 0}
+  c2: {fileID: 0}
+  audioPlayer: {fileID: 1994400953940743682, guid: b00912b2eda432fec932ec09ad8e8964, type: 3}
 --- !u!1 &4469218232856849539
 GameObject:
   m_ObjectHideFlags: 0
@@ -879,7 +898,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &9139784367922252728
 Transform:
   m_ObjectHideFlags: 0

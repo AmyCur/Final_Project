@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Audio
 {
-	[CreateAssetMenu(fileName = "New Level Audio", menuName = "Audio/Create/Audio")]
+	[CreateAssetMenu(fileName = "New Level Audio", menuName = "Audio/Other/Audio")]
 	public class LevelAudio : ScriptableObject
 	{
 		public AudioClip baseClip; 

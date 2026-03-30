@@ -1,7 +1,7 @@
 ﻿using Magical;
 using UnityEngine;
 
-[CreateAssetMenu(fileName="Primary Attack", menuName="Attacks/Create/Primary")]
+[CreateAssetMenu(fileName="Primary Attack", menuName="Attacks/Other/Primary")]
 public class PrimaryAttack : SingularAttack {
     public override bool keyDown() => magic.key.down(keys.attack);
     public override bool keyStayDown() => magic.key.gk(keys.attack);

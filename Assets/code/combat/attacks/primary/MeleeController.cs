@@ -6,7 +6,7 @@ using System.Collections;
 using Combat.Enemies;
 
 namespace Combat.Attacks.Primary{
-	[CreateAssetMenu(fileName="Melee Attack", menuName="Attacks/Create/Melee")]
+	[CreateAssetMenu(fileName="Melee Attack", menuName="Attacks/Other/Melee")]
 	public class MeleeAttack : SingularAttack{
 
 		public override bool keyDown() => magic.key.down(keys.attack);

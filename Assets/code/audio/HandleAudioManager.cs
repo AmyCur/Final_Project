@@ -2,6 +2,7 @@
 using Magical;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MathsAndSome;
 
 namespace Audio{
 
@@ -39,7 +40,9 @@ namespace Audio{
 
 		public static async void PlaySoundUntilStop(AudioClip clip, float volume=1f, float speed=1f){
 			GameObject source = GameObject.Instantiate(audioPlayer);
-			System.Random r = new System.Random();
+			Debug.Log(source.name);
+			source.transform.parent=audioHolder;
+			// System.Random r = new System.Random();
 			source.GetComponent<AudioSource>().clip = clip;
 			source.GetComponent<AudioSource>().volume = Mathf.Clamp(volume, 0, 3);
 			
@@ -59,37 +62,23 @@ namespace Audio{
 
 		// [RuntimeInitializeOnLoadMethod]
 		public static void Init(){
-			Debug.Log("Ran");
-			audioPlayer=ham.audioPlayer;
+			audioPlayer=HandleAudioManager.audioPlayer;
 		}
 	}
 
 	public class HandleAudioManager : MonoBehaviour{
 
-		public AudioClip c1;
-		public AudioClip c2;
-		public GameObject audioPlayer;
-		Sound currentSounds;
+		public static GameObject audioPlayer=>Resources.Load<GameObject>("Resources/Prefabs/Sound/AH/SoundHolder");
+
 
 		void Awake(){
-			AudioManager.ham=this;
+			AudioManager.ham=mas.player.Player.GetComponent<HandleAudioManager>();
 			AudioManager.Init();
 		}
 
-		void TestAudio(){
-			if(magic.key.down(KeyCode.K)){
-				currentSounds = AudioManager.Play(c1);
-			}
-			
-			if(magic.key.down(KeyCode.L)){
-				AudioManager.Stop(currentSounds);
-			}
-
-
-		}
+		
 
 		void Update(){
-			TestAudio();
 			if(AudioManager.players.Count>0){
 				for(int i = 0; i < AudioManager.players.Count ; i++){
 					if(!AudioManager.players[i].audioSource.isPlaying) AudioManager.players.RemoveAt(i);

@@ -4,7 +4,7 @@ using System.Collections;
 using UnityEngine;
 using Vortex;
 
-// [CreateAssetMenu(fileName = "Wind Attack", menuName = "Attacks/Create/Wind", order = 2)]
+// [CreateAssetMenu(fileName = "Wind Attack", menuName = "Attacks/Other/Wind", order = 2)]
 namespace Combat.Attacks{
 	public class WindAttack : AlternateAttack {
 		GameObject upVortex;
