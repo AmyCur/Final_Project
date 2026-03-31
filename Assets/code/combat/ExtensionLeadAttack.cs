@@ -1,4 +1,5 @@
 ﻿using Audio;
+using Entity;
 using Magical;
 using UnityEngine;
 
@@ -16,6 +17,8 @@ namespace Combat {
 			
 			GameObject spark = Instantiate(sparkAttack, pc.cameraPos, Quaternion.identity);
 			spark.GetComponent<HomingController>().damageSound=onDamageClip;
+			spark.GetComponent<HomingController>().element=element;
+		
 			AudioManager.PlaySoundUntilStop(onClickClip);
 			shootingAnimation.SetInteger("weapon_type", 1);
 			SetAnimation();

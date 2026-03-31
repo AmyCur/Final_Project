@@ -22,9 +22,7 @@ public sealed class RaycastAttack : SingularAttack {
 		await Task.Delay((int)(source.GetComponent<AudioSource>().clip.length*1000));
 		Destroy(source);
 	}
-
-
-
+	
 	public override void OnClick(){
 		Debug.Log("Shoot");
 
@@ -37,7 +35,7 @@ public sealed class RaycastAttack : SingularAttack {
 		if(Physics.Raycast(pc.playerCamera.transform.position ,pc.playerCamera.transform.forward, out RaycastHit hit, range)){
 			
 			if(hit.isEntity<ENM_Controller>()){
-				hit.collider.GetComponent<ENM_Controller>().TakeDamage(damage, new(Combat.Elements.ElementType.None));
+				hit.collider.GetComponent<ENM_Controller>().TakeDamage(damage, element);
 				AudioManager.PlaySoundUntilStop(hit.collider.GetComponent<ENM_Controller>().hurtSound);
 			}	
 		}	

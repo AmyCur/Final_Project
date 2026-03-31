@@ -1,4 +1,5 @@
 ﻿using Combat.Elements;
+using Entities;
 using FileManagement.Settings;
 using MathsAndSome;
 using System.Collections;
@@ -25,8 +26,7 @@ namespace Entity {
 		[HideInInspector] public float currentBurnTime = 5f;
 		[HideInInspector] public bool burning;
 
-
-
+		Coroutine burnRoutine;
 
 
 		protected float Positive(float value) {
@@ -37,7 +37,10 @@ namespace Entity {
 
 		#region Elemental Reaction Effects
 
-		void ElectricFireDamage() { }
+		void ElectricFireDamage() {
+			gameObject.CreateDamageSphere(EnemyTypes.enemy, new Element(ElementType.None), 3f, 30f);
+			StopCoroutine(burnRoutine);
+		}
 		void WaterFireDamage() { }
 		void FireWindDamage() { }
 		void WaterElectricDamage() { }
@@ -73,7 +76,8 @@ namespace Entity {
 				currentBurnTime = burnDuration;
 			}
 			else {
-				StartCoroutine(Burn());
+				if(burnRoutine!=null)StopCoroutine(burnRoutine);
+				burnRoutine=StartCoroutine(Burn());
 			}
 		}
 
@@ -84,7 +88,8 @@ namespace Entity {
 			currentBurnTime -= 1;
 
 			if (currentBurnTime > 0) {
-				StartCoroutine(Burn());
+				if(burnRoutine!=null)StopCoroutine(burnRoutine);
+				burnRoutine=StartCoroutine(Burn());
 			}
 			else {
 				burning = false;

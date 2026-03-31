@@ -15,9 +15,9 @@ static class Consts {
 
 
 	public static Dictionary<ElementType, float> elementDecayDic = new() {
-		{ElementType.fire, 5f},
-		{ElementType.water, 5f},
-		{ElementType.electric, 2f},
+		{ElementType.fire, 7f},
+		{ElementType.water, 7f},
+		{ElementType.electric, 5f},
 		{ElementType.wind, 3f},
 		{ElementType.None, 0f}
 	};
