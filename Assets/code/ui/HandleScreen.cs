@@ -19,7 +19,7 @@ namespace UI{
 			// );
 
 			ac.SetBool("zoom_in", false);
-			ac.SetBool("zoom_out", false);
+			ac.SetBool("zoom_out", true);
 		}
 
 		public IEnumerator CloseScreen(){
@@ -28,20 +28,23 @@ namespace UI{
 			ac.SetBool("zoom_in", true);
 			ac.SetBool("zoom_out", false);
 			
-			while(screen.transform.localScale.y > 0){
-				screen.transform.localScale=mas.vector.LerpVectors(
-					screen.transform.localScale,
-					new Vector3(
-						screen.transform.localScale.x,
-						-0.1f,
-						screen.transform.localScale.z
-					),
 
-					Time.deltaTime*animationSpeed
-				);
+			screen.SetActive(false);
+			yield return 0;
+			// while(screen.transform.localScale.y > 0){
+			// 	screen.transform.localScale=mas.vector.LerpVectors(
+			// 		screen.transform.localScale,
+			// 		new Vector3(
+			// 			screen.transform.localScale.x,
+			// 			-0.1f,
+			// 			screen.transform.localScale.z
+			// 		),
 
-				yield return 0;
-			}
+			// 		Time.deltaTime*animationSpeed
+			// 	);
+
+			// 	yield return 0;
+			// }
 
 			// screen.transform.localScale=new(screen.transform.localScale.x, 0, screen.transform.localScale.z);
 		}
@@ -56,20 +59,9 @@ namespace UI{
 			// screen.SetActive(true);
 
 
-			while(screen.transform.localScale.y < 1){
-				screen.transform.localScale=mas.vector.LerpVectors(
-					screen.transform.localScale,
-					new Vector3(
-						screen.transform.localScale.x,
-						1.1f,
-						screen.transform.localScale.z
-					),
-
-					Time.deltaTime*animationSpeed
-				);
-
-				yield return 0;
-			}
+			screen.SetActive(true);
+			yield return 0;
+			
 
 
 			// screen.transform.localScale=new(screen.transform.localScale.x, 1, screen.transform.localScale.z);

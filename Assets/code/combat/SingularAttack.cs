@@ -7,7 +7,7 @@ using UnityEngine;
 using Combat.Enemies;
 using Combat.Attacks.Primary;
 using System.Threading.Tasks;
-using UnityEditor.Animations;
+
 
 // Weapon types
 // 0 = Shoot
@@ -92,6 +92,10 @@ public abstract class SingularAttack : ScriptableObject {
 
 	[Header("Life Steal")]
 	public float lifeStealOnHit;
+
+	[Header("Visuals")]
+
+	public Sprite weaponSprite;
 
 	protected void PlayClip(AudioClip clip) { if (!!clip) source.PlayOneShot(clip); }
 

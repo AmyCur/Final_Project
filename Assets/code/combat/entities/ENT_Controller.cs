@@ -39,7 +39,7 @@ namespace Entity {
 
 		void ElectricFireDamage() {
 			gameObject.CreateDamageSphere(EnemyTypes.enemy, new Element(ElementType.None), 3f, 30f);
-			StopCoroutine(burnRoutine);
+			if(burnRoutine!=null) StopCoroutine(burnRoutine);
 		}
 		void WaterFireDamage() { }
 		void FireWindDamage() { }

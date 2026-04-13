@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using Audio;
 using Player.Movement;
 using Unity.VisualScripting;
+using UnityEngine.UI;
+using UI.HUD;
 
 namespace Combat {
 	[System.Serializable]
@@ -64,6 +66,7 @@ namespace Combat {
 
 		void UpdateWeapon(){
 			weapon.GetComponent<Animator>().SetBool("lower",true);
+			HUDManager.UpdateWeaponIcon();
 		}
 
 		void CheckForAttackPressed(){
