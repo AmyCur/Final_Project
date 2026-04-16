@@ -83,10 +83,11 @@ namespace Audio{
 		
 
 
-     	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+     	[RuntimeInitializeOnLoadMethod]
 		public static void Start(){
 			player=GetPlayer();
 			currentLevelAudio=GetCurrentLevelAudio();
+			Debug.Log($"CLA {currentLevelAudio} PN : {player.name}");
 			if(currentLevelAudio!=null) PlaySong(currentLevelAudio.baseClip);
 			else Debug.LogWarning($"Level music not found for {SceneManager.GetActiveScene().name}");
 		}

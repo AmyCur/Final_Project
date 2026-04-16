@@ -35,5 +35,9 @@ namespace UI{
 				}
 			}
 		}
+
+		void Start()
+		{
+		}
 	}
 }
