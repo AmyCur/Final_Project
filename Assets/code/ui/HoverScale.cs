@@ -1,30 +1,32 @@
 using UnityEngine;
 using MathsAndSome;
 using System.Collections;
+using UnityEngine.EventSystems; 
 
 namespace UI{
-    public class HoverScale : MonoBehaviour{
-        public float targetScale=1.1f;
+    public class HoverScale : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler{
+        public static float targetScale=1.1f;
+        public static float larpSpeed=10f;
 
         Coroutine routine;
 
-        IEnumerator LerpRoutine(float targetScale){
+        IEnumerator LarpRoutine(float targetScale){
             while(transform.localScale!=new Vector3(targetScale, targetScale, targetScale)){
-                transform.localScale=mas.vector.LerpVectors(transform.localScale, new Vector3(targetScale,targetScale,targetScale), Time.deltaTime);
+                transform.localScale=mas.vector.LerpVectors(transform.localScale, new Vector3(targetScale,targetScale,targetScale), Time.deltaTime*larpSpeed);
                 yield return 0;
             }
         }
-        void OnMouseOver(){
+        public void OnPointerEnter(PointerEventData ped){
             Debug.Log($"hover {gameObject.name}");
             if(routine!=null) StopCoroutine(routine);
-            routine=StartCoroutine(LerpRoutine(targetScale));
+            routine=StartCoroutine(LarpRoutine(targetScale));
             // transform.localScale=Mathf.Lerp(transform.localScale, new Vector3(targetScale,targetScale,targetScale), Time.deltaTime);
         }
-        void OnMouseExit()
+        public void OnPointerExit(PointerEventData ped)
         {
             Debug.Log($"nhover {gameObject.name}");
             if(routine!=null) StopCoroutine(routine);
-            routine=StartCoroutine(LerpRoutine(1));
+            routine=StartCoroutine(LarpRoutine(1));
             
         }
 
