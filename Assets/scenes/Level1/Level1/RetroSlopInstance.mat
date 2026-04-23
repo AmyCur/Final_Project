@@ -50,10 +50,10 @@ Material:
     m_Ints: []
     m_Floats:
     - _ColorMask: 15
-    - _Contrast: 100
-    - _Dither_Opacity: 0.25
+    - _Contrast: 200
+    - _Dither_Opacity: 0.1
     - _Quantization_Level: 512
-    - _Saturation_Layers: 1
+    - _Saturation_Layers: 10
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilOp: 0
