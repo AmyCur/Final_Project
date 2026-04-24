@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace Combat.Elements;
+namespace Combat.Elements{
 
 [System.Serializable]
 public class Element {
@@ -31,4 +31,5 @@ public class Element {
 	public Element(ElementType type) {
 		this.type = type;
 	}
+}
 }

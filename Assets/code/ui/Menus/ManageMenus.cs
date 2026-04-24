@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace UI.Menus;
+namespace UI.Menus{
 
 public enum MenuType : byte{
     overlay = 0x00000000,
@@ -26,4 +26,5 @@ public class Menu{
 
 public static class ManageMenus{
     public static Menu currentOpenMenu;
+}
 }

@@ -1,7 +1,7 @@
 using MathsAndSome;
 using UnityEngine;
 
-namespace Player.Movement;
+namespace Player.Movement{
 
 public static class Slam{
 	static PL_Controller pc => mas.player.Player;
@@ -13,4 +13,5 @@ public static class Slam{
 		pc.rb.AddForce(new Vector3(0, -pc.slam.force * 5f * Time.deltaTime, 0), ForceMode.Impulse);
 		
 	}	
+}
 }

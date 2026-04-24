@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Combat.Elements;
+namespace Combat.Elements{
 
 static class Consts {
 	readonly public static float lightningArcRange = 2f;
@@ -21,4 +21,4 @@ static class Consts {
 		{ElementType.wind, 3f},
 		{ElementType.None, 0f}
 	};
-}
+}}

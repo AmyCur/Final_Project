@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System;
 
-namespace Admin;
+namespace Admin{
 
 public struct Command{
 	public object parent;
@@ -48,4 +48,5 @@ public static class CommandReader{
 		command.splitCommand = SplitCommand(command);
 		if(command.splitCommand.Length>0) DetermineAppropriateCommand(command);
 	}
+}
 }

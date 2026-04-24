@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Entity;
 
-namespace Combat.Attacks.Primary;
+namespace Combat.Attacks.Primary{
 
 // [CreateAssetMenu(fileName = "Beam Attack", menuName = "Attacks/Primary/Beam", order = 0)]
 public class BeamAttack : PrimaryAttack {
@@ -73,4 +73,4 @@ public class BeamAttack : PrimaryAttack {
 	}
 
 
-}
+}}

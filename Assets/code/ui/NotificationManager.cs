@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 
 
-namespace UI;
+namespace UI{
 
 public class Notification{
 	public GameObject obj;
@@ -53,3 +53,4 @@ public static class NotificationManager{
 	
 }
 
+}

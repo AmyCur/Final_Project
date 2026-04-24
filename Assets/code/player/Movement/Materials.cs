@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Player.Movement;
+namespace Player.Movement{
 
 public static class Materials{
 	public static PL_Controller pc => mas.player.Player;
@@ -61,4 +61,5 @@ public static class Materials{
 			this.sound=sound;
 		}
 	}
+}
 }

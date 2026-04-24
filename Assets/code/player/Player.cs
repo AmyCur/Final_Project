@@ -4,7 +4,7 @@ using System.Collections;
 using UnityEngine;
 using Player.Movement;
 
-namespace Player;
+namespace Player{
 
 [Serializable]
 public class Stamina {
@@ -99,4 +99,4 @@ public class Force {
 			goneBack[1] = true;
 		}
 	}
-}
+}}

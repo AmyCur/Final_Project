@@ -4,7 +4,7 @@ using System.Collections;
 using UnityEngine;
 using Player.Movement;
 
-namespace Entity;
+namespace Entity{
 
 [Serializable]
 public class Health {
@@ -93,7 +93,7 @@ public class Health {
 
 	public override bool Equals(object obj) => obj is Health health && this.h == health.h;
 	public override int GetHashCode() => HashCode.Combine(h);
-}
+}}
 
 
 //* Legacy

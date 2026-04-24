@@ -3,7 +3,7 @@ using System.Collections;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Player.Movement;
+namespace Player.Movement{
 
 public static class Dash{
 	static PL_Controller pc => mas.player.Player;
@@ -126,4 +126,5 @@ public static class Dash{
 		if (!pc.Grounded()) pc.StartCoroutine(GravityDash());
 		else pc.StartCoroutine(DecayDash());
 	}
+}
 }

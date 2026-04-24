@@ -2,7 +2,7 @@
 using MathsAndSome;
 using System.Collections.Generic;
 
-namespace UI;
+namespace UI{
 
 public static class HandleAllMenus{
 	public static List<HandleScreen> openScreens = new();
@@ -17,4 +17,4 @@ public static class HandleAllMenus{
 		}
 		
 	}
-}
+}}

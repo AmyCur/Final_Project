@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace Player.Movement;
+namespace Player.Movement{
 
 public static class Slide{
 
@@ -176,4 +176,5 @@ public static class Slide{
 		pc.justSlid=false;
 	}
 
+}
 }
