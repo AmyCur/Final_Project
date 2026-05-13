@@ -4,6 +4,8 @@ using UnityEngine;
 public class FadeBasedOnDistance : MonoBehaviour
 {
     void Update(){
+		Cursor.lockState = CursorLockMode.None;
+		Cursor.visible = true;
         Vector3 screenPoint = Input.mousePosition;
 		Vector3 pos = transform.position;
 		float difference = 1-(Vector3.Magnitude(screenPoint-pos)/1000f);
