@@ -12,40 +12,40 @@ using Audio;
 
 namespace Player.Movement {
 	[RequireComponent(typeof(AudioSource))]
-	public class PL_Controller : RB_Controller{
+	public class PL_Controller : RB_Controller {
 
 
 		public bool shouldJump => canJump && BoxGrounded(justSlid ? 2f : 1.3f) && magic.key.down(keys.jump);
 
 		public bool shouldSlide => slide.can && Grounded(1.3f) && magic.key.down(keys.slide) && state != PlayerState.sliding;
-		
+
 		public bool shouldDash => dash.can && magic.key.down(keys.dash) && stamina.s - dash.staminaPer >= 0;
-		
+
 		public bool shouldSlam => slam.can && magic.key.down(keys.slam) && !Grounded() && state != PlayerState.slamming;
 
 		[Header("Player")]
 		[Header("States")]
-		
+
 
 		public PlayerState state;
-		
+
 		public MovementState jumpState = MovementState.none;
-		
+
 		public MovementState slideState = MovementState.none;
-		
+
 		public MovementState slamState = MovementState.none;
-		
+
 		public AdminState adminState = AdminState.standard;
 
 		[Header("Movement")]
 		public float forwardSpeed = 12f;
-		
+
 		public float sidewaysSpeed = 12f;
-		
+
 		public float maxSpeed = 35f;
-		
+
 		public float maxVerticalSpeed = 35f;
-		
+
 		public LayerMask playerMask;
 
 		public List<AudioClip> footsteps = new();
@@ -53,46 +53,47 @@ namespace Player.Movement {
 
 		[Header("Jumping")]
 		public bool canJump;
-		
+
 		public float jumpForce;
-		
+
 		[SerializeField] float groundedRange = 1.08f;
-		
-		public float trueGroundedRange (float m = 1f) => transform.localScale.y * groundedRange * m;
+
+		public float trueGroundedRange(float m = 1f) => transform.localScale.y * groundedRange * m;
 
 		[Header("Slam")]
 
 		public bool canSlam;
-		
+
 		[SerializeField] float finalSlamVelocity;
-		
-		[SerializeField] float slamCheckRange=2f;
+
+		[SerializeField] float slamCheckRange = 2f;
 
 		[Header("Sliding")]
 
-		[HideInInspector] public bool justSlid=false;
+		[HideInInspector] public bool justSlid = false;
 
 		public Force slide;
-		
+
 		public GameObject slideCameraObject;
-		
+
 		public GameObject defaultCameraObject;
 
 		[Header("Dashing")]
 
 		public DashForce dash;
+		public AudioClip dashSFX;
 
 		[Header("Mouse")]
 
 		public float mouseSensitivityX;
-		
+
 		public float mouseSensitivityY;
 
 		[SerializeField] float maxY = 90;
-		
+
 		[SerializeField] float minY = -90;
 
-		float currentXRotation;
+		[SerializeField] float currentXRotation;
 
 		[Header("Stamina")]
 
@@ -103,25 +104,25 @@ namespace Player.Movement {
 		public Force slam;
 
 		[HideInInspector] public Camera playerCamera;
-		
+
 		public new CapsuleCollider collider;
-		
+
 		[SerializeField] CapsuleCollider footCollider;
-		
+
 		float playerHeight => collider.height;
 
 		float hInp;
-		
+
 		float vInp;
 
 		[HideInInspector] public Vector3 fw => (transform.forward + Camera.main.transform.forward).normalized;
-		
+
 		[HideInInspector] public Vector3 cameraPos => playerCamera.transform.position;
 
 		[Header("Slope")]
 
-		public float maxSlopeAngle=30f;
-		
+		public float maxSlopeAngle = 30f;
+
 		RaycastHit slopeHit;
 
 		public GameObject forwardObject;
@@ -129,10 +130,10 @@ namespace Player.Movement {
 		[Header("Friction")]
 
 		[SerializeField] float defaultFriction;
-		
-		[SerializeField] float slopeFriction=0.5f;
 
-		[SerializeField] float dashFriction=0f;
+		[SerializeField] float slopeFriction = 0.5f;
+
+		[SerializeField] float dashFriction = 0f;
 
 		[Header("UI")]
 
@@ -141,7 +142,7 @@ namespace Player.Movement {
 		[Header("Admin")]
 
 		public bool admin = true;
-		
+
 		[SerializeField] float adminSpeed = 40f;
 
 		public GameObject EnemySpawnScreen;
@@ -153,14 +154,32 @@ namespace Player.Movement {
 		public AudioClip jumpSFX;
 
 		#region Start
-		void Awake(){
-			MathsAndSome.mas.player.Player=this;
-			NotificationManager.mb=this;
+		void Awake() {
+			MathsAndSome.mas.player.Player = this;
+			NotificationManager.mb = this;
+		}
+
+		[HideInInspector] public bool cutsceneOver = false;
+		bool updateCalled = false;
+		IEnumerator tempRoutine() {
+			canMove = false;
+			canJump = false;
+			canSlam = false;
+			dash.can = false;
+			slide.can = false;
+			yield return new WaitForSeconds(15.6f);
+			canMove = true;
+			canJump = true;
+			canSlam = true;
+			dash.can = true;
+			slide.can = true;
+			cutsceneOver = true;
+
 		}
 
 		public override void SetStartDefaults() {
 			base.SetStartDefaults();
-			
+
 			Entity.Entity.KillAll(typeof(ENM_Controller));
 			stamina.pc = this;
 			StartCoroutine(RegenerateStamina());
@@ -168,34 +187,31 @@ namespace Player.Movement {
 			Cursor.lockState = CursorLockMode.Locked;
 			Cursor.visible = false;
 			// Debug.Log(Instance<PL_Utility>.Instance.gameObject.name);
+			StartCoroutine(tempRoutine());
 		}
 		#endregion
 
 		#region Update
 
-		void AdminFunctionality()
-        {
-            if(Input.GetKeyDown(KeyCode.LeftBracket)) Entity.Entity.KillAll(typeof(ENM_Controller));
+		void AdminFunctionality() {
+			if (Input.GetKeyDown(KeyCode.LeftBracket)) Entity.Entity.KillAll(typeof(ENM_Controller));
 			if (magic.key.down(keys.noclip)) CheckForAdmin();
-        }
+		}
 
-		void HandleIFrames()
-        {
-            if (health.takenDamage) {
+		void HandleIFrames() {
+			if (health.takenDamage) {
 				health.takenDamage = false;
 				StartCoroutine(IFrames());
 			}
-        }
+		}
 
-		void HandleSlamEnding()
-        {
-            if (BoxGrounded(1.3f) && state == PlayerState.slamming) state = PlayerState.walking;
+		void HandleSlamEnding() {
+			if (BoxGrounded(1.3f) && state == PlayerState.slamming) state = PlayerState.walking;
 			if (BoxGrounded(slamCheckRange) && state == PlayerState.slamming) StartCoroutine(HandleSlamMomentumPreservation());
-        }
+		}
 
-		void HardClampVelocity()
-        {
-            if(rb!=null){
+		void HardClampVelocity() {
+			if (rb != null) {
 				rb.linearVelocity = MathsAndSome.mas.vector.ClampVector(rb.linearVelocity, new Vector3[]
 					{
 						new Vector3(-1_000,-1_000,-1_000),
@@ -203,25 +219,25 @@ namespace Player.Movement {
 					}
 				);
 			}
-        }
+		}
 
-		void ClampVerticalVelocity(){
-			if(rb!=null){
-				rb.linearVelocity=new Vector3(rb.linearVelocity.x, Mathf.Clamp(rb.linearVelocity.y, -1000, maxVerticalSpeed), rb.linearVelocity.z);
+		void ClampVerticalVelocity() {
+			if (rb != null) {
+				rb.linearVelocity = new Vector3(rb.linearVelocity.x, Mathf.Clamp(rb.linearVelocity.y, -1000, maxVerticalSpeed), rb.linearVelocity.z);
 			}
 		}
 
-		void HandleSpeedLines(){
-			if (state != PlayerState.sliding){
-				speedLines.startSpeed  = 0;
+		void HandleSpeedLines() {
+			if (state != PlayerState.sliding) {
+				speedLines.startSpeed = 0;
 			}
-			else{
-				speedLines.startSpeed  = Mathf.Clamp(10f+rb.linearVelocity.magnitude*3f, 10f, 30f);
+			else {
+				speedLines.startSpeed = Mathf.Clamp(10f + rb.linearVelocity.magnitude * 3f, 10f, 30f);
 			}
 		}
 
-		void HandleFOV(){
-			playerCamera.fieldOfView = Mathf.Clamp(Mathf.Lerp(playerCamera.fieldOfView, rb.linearVelocity.magnitude > 16 ? (rb.linearVelocity.magnitude)/3f+90 : 90, Time.deltaTime*10f), 90, 100);	
+		void HandleFOV() {
+			playerCamera.fieldOfView = Mathf.Clamp(Mathf.Lerp(playerCamera.fieldOfView, rb.linearVelocity.magnitude > 16 ? (rb.linearVelocity.magnitude) / 3f + 90 : 90, Time.deltaTime * 10f), 90, 100);
 		}
 
 		public override void Update() {
@@ -243,7 +259,7 @@ namespace Player.Movement {
 
 			//* Combat
 			HandleIFrames();
-			
+
 			if (hc != null) hc.UpdateHeath();
 
 			SetSlopeFriction();
@@ -253,10 +269,10 @@ namespace Player.Movement {
 			HandleSpeedLines();
 			HandleFOV();
 
-			if(health.h>health.maxHealth) health.h=health.maxHealth;
+			if (health.h > health.maxHealth) health.h = health.maxHealth;
 
 			if (state != PlayerState.sliding && state != PlayerState.slamming && canMove) {
-				if (adminState == AdminState.noclip) this.AdminMove();	
+				if (adminState == AdminState.noclip) this.AdminMove();
 			}
 
 			Audio.ChangeAudioOnIntensity.FadeSongBasedOnDangerLevel();
@@ -266,8 +282,8 @@ namespace Player.Movement {
 			// print(Dash.dashForceToAdd);
 		}
 
-		void SetDashFriction(){
-			if(dash.state!=MovementState.none){
+		void SetDashFriction() {
+			if (dash.state != MovementState.none) {
 				footCollider.SetFriction(dashFriction);
 			}
 		}
@@ -279,10 +295,10 @@ namespace Player.Movement {
 			if (state != PlayerState.sliding && state != PlayerState.slamming && canMove) {
 				if (adminState == AdminState.standard) this.Move();
 			}
-			
+
 			Vector2 hVel = new Vector2(rb.linearVelocity.x, rb.linearVelocity.z);
-			if(hVel.magnitude>maxSpeed) hVel=hVel.normalized*maxSpeed;
-			
+			if (hVel.magnitude > maxSpeed) hVel = hVel.normalized * maxSpeed;
+
 			rb.linearVelocity = new Vector3(hVel.x, rb.linearVelocity.y, hVel.y);
 			// rb.linearVelocity = new Vector3(Mathf.Clamp(rb.linearVelocity.x, 0, maxSpeed), rb.linearVelocity.y, Mathf.Clamp(rb.linearVelocity.z,0,maxSpeed));
 		}
@@ -294,63 +310,62 @@ namespace Player.Movement {
 			health.canTakeDamage = true;
 		}
 
-		void HandleSlope(){
-			if(OnSlope() && jumpState!=MovementState.middle){
-				if(state != PlayerState.sliding){
-					transform.position=new Vector3(slopeHit.point.x,slopeHit.point.y+transform.localScale.y,slopeHit.point.z);
-					if(adminState != AdminState.noclip) rb.useGravity=false;
+		void HandleSlope() {
+			if (OnSlope() && jumpState != MovementState.middle) {
+				if (state != PlayerState.sliding) {
+					transform.position = new Vector3(slopeHit.point.x, slopeHit.point.y + transform.localScale.y, slopeHit.point.z);
+					if (adminState != AdminState.noclip) rb.useGravity = false;
 				}
 			}
-			else{
-				if(adminState != AdminState.noclip) rb.useGravity=true;
+			else {
+				if (adminState != AdminState.noclip) rb.useGravity = true;
 			}
 		}
 
-		public void HandleMove(){
-            if (adminState != AdminState.noclip)
-            {
-                if (shouldJump) Jump();
+		public void HandleMove() {
+			if (adminState != AdminState.noclip) {
+				if (shouldJump) Jump();
 				if (shouldDash) Dash.HandleDash();
 				if (shouldSlide) StartCoroutine(Slide.SlideRoutine());
 				else if (shouldSlam) Slam.HandleSlam();
-            }
+			}
 		}
 
-		IEnumerator HandleSlamMomentumPreservation(){
-			finalSlamVelocity=rb.linearVelocity.y;
+		IEnumerator HandleSlamMomentumPreservation() {
+			finalSlamVelocity = rb.linearVelocity.y;
 			yield return new WaitForSeconds(0.3f);
-			finalSlamVelocity=0f;
+			finalSlamVelocity = 0f;
 		}
 
-		
 
-		public void ClampIfRampTooSteep(){
-			if(Physics.Raycast(transform.position-new Vector3(0f,transform.localScale.y/2f,0f), transform.forward, out RaycastHit hit, 1f)){
-				if (!hit.isProjectile()){
+
+		public void ClampIfRampTooSteep() {
+			if (Physics.Raycast(transform.position - new Vector3(0f, transform.localScale.y / 2f, 0f), transform.forward, out RaycastHit hit, 1f)) {
+				if (!hit.isProjectile()) {
 					// Debug.Log(hit.normal);
 					float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
-					if(angle>maxSlopeAngle && angle < 90f){
+					if (angle > maxSlopeAngle && angle < 90f) {
 						// Debug.Log("Thats high");
-						rb.linearVelocity=new Vector3(rb.linearVelocity.x,Mathf.Clamp(rb.linearVelocity.y, -1_000f, 0f),rb.linearVelocity.z);
+						rb.linearVelocity = new Vector3(rb.linearVelocity.x, Mathf.Clamp(rb.linearVelocity.y, -1_000f, 0f), rb.linearVelocity.z);
 					}
 				}
 			}
 		}
 
 		void CheckForAdmin() {
-			if (admin){
+			if (admin) {
 				adminState = adminState == AdminState.standard ? AdminState.noclip : AdminState.standard;
 				rb.useGravity = adminState != AdminState.noclip;
-				if(adminState==AdminState.noclip) state=PlayerState.walking;
+				if (adminState == AdminState.noclip) state = PlayerState.walking;
 
-				foreach(CapsuleCollider col in GetComponentsInChildren(typeof(CapsuleCollider))){
+				foreach (CapsuleCollider col in GetComponentsInChildren(typeof(CapsuleCollider))) {
 					col.isTrigger = adminState == AdminState.noclip;
 				}
-				stamina.s=stamina.max;
-				NotificationManager.AddNotification($"Noclip: {adminState==AdminState.noclip}");
+				stamina.s = stamina.max;
+				NotificationManager.AddNotification($"Noclip: {adminState == AdminState.noclip}");
 			}
 		}
-		
+
 		//* Stamina
 		public IEnumerator RegenerateStamina() {
 			while (true) {
@@ -371,17 +386,17 @@ namespace Player.Movement {
 
 		//* Stamina
 
-			
 
 
-		IEnumerator WaitForJumpEnd(){
+
+		IEnumerator WaitForJumpEnd() {
 			yield return new WaitForSeconds(0.1f);
 			yield return new WaitUntil(() => Grounded());
-			jumpState=MovementState.none;
+			jumpState = MovementState.none;
 		}
 
 		public void Jump() {
-			jumpState=MovementState.middle;
+			jumpState = MovementState.middle;
 			rb.AddForce(0, jumpForce * Consts.Multipliers.JUMP_MULTIPLIER, 0);
 			AudioManager.PlaySoundUntilStop(jumpSFX);
 			StartCoroutine(WaitForJumpEnd());
@@ -389,7 +404,7 @@ namespace Player.Movement {
 
 		}
 
-		
+
 
 		void SetAdminMode() {
 			// ResetForces();
@@ -415,7 +430,7 @@ namespace Player.Movement {
 			hInp = Grounded() ? Input.GetAxisRaw("Horizontal") : Input.GetAxis("Horizontal");
 			vInp = Grounded() ? Input.GetAxisRaw("Vertical") : Input.GetAxis("Vertical");
 
-			moving = hInp!=0f || vInp!=0f;
+			moving = hInp != 0f || vInp != 0f;
 
 			Vector3 forward = forwardObject.transform.forward;
 			Vector3 right = forwardObject.transform.right;
@@ -426,14 +441,14 @@ namespace Player.Movement {
 			float airChange = Consts.Movement.AirSpeedChange(Grounded());
 
 			Vector3 force = (forward * vInp * fwSpeed * airChange) + (right * hInp * sdSpeed * airChange);
-			moveDirection=force;
+			moveDirection = force;
 
 			slide.ChangeDirection(force.normalized);
 			dash.ChangeDirection(force.normalized);
 
 			rb.AddForce(force);
 
-			if(force!=Vector3.zero){
+			if (force != Vector3.zero) {
 
 			}
 			// moveDirection = force.normalized;
@@ -461,12 +476,12 @@ namespace Player.Movement {
 
 
 
-		public bool Grounded(float m = 1f) => Physics.Raycast(collider.transform.position, Vector3.down, transform.localScale.y * groundedRange*m, ~playerMask);
-		public bool BoxGrounded(float m = 1f){
-			Vector3 startPos = transform.position-new Vector3(0,transform.localScale.y/2f,0);
-			Collider[] colliders = Physics.OverlapBox(startPos, new Vector3(transform.localScale.x*.2f,0.5f*m,transform.localScale.z*.2f));
-			foreach(Collider col in colliders){
-				if(!col.isEntity<PL_Controller>() && !col.isProjectile() && !col.CompareTag("CollisionChecker") && !col.isTrigger) {
+		public bool Grounded(float m = 1f) => Physics.Raycast(collider.transform.position, Vector3.down, transform.localScale.y * groundedRange * m, ~playerMask);
+		public bool BoxGrounded(float m = 1f) {
+			Vector3 startPos = transform.position - new Vector3(0, transform.localScale.y / 2f, 0);
+			Collider[] colliders = Physics.OverlapBox(startPos, new Vector3(transform.localScale.x * .2f, 0.5f * m, transform.localScale.z * .2f));
+			foreach (Collider col in colliders) {
+				if (!col.isEntity<PL_Controller>() && !col.isProjectile() && !col.CompareTag("CollisionChecker") && !col.isTrigger) {
 					// Debug.Log(col.name);
 					// Debug.Log(col.name);
 					return true;
@@ -475,42 +490,43 @@ namespace Player.Movement {
 			return false;
 		}
 
-		public void SetSlopeFriction(){
-			if(Physics.Raycast(footCollider.transform.position, Vector3.down, out slopeHit, 0.6f, ~playerMask) || Physics.Raycast(footCollider.transform.position, MathsAndSome.mas.vector.MultiplyVectors(new List<Vector3>(){Vector3.forward,moveDirection.normalized}), out slopeHit, 1f, ~playerMask)){
-				if(!slopeHit.isProjectile()){
+		public void SetSlopeFriction() {
+			if (Physics.Raycast(footCollider.transform.position, Vector3.down, out slopeHit, 0.6f, ~playerMask) || Physics.Raycast(footCollider.transform.position, MathsAndSome.mas.vector.MultiplyVectors(new List<Vector3>() { Vector3.forward, moveDirection.normalized }), out slopeHit, 1f, ~playerMask)) {
+				if (!slopeHit.isProjectile()) {
 					float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
-					if(moving || state!=PlayerState.walking){
-						if(angle!=0f) footCollider.SetFriction(slopeFriction);
+					if (moving || state != PlayerState.walking) {
+						if (angle != 0f) footCollider.SetFriction(slopeFriction);
 						else footCollider.SetFriction(defaultFriction);
 					}
 					else footCollider.SetFriction(defaultFriction);
-					
+
 				}
 
 				return;
 			}
-			
+
 			footCollider.SetFriction(defaultFriction);
 		}
 
-		public bool OnSlope(){
-			if(Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + .5f)){
-				if(!slopeFriction.isProjectile()){
+		public bool OnSlope() {
+			if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + .5f)) {
+				if (!slopeFriction.isProjectile()) {
 					float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
-					return angle < maxSlopeAngle && angle!=0;
+					return angle < maxSlopeAngle && angle != 0;
 				}
 			}
 			return false;
 		}
 
-		Vector3 GetSlopeMoveDirection(){
+		Vector3 GetSlopeMoveDirection() {
 			return Vector3.ProjectOnPlane(moveDirection.normalized, slopeHit.normal).normalized;
 		}
 
 
 
 		void HandleMouse() {
-			if(!Props.inMenu && !UI.Pause.paused){
+			if (!Props.inMenu && !UI.Pause.paused && (!updateCalled || cutsceneOver)) {
+				updateCalled = true;
 				float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensitivityX;
 				float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensitivityY;
 
@@ -519,7 +535,7 @@ namespace Player.Movement {
 				currentXRotation -= mouseY;
 				currentXRotation = Mathf.Clamp(currentXRotation, minY, maxY);
 
-				if(playerCamera==null) playerCamera=Camera.main;
+				if (playerCamera == null) playerCamera = Camera.main;
 				playerCamera.transform.localRotation = Quaternion.Euler(currentXRotation, 0f, 0f);
 
 			}
@@ -538,9 +554,9 @@ namespace Player.Movement {
 			if (magic.key.gk(keys.dash)) rb.linearVelocity = new(rb.linearVelocity.x, -30, rb.linearVelocity.z);
 			if (magic.key.down(keys.teleport)) {
 				RaycastHit[] hits = Physics.RaycastAll(transform.position, forward, 1020f);
-				if (hits.Length>0) {
-					foreach(RaycastHit hit in hits){
-						if(!hit.isEntity<PL_Controller>()){
+				if (hits.Length > 0) {
+					foreach (RaycastHit hit in hits) {
+						if (!hit.isEntity<PL_Controller>()) {
 							transform.position = hit.point;
 							Debug.Log(hit.transform.name);
 						}
@@ -549,8 +565,8 @@ namespace Player.Movement {
 			}
 		}
 
-		public override void Die() { 
-			state=PlayerState.dead;
+		public override void Die() {
+			state = PlayerState.dead;
 		}
 	}
 }

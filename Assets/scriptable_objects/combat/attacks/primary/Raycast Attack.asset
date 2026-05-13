@@ -26,7 +26,7 @@ MonoBehaviour:
   onReleaseClip: {fileID: 0}
   onDamageClip: {fileID: 0}
   lifeStealOnHit: 0
-  weaponSprite: {fileID: 21300000, guid: 99d2c6ffcebb99c4d8387e3c983dba45, type: 3}
+  weaponSprite: {fileID: 21300000, guid: 917add71ca862aba995a77521e7bfa58, type: 3}
   attackSounds:
   - {fileID: 8300000, guid: fab36e28e9604d72486f039cc361eceb, type: 3}
   - {fileID: 8300000, guid: 909764d09ce612a8f9d2be4c88cba5a0, type: 3}

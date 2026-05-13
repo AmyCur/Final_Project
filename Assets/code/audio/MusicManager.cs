@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using System.Threading.Tasks;
 
 namespace Audio {
 	[System.Serializable]
@@ -43,6 +44,17 @@ namespace Audio {
 		public static void LoopAudio() {
 
 		}
+
+		public static async void PlaySoundUntilComplete(AudioClip clip) {
+			AudioObject pl = new(GameObject.Instantiate(player));
+
+			System.Random r = new System.Random();
+			pl.src.clip = clip;
+			pl.src.Play();
+			await Task.Delay((int) (pl.src.clip.length * 1000));
+			GameObject.Destroy(pl.obj);
+		}
+
 
 		public static void PlaySong(AudioClip targetClip) {
 			AudioObject pl = new(GameObject.Instantiate(player));

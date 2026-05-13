@@ -733,10 +733,12 @@ MonoBehaviour:
     staminaPer: 30
     gravityDashForce: 15
     noGravDashTime: 0.1
+  dashSFX: {fileID: 0}
   mouseSensitivityX: 2
   mouseSensitivityY: 2
   maxY: 90
   minY: -90
+  currentXRotation: 0
   stamina:
     min: 0
     max: 100
@@ -766,6 +768,7 @@ MonoBehaviour:
   adminSpeed: 4000
   EnemySpawnScreen: {fileID: 0}
   jumpSFX: {fileID: 8300000, guid: ec669363f9c53c4ff9131ffac44ad384, type: 3}
+  cutsceneOver: 0
 --- !u!114 &5051447779828918764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -788,10 +791,10 @@ MonoBehaviour:
     assist: {fileID: 11400000, guid: 99630e5c044b3ea49a1a3358b2267aa3, type: 2}
     ability: {fileID: 11400000, guid: 153ac1008ec70644b8ac7fa58d02adfe, type: 2}
     material: {fileID: 2100000, guid: 8eaac78a540f2a81faae436254d79d5b, type: 2}
-  - primary: {fileID: 11400000, guid: 6c52cbc2e92ef135eb6ef0993b59b3bc, type: 2}
+  - primary: {fileID: 11400000, guid: 3c8d68638b87e8361a8e175e005147b6, type: 2}
     assist: {fileID: 11400000, guid: 96f2cc3f10d6a8a4bbb0e52e2e00957c, type: 2}
     ability: {fileID: 11400000, guid: f83a12c272f1f764cb5962dd77f1df24, type: 2}
-    material: {fileID: 2100000, guid: fd029aea3e8147c4a93da4fe11e16e8b, type: 2}
+    material: {fileID: 2100000, guid: 1af45dea61d936d769aed4f09b315f1b, type: 2}
   caIndex: 0
   homing: 0
   spawner:
@@ -864,7 +867,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 0}
-  targetFrequency: 4000
+  targetFrequency: 1250
   normalFrequency: 22000
 --- !u!114 &4401055990074592803
 MonoBehaviour:
@@ -878,9 +881,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 747e1e5f86d2aa84f971ba607e7a1ee7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  c1: {fileID: 0}
-  c2: {fileID: 0}
-  audioPlayer: {fileID: 1994400953940743682, guid: b00912b2eda432fec932ec09ad8e8964, type: 3}
 --- !u!1 &4469218232856849539
 GameObject:
   m_ObjectHideFlags: 0

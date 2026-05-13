@@ -48,7 +48,7 @@ namespace UI {
 
 		// Update is called once per frame
 		void Update() {
-			if (magic.key.down(keys.pause)) {
+			if (magic.key.down(keys.pause) && MathsAndSome.mas.player.Player.cutsceneOver) {
 				TogglePaused();
 			}
 		}

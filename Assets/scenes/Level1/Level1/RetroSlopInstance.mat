@@ -53,7 +53,7 @@ Material:
     - _ColorMask: 15
     - _Contrast: 58
     - _Contrast_2: 0.8
-    - _Dither_Opacity: 0.075
+    - _Dither_Opacity: 0.12
     - _Quantization_Level: 512
     - _Saturation_Layers: 100
     - _Stencil: 0
