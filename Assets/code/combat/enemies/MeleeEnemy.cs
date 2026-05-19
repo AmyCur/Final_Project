@@ -3,6 +3,7 @@ using System.Collections;
 using Entity;
 using MathsAndSome;
 using Audio;
+using Player.Movement;
 
 namespace Combat.Enemies{
 	public sealed class MeleeEnemy : ENM_Controller
@@ -16,7 +17,26 @@ namespace Combat.Enemies{
 
 		protected override void Attack(){
 			if (canAttack){
-				gameObject.ShootPlayer<RaycastHit>(range, damage);
+			
+					Debug.Log("ATK");
+				
+				RaycastHit[] hits = Physics.RaycastAll(transform.position, pc.transform.position-transform.position, range);
+				foreach(RaycastHit hit in hits){
+					Debug.Log(hit.transform.name);
+					if(!hit.collider.isTrigger){
+						if(hit.isEntity<ENM_Controller>()){
+
+						}
+						else if(hit.isEntity<PL_Controller>()){
+							pc.health-=damage;
+						}
+						else{
+							break;
+						}
+					}
+				}
+				
+				// gameObject.ShootPlayer<RaycastHit>(range, damage);
 				base.Attack();
 			}
 		}
@@ -24,11 +44,12 @@ namespace Combat.Enemies{
 		protected override bool ShouldAttack(){
 			bool playerInRange=false;
 
-			if(Physics.Raycast(transform.position, playerPosition-transform.position, out RaycastHit hit, range)){
-				playerInRange = hit.isEntity<Player.Movement.PL_Controller>();
-			}
-			
-			return playerInRange;
+			// if(Physics.Raycast(transform.position, playerPosition-transform.position, out RaycastHit hit, range)){
+			// 	playerInRange = hit.isEntity<Player.Movement.PL_Controller>();
+			// }
+			// HACK HACK HACK
+			// Debug.Log((pc.transform.position-transform.position).magnitude);
+			return (pc.transform.position-transform.position).magnitude <= range;
 		}
 
 		protected override bool ShouldHunt(){

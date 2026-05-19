@@ -159,6 +159,15 @@ namespace Player.Movement {
 			NotificationManager.mb = this;
 		}
 
+		IEnumerator SetHealth(){
+			while(!canSlam){
+				health.h=health.maxHealth;
+				yield return 0;
+			}
+		}
+
+		
+
 		[HideInInspector] public bool cutsceneOver = false;
 		bool updateCalled = false;
 		IEnumerator tempRoutine() {
@@ -167,6 +176,7 @@ namespace Player.Movement {
 			canSlam = false;
 			dash.can = false;
 			slide.can = false;
+			StartCoroutine(SetHealth());
 			yield return new WaitForSeconds(15.6f);
 			canMove = true;
 			canJump = true;
@@ -174,7 +184,8 @@ namespace Player.Movement {
 			dash.can = true;
 			slide.can = true;
 			cutsceneOver = true;
-
+			
+			PlayerPrefs.SetInt("SkipCutscene", 1);
 		}
 
 		public override void SetStartDefaults() {
@@ -187,7 +198,10 @@ namespace Player.Movement {
 			Cursor.lockState = CursorLockMode.Locked;
 			Cursor.visible = false;
 			// Debug.Log(Instance<PL_Utility>.Instance.gameObject.name);
-			StartCoroutine(tempRoutine());
+			if(PlayerPrefs.GetInt("SkipCutscene") == 0) StartCoroutine(tempRoutine());
+			else{
+				Destroy(GameObject.Find("IntroCutscene"));
+			}
 		}
 		#endregion
 
@@ -525,7 +539,7 @@ namespace Player.Movement {
 
 
 		void HandleMouse() {
-			if (!Props.inMenu && !UI.Pause.paused && (!updateCalled || cutsceneOver)) {
+			if (!Props.inMenu && !UI.Pause.paused && (!updateCalled || cutsceneOver || PlayerPrefs.GetInt("SkipCutscene")==1)) {
 				updateCalled = true;
 				float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensitivityX;
 				float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensitivityY;

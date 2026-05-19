@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 public static class HandleRestart{
 	public static void Restart(){
 		if(PlayerPrefs.HasKey(PL_CPController.CPPKey)) PlayerPrefs.DeleteKey(PL_CPController.CPPKey);
+		if(PlayerPrefs.HasKey("SkipCutscene")) PlayerPrefs.SetInt("SkipCutscene", 0);
 	}
 
 
